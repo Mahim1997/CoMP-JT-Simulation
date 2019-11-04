@@ -12,7 +12,7 @@ public class SimulationParameters {
     public double power_transmitted; //Pt: transmission power in dBm
     public double frequency_carrier; //fc: Carrier frequency (Hz)
     public double bandwidth; //BW: in Hz
-    public double monte_carlo; //No. of simulations ... usually 1k or 10k
+    public int monte_carlo; //No. of simulations ... usually 1k or 10k
 
     //2. Path loss parameters
     public double path_loss_reference_distance; //d_0 : usually 0.1 km
