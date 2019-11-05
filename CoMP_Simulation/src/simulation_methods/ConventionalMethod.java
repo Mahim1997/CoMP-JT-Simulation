@@ -53,29 +53,58 @@ public class ConventionalMethod {
         int no_resource_blocks = ResourceBlockCalculator.numberOfResourceBlocks(bw_MHz);
         System.out.println("Num. resource blocks = " + no_resource_blocks);
 
+        //Calculate FSPL_dB upfront [Fixed S Path Loss in dB]
+        double FSPL_dB = 20 * Math.log10(simParams.path_loss_reference_distance)
+                + 20 * Math.log10(simParams.frequency_carrier)
+                + 92.45;
+        
+        //Calculate Power NOUSE up front
+        double Pn_mW = Helper.convert_To_mW_From_dBM(-174 + 10*Math.log10(simParams.bandwidth));
+
+        //FOR EACH HOUR
         for (int hour = 0; hour < 24; hour++) {
-            //DO CALCULATION FOR THIS HOUR
+            //FOR EACH B.S.
             for (int baseStation_iter = 0; baseStation_iter < baseStations.size(); baseStation_iter++) {
                 BaseStation bs = baseStations.get(baseStation_iter);
 
                 //Do calculation wrt this BASE STATION
                 //2. Take random traffic for each Base Station Using CHI //FLOOR(chi * num_resource_blocks * rand)
                 int num_users_this_bs = (int) (Math.random() * simParams.chi[hour] * no_resource_blocks);
-//                System.out.println("Hour = " + hour + " , Base station bs = " + bs + ", no_users = " + num_users_this_bs);
-                //Use array of users.
-
-                User[] users_arr = new User[num_users_this_bs];
-
+//                double[] distances_to_all_BS = null;
+                //FOR EACH U.E.
                 for (int user_no = 0; user_no < num_users_this_bs; user_no++) {
-                    
-                    //Assume this user is connected to my Base station
-                    
-                    double theta = Math.random() * Math.PI; //an angle randomly taken from 0 to π
+
+                    //Assume this user is connected to my Base station [THIS BASE STATION i.e. bs]                    
+                    double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π
                     double x_user = inter_bs_distance * Math.cos(Helper.DEGREE_TO_RADIAN(theta));
                     double y_user = inter_bs_distance * Math.sin(Helper.DEGREE_TO_RADIAN(theta));
-                    users_arr[user_no] = new User(x_user, y_user);
+                    User user = new User(x_user, y_user);
+                    //Perform user-wise computations.
                     
+                    //Pass the list of all base stations to THIS user and get distances to all BS.
+//                    distances_to_all_BS = user.get_distances_of_all_baseStations(baseStations);
+                    double distance_to_this_BS_of_this_user = user.getDistanceFromBS(bs);
+                    
+                    //Array of received powers of all base stations for THIS USER.
+                    double[] power_received_from_all_BS_of_this_user = 
+                            user.get_RECEIVED_POWER_of_all_BS(FSPL_dB, baseStations, simParams);
+                    
+                    //JUST THIS BASE STATION'S RECEIVED POWER.
+                    double power_received_from_THIS_BS = user.get_RECEIVED_POWER_mW_for_one_BS(FSPL_dB, bs, simParams);
+                    
+                    double noise = Pn_mW;
+                    double total_recv_power_of_just_other_BS = 
+                            Helper.SUM_OF_ARRAY(power_received_from_all_BS_of_this_user) - power_received_from_THIS_BS;
+                    
+                    user.SINR_user_one_BS = power_received_from_THIS_BS / (noise + total_recv_power_of_just_other_BS);
+                    
+
+                    //Now, calculate throughputs and other metrics.
+                
+                    //1. Cumulative throughput for this hour for ONE B.S.
                 }
+
+                
 
             }
         }

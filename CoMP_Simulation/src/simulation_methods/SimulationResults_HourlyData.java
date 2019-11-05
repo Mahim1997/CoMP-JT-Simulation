@@ -1,6 +1,13 @@
 package simulation_methods;
 
+import java.util.ArrayList;
+import java.util.List;
+import objects.BaseStation;
+
 public class SimulationResults_HourlyData {
+    
+    public List<BaseStation> list_of_base_stations = new ArrayList<>();
+    
     public double []hour_arr;
     public double []throughput_arr;
     public double []energy_efficiency_arr;

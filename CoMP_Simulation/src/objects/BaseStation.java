@@ -1,5 +1,6 @@
 package objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaseStation {
@@ -9,6 +10,10 @@ public class BaseStation {
     public int base_station_id;
     public int tier;
 
+    public List<User> users_of_this_baseStation = new ArrayList<>();
+    
+    
+    
     @Override
     public String toString() {
         return "BaseStation{" + "x_pos=" + x_pos + ", y_pos=" + y_pos + ", base_station_id=" + base_station_id + ", tier=" + tier + '}';

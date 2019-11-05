@@ -1,5 +1,6 @@
 package simulation_params;
 
+import comp_simulation.Helper;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,12 +21,12 @@ public class SimulationParameterBuilder {
         s.monte_carlo = 1000;
 
         //2. Path loss params
-        s.path_loss_reference_distance = 0.1;
+        s.path_loss_reference_distance = 0.1; //km
         s.path_loss_exponent_alpha = 3.574;
         s.path_loss_standard_deviation = 8;
 
         //3. Energy Params
-        s.power_max = convertToWatts_From_dBm(s.power_transmitted);
+        s.power_max = Helper.convertToWatts_From_dBm(s.power_transmitted);
         s.power_zeroOutput = 130;
         s.power_numberOfTransceivers = 1;
         s.power_delP = 4.7;
@@ -73,10 +74,6 @@ public class SimulationParameterBuilder {
         return data_double;
     }
 
-    private static double convertToWatts_From_dBm(double power_in_dBm) {
-        double p = (power_in_dBm * 0.1) - 3;
-        return Math.pow(10, p);
-        //return (Math.pow(10, power_in_dBm * 0.1) * Math.pow(10, -3));
-    }
+
 
 }
