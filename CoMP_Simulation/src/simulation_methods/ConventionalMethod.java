@@ -34,13 +34,17 @@ public class ConventionalMethod {
         SimulationResults_HourlyData[] results = new SimulationResults_HourlyData[simParams.monte_carlo];
 
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius;
-        for (int i = 0; i < 1 /*simParams.monte_carlo*/; i++) {
+        for (int i = 0; i < simParams.monte_carlo; i++) {
+            System.out.println("Simulation number i = " + (i+1) + " starting..");
+ 
 
             SimulationResults_HourlyData oneSimulation = runSimulation_Once(inter_bs_distance, i, simParams, baseStations);
-            
             results[i] = oneSimulation;
-            oneSimulation.printAllData();
         }
+
+        SimulationResults_HourlyData finalResult = new SimulationResults_HourlyData(baseStations.size());
+        finalResult.formAverage(results);
+        finalResult.printAllData();
 
         //Now take the average...
     }
@@ -51,12 +55,9 @@ public class ConventionalMethod {
         SimulationResults_HourlyData simResults = new SimulationResults_HourlyData(baseStations.size());
 
         //With respect to distance will be taken.
-        System.out.println("Inside runSimulation_Once, mc = " + mc + " , BW = " + simParams.bandwidth);
-
         //1. Calculate no. of resource blocks.
         double bw_MHz = simParams.bandwidth / Math.pow(10, 6);
         int no_resource_blocks = ResourceBlockCalculator.numberOfResourceBlocks(bw_MHz);
-        System.out.println("Num. resource blocks = " + no_resource_blocks);
 
         //Calculate FSPL_dB upfront [Fixed S Path Loss in dB]
         double FSPL_dB = (20 * Math.log10(simParams.path_loss_reference_distance))
@@ -64,7 +65,7 @@ public class ConventionalMethod {
                 + 92.45;
 
         //Calculate Power NOUSE up front
-        double Pn_mW = Helper.convert_To_mW_From_dBM( (-174 + (10 * Math.log10(simParams.bandwidth )) ));
+        double Pn_mW = Helper.convert_To_mW_From_dBM((-174 + (10 * Math.log10(simParams.bandwidth))));
 //        System.out.println("Noise = " + Pn_mW + " , simBandwidth = " + simParams.bandwidth);
         //FOR EACH HOUR
         for (int hour = 0; hour < 24; hour++) {
@@ -82,8 +83,8 @@ public class ConventionalMethod {
                     double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                     Random rand = new Random();
                     double ibs_random_user_wrt_BS = rand.nextDouble();
-                    double x_user = (inter_bs_distance*ibs_random_user_wrt_BS* Math.cos(theta) ) + bs.x_pos;
-                    double y_user = (inter_bs_distance*ibs_random_user_wrt_BS* Math.sin(theta) ) + bs.y_pos;
+                    double x_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.cos(theta)) + bs.x_pos;
+                    double y_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.sin(theta)) + bs.y_pos;
                     User user = new User(x_user, y_user);
                     //Perform user-wise computations.
 
@@ -94,7 +95,7 @@ public class ConventionalMethod {
                     List<BaseStation> onlyRemainingBaseStations = new ArrayList<>();
                     onlyRemainingBaseStations.addAll(baseStations);
                     onlyRemainingBaseStations.remove(bs);
-                    
+
                     double[] power_received_from_ONLY_Other_BS_of_this_user
                             = user.get_RECEIVED_POWER_of_all_BS(FSPL_dB, onlyRemainingBaseStations, simParams);
 
@@ -102,17 +103,17 @@ public class ConventionalMethod {
                     double power_received_from_THIS_BS = user.get_RECEIVED_POWER_mW_for_one_BS(FSPL_dB, bs, simParams);
 //                    System.out.println("Power RCV of THIS BS = " + power_received_from_THIS_BS);
                     double noise = Pn_mW;
-                    
+
                     double total_recv_power_of_just_other_BS = Helper.SUM_OF_ARRAY(power_received_from_ONLY_Other_BS_of_this_user);
 
                     user.SINR_user_one_BS = power_received_from_THIS_BS / (noise + total_recv_power_of_just_other_BS);
-                    
+
                     //Metric 1. Cumulative Throughput of this hour [ThCon]
                     double throughput_of_user_for_BS_this_hour = 180 * (Math.log(1 + user.SINR_user_one_BS) / (Math.log(2)));  //per (User,BS,Hour)
-                    
+
                     cumulative_throughput_this_hour += throughput_of_user_for_BS_this_hour; //Cumulative Throughput of this (Hour)
-                    System.out.println("BS = " + bs.base_station_id + " ,hr = " + hour + " , user.SINR = " + user.SINR_user_one_BS
-                    + " , throughput_of_user_for_BS_this_hour = " + throughput_of_user_for_BS_this_hour);
+//                    System.out.println("BS = " + bs.base_station_id + " ,hr = " + hour + " , user.SINR = " + user.SINR_user_one_BS
+//                    + " , throughput_of_user_for_BS_this_hour = " + throughput_of_user_for_BS_this_hour);
                     bs.users_of_this_baseStation.add(user);
                 }
                 //Metric 2. Cumulative Power Consumption. [PcCon] PCcon(BS,hr) = NTRX * (P_0 + chi[BS,hr]*P_max*del_p)
@@ -121,7 +122,7 @@ public class ConventionalMethod {
                 simResults.power_consumption_arr[hour][baseStation_iter] = power_consumed_each_BS_each_hr; //hour,BS
 
             }
-            System.out.println("Adding cum[hr = " + hour + "] = " + cumulative_throughput_this_hour);
+
             simResults.cumulative_throughput_arr[hour] = cumulative_throughput_this_hour;
         }
 

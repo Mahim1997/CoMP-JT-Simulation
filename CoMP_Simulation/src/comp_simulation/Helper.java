@@ -31,9 +31,14 @@ public class Helper {
         //return (Math.pow(10, power_in_dBm * 0.1) * Math.pow(10, -3));
     }
 
+    public static double AVERAGE_ARRAY(double[] arr) {
+        double sum_arr = SUM_OF_ARRAY(arr);
+        return (sum_arr / (double) (arr.length));
+    }
+
     public static double SUM_OF_ARRAY(double[] arr) {
         double sum = 0;
-        for (int i=0; i<arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             sum += arr[i];
         }
         return sum;
