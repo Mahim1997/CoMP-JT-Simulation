@@ -5,6 +5,7 @@ import java.util.List;
 
 public class BaseStation {
 
+    //Parameters
     public double x_pos;
     public double y_pos;
     public int base_station_id;
@@ -12,7 +13,7 @@ public class BaseStation {
 
     public List<User> users_of_this_baseStation = new ArrayList<>();
     
-    
+
     
     @Override
     public String toString() {
