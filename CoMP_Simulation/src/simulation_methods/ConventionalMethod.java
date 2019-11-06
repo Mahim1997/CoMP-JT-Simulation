@@ -5,6 +5,7 @@ import comp_simulation.Helper;
 import comp_simulation.ResourceBlockCalculator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import objects.User;
 import simulation_params.SimulationParameters;
 
@@ -35,11 +36,10 @@ public class ConventionalMethod {
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius;
         for (int i = 0; i < 1 /*simParams.monte_carlo*/; i++) {
 
-            SimulationResults_HourlyData runSimulation_Once = runSimulation_Once(inter_bs_distance, i, simParams, baseStations);
-            for (int k = 0; k < runSimulation_Once.average_throughput_arr.length; k++) {
-                System.out.println(runSimulation_Once.cumulative_throughput_arr[k]);
-            }
-            results[i] = runSimulation_Once;
+            SimulationResults_HourlyData oneSimulation = runSimulation_Once(inter_bs_distance, i, simParams, baseStations);
+            
+            results[i] = oneSimulation;
+            oneSimulation.printAllData();
         }
 
         //Now take the average...
@@ -59,13 +59,13 @@ public class ConventionalMethod {
         System.out.println("Num. resource blocks = " + no_resource_blocks);
 
         //Calculate FSPL_dB upfront [Fixed S Path Loss in dB]
-        double FSPL_dB = 20 * Math.log10(simParams.path_loss_reference_distance)
-                + 20 * Math.log10(simParams.frequency_carrier)
+        double FSPL_dB = (20 * Math.log10(simParams.path_loss_reference_distance))
+                + (20 * Math.log10(simParams.frequency_carrier))
                 + 92.45;
 
         //Calculate Power NOUSE up front
-        double Pn_mW = Helper.convert_To_mW_From_dBM(-174 + 10 * Math.log10(simParams.bandwidth));
-
+        double Pn_mW = Helper.convert_To_mW_From_dBM( (-174 + (10 * Math.log10(simParams.bandwidth )) ));
+//        System.out.println("Noise = " + Pn_mW + " , simBandwidth = " + simParams.bandwidth);
         //FOR EACH HOUR
         for (int hour = 0; hour < 24; hour++) {
             //FOR EACH B.S.
@@ -79,33 +79,36 @@ public class ConventionalMethod {
                 for (int user_no = 0; user_no < num_users_this_bs; user_no++) {
 
                     //Assume this user is connected to my Base station [THIS BASE STATION i.e. bs]                    
-                    double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π
-                    double x_user = inter_bs_distance * Math.cos(Helper.DEGREE_TO_RADIAN(theta));
-                    double y_user = inter_bs_distance * Math.sin(Helper.DEGREE_TO_RADIAN(theta));
+                    double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
+                    Random rand = new Random();
+                    double ibs_random_user_wrt_BS = rand.nextDouble();
+                    double x_user = (inter_bs_distance*ibs_random_user_wrt_BS* Math.cos(theta) ) + bs.x_pos;
+                    double y_user = (inter_bs_distance*ibs_random_user_wrt_BS* Math.sin(theta) ) + bs.y_pos;
                     User user = new User(x_user, y_user);
                     //Perform user-wise computations.
 
                     //Pass the list of all base stations to THIS user and get distances to all BS.
 //                    distances_to_all_BS = user.get_distances_of_all_baseStations(baseStations);
                     double distance_to_this_BS_of_this_user = user.getDistanceFromBS(bs);
-
                     //Array of received powers of all base stations for THIS USER.
                     double[] power_received_from_all_BS_of_this_user
                             = user.get_RECEIVED_POWER_of_all_BS(FSPL_dB, baseStations, simParams);
 
                     //JUST THIS BASE STATION'S RECEIVED POWER.
                     double power_received_from_THIS_BS = user.get_RECEIVED_POWER_mW_for_one_BS(FSPL_dB, bs, simParams);
-
+//                    System.out.println("Power RCV of THIS BS = " + power_received_from_THIS_BS);
                     double noise = Pn_mW;
+                    
                     double total_recv_power_of_just_other_BS
                             = Helper.SUM_OF_ARRAY(power_received_from_all_BS_of_this_user) - power_received_from_THIS_BS;
 
                     user.SINR_user_one_BS = power_received_from_THIS_BS / (noise + total_recv_power_of_just_other_BS);
-
+//                    System.out.println("user.SINR = " + user.SINR_user_one_BS);
                     //Metric 1. Cumulative Throughput of this hour [ThCon]
                     double throughput_of_user_for_BS_this_hour = 180 * (Math.log(1 + user.SINR_user_one_BS) / Math.log(2));  //per (User,BS,Hour)
                     cumulative_throughput_this_hour += throughput_of_user_for_BS_this_hour; //Cumulative Throughput of this (Hour)
 
+                    bs.users_of_this_baseStation.add(user);
                 }
                 //Metric 2. Cumulative Power Consumption. [PcCon] PCcon(BS,hr) = NTRX * (P_0 + chi[BS,hr]*P_max*del_p)
                 double power_consumed_each_BS_each_hr = simParams.power_numberOfTransceivers

@@ -12,6 +12,19 @@ public class Helper {
         }
     }
 
+    public static String getArrayDelim_EnterNewLineBoolean(double[] arr, String delim, boolean enter_new_line) {
+        String s = "";
+
+        for (int i = 0; i < arr.length; i++) {
+            s += (String.valueOf(arr[i]));
+            s += delim;
+        }
+        if (enter_new_line) {
+            s += "\n";
+        }
+        return s;
+    }
+
     public static double convertToWatts_From_dBm(double power_in_dBm) {
         double p = (power_in_dBm * 0.1) - 3;
         return Math.pow(10, p);
@@ -34,8 +47,8 @@ public class Helper {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
-    public static double DEGREE_TO_RADIAN(double rad) {
-        return (rad * (Math.PI / 180.0));
+    public static double DEGREE_TO_RADIAN(double degree) {
+        return (degree * (Math.PI / 180.0));
     }
 
 }
