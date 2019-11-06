@@ -33,8 +33,8 @@ public class Helper {
 
     public static double SUM_OF_ARRAY(double[] arr) {
         double sum = 0;
-        for (double x : arr) {
-            sum += x;
+        for (int i=0; i<arr.length; i++) {
+            sum += arr[i];
         }
         return sum;
     }

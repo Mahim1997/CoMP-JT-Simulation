@@ -91,23 +91,28 @@ public class ConventionalMethod {
 //                    distances_to_all_BS = user.get_distances_of_all_baseStations(baseStations);
                     double distance_to_this_BS_of_this_user = user.getDistanceFromBS(bs);
                     //Array of received powers of all base stations for THIS USER.
-                    double[] power_received_from_all_BS_of_this_user
-                            = user.get_RECEIVED_POWER_of_all_BS(FSPL_dB, baseStations, simParams);
+                    List<BaseStation> onlyRemainingBaseStations = new ArrayList<>();
+                    onlyRemainingBaseStations.addAll(baseStations);
+                    onlyRemainingBaseStations.remove(bs);
+                    
+                    double[] power_received_from_ONLY_Other_BS_of_this_user
+                            = user.get_RECEIVED_POWER_of_all_BS(FSPL_dB, onlyRemainingBaseStations, simParams);
 
                     //JUST THIS BASE STATION'S RECEIVED POWER.
                     double power_received_from_THIS_BS = user.get_RECEIVED_POWER_mW_for_one_BS(FSPL_dB, bs, simParams);
 //                    System.out.println("Power RCV of THIS BS = " + power_received_from_THIS_BS);
                     double noise = Pn_mW;
                     
-                    double total_recv_power_of_just_other_BS
-                            = Helper.SUM_OF_ARRAY(power_received_from_all_BS_of_this_user) - power_received_from_THIS_BS;
+                    double total_recv_power_of_just_other_BS = Helper.SUM_OF_ARRAY(power_received_from_ONLY_Other_BS_of_this_user);
 
                     user.SINR_user_one_BS = power_received_from_THIS_BS / (noise + total_recv_power_of_just_other_BS);
-//                    System.out.println("user.SINR = " + user.SINR_user_one_BS);
+                    
                     //Metric 1. Cumulative Throughput of this hour [ThCon]
-                    double throughput_of_user_for_BS_this_hour = 180 * (Math.log(1 + user.SINR_user_one_BS) / Math.log(2));  //per (User,BS,Hour)
+                    double throughput_of_user_for_BS_this_hour = 180 * (Math.log(1 + user.SINR_user_one_BS) / (Math.log(2)));  //per (User,BS,Hour)
+                    
                     cumulative_throughput_this_hour += throughput_of_user_for_BS_this_hour; //Cumulative Throughput of this (Hour)
-
+                    System.out.println("BS = " + bs.base_station_id + " ,hr = " + hour + " , user.SINR = " + user.SINR_user_one_BS
+                    + " , throughput_of_user_for_BS_this_hour = " + throughput_of_user_for_BS_this_hour);
                     bs.users_of_this_baseStation.add(user);
                 }
                 //Metric 2. Cumulative Power Consumption. [PcCon] PCcon(BS,hr) = NTRX * (P_0 + chi[BS,hr]*P_max*del_p)
@@ -116,6 +121,7 @@ public class ConventionalMethod {
                 simResults.power_consumption_arr[hour][baseStation_iter] = power_consumed_each_BS_each_hr; //hour,BS
 
             }
+            System.out.println("Adding cum[hr = " + hour + "] = " + cumulative_throughput_this_hour);
             simResults.cumulative_throughput_arr[hour] = cumulative_throughput_this_hour;
         }
 
