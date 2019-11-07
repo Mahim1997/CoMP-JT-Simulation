@@ -1,7 +1,13 @@
 package comp_simulation;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import objects.BaseStation;
 import java.util.List;
+import simulation_methods.SimulationResults_HourlyData;
 
 public class Helper {
 
@@ -54,6 +60,42 @@ public class Helper {
 
     public static double DEGREE_TO_RADIAN(double degree) {
         return (degree * (Math.PI / 180.0));
+    }
+
+    public static void write_to_file(String fileName, SimulationResults_HourlyData finalResult) {
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(fileName), "utf-8"))) {
+//            writer.write("something");
+
+            for(int i=0; i<SimulationResults_HourlyData.things_to_save.length; i++){
+                writer.write(SimulationResults_HourlyData.things_to_save[i]);
+                if(i != (SimulationResults_HourlyData.things_to_save.length - 1 )){
+                    writer.write(",");
+                }
+            }
+            //{"Hour", "Chi", "Average Throughput(kBps)", "Average Power Consumed (W)"}
+            writer.write("\n");
+            int num_hours = 24;
+            for(int i=0; i<num_hours; i++){
+                
+                //{
+                //Write all as columns of CSV file
+                writer.write(String.valueOf(finalResult.hour_arr[i]) + ",");
+                writer.write(String.valueOf(finalResult.chi[i]) + ",");
+                writer.write(String.valueOf(finalResult.average_throughput_arr[i]) + ",");
+                writer.write(String.valueOf(finalResult.average_power_consumption_arr[i]) + ",");
+                //}
+                //New line
+                writer.write("\n");
+            }
+            
+            
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
 }

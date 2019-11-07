@@ -18,7 +18,7 @@ public class SimulationParameterBuilder {
         s.power_transmitted = 43; //dBm
         s.frequency_carrier = 2; //2 GHz
         s.bandwidth = 5 * Math.pow(10, 6); //5 GHz in MHz
-        s.monte_carlo = 1000;
+        s.monte_carlo = 10000;
 
         //2. Path loss params
         s.path_loss_reference_distance = 0.1; //km

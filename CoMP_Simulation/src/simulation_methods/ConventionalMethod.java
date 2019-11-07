@@ -17,18 +17,11 @@ public class ConventionalMethod {
 
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
 
-        //Printing them
-//        Helper.printBaseStationLocations(baseStations);
-        double[] hour_arr = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5,
-            10.5, 11.5, 12.5, 13.5, 14.5, 15.5, 16.5, 17.5, 18.5, 19.5, 20.5, 21.5, 22.5, 23.5};
-        double[] throughput_arr = new double[24];
-        double[] energy_efficiency_arr = new double[24];
-
-        runSimulation_Conventional_Generate_Data(simParams, baseStations, hour_arr, throughput_arr, energy_efficiency_arr);
+        runSimulation_Conventional_Generate_Data(simParams, baseStations);
     }
 
     private static void runSimulation_Conventional_Generate_Data(SimulationParameters simParams,
-            List<BaseStation> baseStations, double[] hour_arr, double[] throughput_arr, double[] energy_efficiency_arr) {
+            List<BaseStation> baseStations) {
         //Data will be stored in those arrays ... 24 hr data.
 
         SimulationResults_HourlyData[] results = new SimulationResults_HourlyData[simParams.monte_carlo];
@@ -45,7 +38,11 @@ public class ConventionalMethod {
         SimulationResults_HourlyData finalResult = new SimulationResults_HourlyData(baseStations.size());
         finalResult.formAverage(results);
         finalResult.printAllData();
-
+        //Copy CHI
+        finalResult.copy_chi(simParams.chi);
+        
+        //As CSV file
+        Helper.write_to_file("Conventional.csv", finalResult);
         //Now take the average...
     }
 
