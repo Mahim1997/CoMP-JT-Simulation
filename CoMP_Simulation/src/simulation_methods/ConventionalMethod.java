@@ -155,7 +155,7 @@ public class ConventionalMethod {
             }
             //Average power consumption
             simResults.average_power_consumption_arr[hr] = hourly_power_consumption_total;
-            simResults.average_power_consumption_arr[hr] /= (double) simResults.number_users_arr[hr];
+            simResults.average_power_consumption_arr[hr] /= (double) baseStations.size(); //total / num of base stations
         }
 
         return simResults;
