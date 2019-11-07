@@ -16,7 +16,7 @@ public class User {
     public double SINR_user_one_BS;
     public double PATH_LOSS_this_user_mW;
     public double POWER_RECEIVED_ONE_BS_mW;
-    public double THROUGHPUT_user_one_BS;
+    public double THROUGHPUT_user_one_BS_KBps;
 
     public double get_RECEIVED_POWER_mW_for_one_BS(double FSPL_dB, BaseStation bs,
             SimulationParameters simParams) {

@@ -24,24 +24,23 @@ public class ConventionalMethod {
             List<BaseStation> baseStations) {
         //Data will be stored in those arrays ... 24 hr data.
 
-        SimulationResults_HourlyData[] results = new SimulationResults_HourlyData[simParams.monte_carlo];
+        SimulationResults_HourlyData finalResult = new SimulationResults_HourlyData(baseStations.size());
+        finalResult.formZero(); //Make all arrays zero
+        SimulationResults_HourlyData result;
 
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius;
         for (int i = 0; i < simParams.monte_carlo; i++) {
             System.out.println("Simulation number i = " + (i + 1) + " starting..");
 
-            SimulationResults_HourlyData oneSimulation = runSimulation_Once(inter_bs_distance, i, simParams, baseStations);
-            results[i] = oneSimulation;
+            result = runSimulation_Once(inter_bs_distance, i, simParams, baseStations);
+            finalResult.formSum(result);
         }
-
-        SimulationResults_HourlyData finalResult = new SimulationResults_HourlyData(baseStations.size());
-        finalResult.formAverage(results);
+        finalResult.formAverage(simParams.monte_carlo);
         finalResult.printAllData();
         //Copy CHI
         finalResult.copy_chi(simParams.chi);
-
         //As CSV file
-        Helper.write_to_file("Conventional.csv", finalResult);
+        Helper.write_to_file("Conventional_" + simParams.monte_carlo + ".csv", finalResult);
         //Now take the average...
     }
 
@@ -66,9 +65,9 @@ public class ConventionalMethod {
         //FOR EACH HOUR
         for (int hour = 0; hour < 24; hour++) {
             //FOR EACH B.S.
-            double cumulative_throughput_this_hour = 0;
+            double cumulative_throughput_this_hour_KBps = 0;
             //FOR FAIRNESS INDEX
-            double sum_of_squares_of_throughput_this_hr = 0;
+            double sum_of_squares_of_throughput_this_hr_KBps = 0;
             int total_num_users_this_hr = 0;
 
             for (int baseStation_iter = 0; baseStation_iter < baseStations.size(); baseStation_iter++) {
@@ -77,7 +76,7 @@ public class ConventionalMethod {
 //                int num_users_this_bs = (int) (Math.random() * simParams.chi[hour] * no_resource_blocks);
                 int num_users_this_bs = (int) (simParams.chi[hour] * no_resource_blocks); //All B.S. same chi
                 total_num_users_this_hr += num_users_this_bs; //For fairness index
-                
+
                 //FOR EACH U.E.
                 for (int user_no = 0; user_no < num_users_this_bs; user_no++) {
 
@@ -111,13 +110,13 @@ public class ConventionalMethod {
                     user.SINR_user_one_BS = power_received_from_THIS_BS / (noise + total_recv_power_of_just_other_BS);
 
                     //Metric 1. Cumulative Throughput of this hour [ThCon]
-                    double throughput_of_user_for_BS_this_hour = 180 * (Math.log(1 + user.SINR_user_one_BS) / (Math.log(2)));  //per (User,BS,Hour)
-                    user.THROUGHPUT_user_one_BS = throughput_of_user_for_BS_this_hour;
-//                    System.out.println("THROUGHPUT = " + user.THROUGHPUT_user_one_BS);
+                    double throughput_of_user_for_BS_this_hour_KBps = 180 * (Math.log(1 + user.SINR_user_one_BS) / (Math.log(2)));  //per (User,BS,Hour)
+                    user.THROUGHPUT_user_one_BS_KBps = throughput_of_user_for_BS_this_hour_KBps;
+                    
                     //For Fairness Index
-                    sum_of_squares_of_throughput_this_hr += (user.THROUGHPUT_user_one_BS * user.THROUGHPUT_user_one_BS);
-
-                    cumulative_throughput_this_hour += throughput_of_user_for_BS_this_hour; //Cumulative Throughput of this (Hour)
+                    sum_of_squares_of_throughput_this_hr_KBps += (throughput_of_user_for_BS_this_hour_KBps * throughput_of_user_for_BS_this_hour_KBps);
+//                    System.out.println("UE THROUGHPUT = " + user.THROUGHPUT_user_one_BS_KBps + " , SUM_SQUARE = " + sum_of_squares_of_throughput_this_hr_KBps);
+                    cumulative_throughput_this_hour_KBps += throughput_of_user_for_BS_this_hour_KBps; //Cumulative Throughput of this (Hour)
 //                    System.out.println("BS = " + bs.base_station_id + " ,hr = " + hour + " , user.SINR = " + user.SINR_user_one_BS
 //                    + " , throughput_of_user_for_BS_this_hour = " + throughput_of_user_for_BS_this_hour);
                     bs.users_of_this_baseStation.add(user);
@@ -131,12 +130,16 @@ public class ConventionalMethod {
 
             //Hourly Calculations
             simResults.number_users_arr[hour] = total_num_users_this_hr;
-            simResults.cumulative_throughput_arr[hour] = cumulative_throughput_this_hour;
-            
+            simResults.cumulative_throughput_arr[hour] = cumulative_throughput_this_hour_KBps;
+
             //Average fairness index.
             double J_of_T = 0;
-            J_of_T = ((cumulative_throughput_this_hour * cumulative_throughput_this_hour)
-                    / (((double) (total_num_users_this_hr)) * sum_of_squares_of_throughput_this_hr));
+            //All are taken in BPS
+//            System.out.println("Sum of squares of throughput = " + sum_of_squares_of_throughput_this_hr_KBps 
+//                    + " , cuml throughput = " + cumulative_throughput_this_hour_KBps + ", No.users = " + total_num_users_this_hr);
+ 
+            J_of_T = ((cumulative_throughput_this_hour_KBps * cumulative_throughput_this_hour_KBps)
+                    / (((double) (total_num_users_this_hr)) * sum_of_squares_of_throughput_this_hr_KBps));
             simResults.fairness_index_arr[hour] = J_of_T;
         }
 
@@ -144,7 +147,7 @@ public class ConventionalMethod {
         double num_bs_double = (double) (baseStations.size());
         for (int hr = 0; hr < 24; hr++) {
             //Average Throughput
-            simResults.spectral_efficiency_arr[hr] = (simResults.cumulative_throughput_arr[hr]*1000) / (double)(simParams.bandwidth); //MBps divide by Mhz
+            simResults.spectral_efficiency_arr[hr] = (simResults.cumulative_throughput_arr[hr] * 1000) / (double) (simParams.bandwidth); //MBps divide by Mhz
             simResults.average_throughput_arr[hr] = simResults.cumulative_throughput_arr[hr] / (double) simResults.number_users_arr[hr];
             double hourly_power_consumption_total = 0;
             for (int bs = 0; bs < baseStations.size(); bs++) {
@@ -166,7 +169,7 @@ public class ConventionalMethod {
                 for (int j = 0; j < bs.users_of_this_baseStation.size(); j++) {
                     User user = bs.users_of_this_baseStation.get(j);
                     number_users_arr++;
-                    sum_throughput_squares_this_hr += (user.THROUGHPUT_user_one_BS * user.THROUGHPUT_user_one_BS); //sum of squares
+                    sum_throughput_squares_this_hr += (user.THROUGHPUT_user_one_BS_KBps * user.THROUGHPUT_user_one_BS_KBps); //sum of squares
                 }
             }
             J_of_T = ((sum_throughput_this_hr * sum_throughput_this_hr) / ((double)(number_users_arr) * sum_throughput_squares_this_hr));

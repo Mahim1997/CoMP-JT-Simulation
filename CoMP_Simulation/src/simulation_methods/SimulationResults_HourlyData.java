@@ -2,6 +2,7 @@ package simulation_methods;
 
 import comp_simulation.Helper;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import objects.BaseStation;
 
@@ -105,6 +106,38 @@ public class SimulationResults_HourlyData {
             this.cell_edge_throughput_arr[k] /= monte_carlo;
         }
 
+    }
+
+    public void formZero() {
+        Arrays.fill(this.average_power_consumption_arr, 0);
+        Arrays.fill(this.average_throughput_arr, 0);
+        Arrays.fill(this.fairness_index_arr, 0);
+        Arrays.fill(this.spectral_efficiency_arr, 0);
+        Arrays.fill(this.cell_edge_throughput_arr, 0);
+        Arrays.fill(this.cumulative_throughput_arr, 0);
+    }
+
+    public void formAverage(int num) {
+        double monte_carlo = (double)num;
+        for (int k = 0; k < 24; k++) {
+            this.average_throughput_arr[k] /= monte_carlo; //Average throughput
+            this.average_power_consumption_arr[k] /= monte_carlo; //Average Power Consumption
+            this.fairness_index_arr[k] /= monte_carlo; //Fairness Index
+            this.cumulative_throughput_arr[k] /= monte_carlo;
+            this.spectral_efficiency_arr[k] /= monte_carlo;
+            this.cell_edge_throughput_arr[k] /= monte_carlo;
+        }
+    }
+
+    public void formSum(SimulationResults_HourlyData oneResult) {
+        for (int k = 0; k < 24; k++) {
+            this.average_throughput_arr[k] += oneResult.average_throughput_arr[k]; //1. Avg Throughput
+            this.average_power_consumption_arr[k] += oneResult.average_power_consumption_arr[k]; //2. Avg Power Consumption
+            this.fairness_index_arr[k] += oneResult.fairness_index_arr[k]; //3. Fairness Index
+            this.spectral_efficiency_arr[k] += oneResult.spectral_efficiency_arr[k];
+            this.cell_edge_throughput_arr[k] += oneResult.cell_edge_throughput_arr[k];
+            this.cumulative_throughput_arr[k] += oneResult.cumulative_throughput_arr[k];
+        }
     }
 
 }
