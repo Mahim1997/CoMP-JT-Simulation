@@ -11,7 +11,7 @@ import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
-public class Main extends Application {
+public class GraphPlotter extends Application {
 
     public static String FILE_NAME = "Conventional.csv";
 
@@ -33,6 +33,10 @@ public class Main extends Application {
         plotGraphAndSave("Avg Throughput (kBps)", "Time (hr)", "Conventional_Throughput_vs_Time.png", rs.average_throughput, rs.hour);
         plotGraphAndSave("Avg Power Consumption (W)", "Time (hr)", "Conventional_Power_vs_Time.png", rs.average_power_consumption, rs.hour);
         plotGraphAndSave("Chi (%)", "Time (hr)", "Conventional_Chi_vs_Time.png", rs.get_chi_percentage(), rs.hour);
+        plotGraphAndSave("Fairness Index", "Time (hr)", "Conventional_Fairness_Index_vs_Time.png", rs.fairness_index, rs.hour);
+        plotGraphAndSave("Spectral Efficiency", "Time (hr)", "Conventional_Spectral_Efficiency_vs_Time.png", rs.fairness_index, rs.hour);
+        plotGraphAndSave("Cell-Edge Throughput (kBps)", "Time (hr)", "Conventional_Cell-Edge_Throughput_vs_Time.png", rs.fairness_index, rs.hour);
+
         //stage.show();
         System.out.println("After saving files .... exiting SYS.exit(0)");
         System.exit(0);
@@ -74,12 +78,12 @@ public class Main extends Application {
         for (int i = 0; i < num_data_points; i++) {
             series.getData().add(new XYChart.Data(x_axis_data[i], y_axis_data[i]));
         }
-        
+
         Scene scene = new Scene(lineChart, 800, 600); //Height and Width [Default values]
-        
+
         lineChart.setAnimated(false);
         lineChart.getData().add(series);
-        
+
         saveAsPng(scene, fileNameToSaveAndTitle);
         stage.setScene(scene);
 //        saveAsPng(scene, "chart1.png");

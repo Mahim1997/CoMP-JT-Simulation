@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 public class Reader {
 
     //Read from CSV file
-    public String fileNameToRead = Main.FILE_NAME;
+    public String fileNameToRead = GraphPlotter.FILE_NAME;
 
     public Results readThingsFromFile() {
         BufferedReader csvReader = null;
@@ -34,6 +34,7 @@ public class Reader {
                     rs.chi[idx] = Double.parseDouble(data[1]);
                     rs.average_throughput[idx] = Double.parseDouble(data[2]);
                     rs.average_power_consumption[idx] = Double.parseDouble(data[3]);
+                    rs.fairness_index[idx] = Double.parseDouble(data[4]);
                 }
                 idx++;
             }

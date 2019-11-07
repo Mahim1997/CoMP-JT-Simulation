@@ -67,19 +67,20 @@ public class ConventionalMethod {
         for (int hour = 0; hour < 24; hour++) {
             //FOR EACH B.S.
             double cumulative_throughput_this_hour = 0;
-
             //FOR FAIRNESS INDEX
             double sum_of_squares_of_throughput_this_hr = 0;
-            double sum_of_throughput_this_hr = 0;
-            int no_of_users = 0;
+            int total_num_users_this_hr = 0;
 
             for (int baseStation_iter = 0; baseStation_iter < baseStations.size(); baseStation_iter++) {
                 BaseStation bs = baseStations.get(baseStation_iter);
                 //2. Take random traffic for each Base Station Using CHI //FLOOR(chi * num_resource_blocks * rand)
-                int num_users_this_bs = (int) (Math.random() * simParams.chi[hour] * no_resource_blocks);
+//                int num_users_this_bs = (int) (Math.random() * simParams.chi[hour] * no_resource_blocks);
+                int num_users_this_bs = (int) (simParams.chi[hour] * no_resource_blocks); //All B.S. same chi
+                total_num_users_this_hr += num_users_this_bs; //For fairness index
+                
                 //FOR EACH U.E.
                 for (int user_no = 0; user_no < num_users_this_bs; user_no++) {
-                    no_of_users++; //For fairness index
+
                     //Assume this user is connected to my Base station [THIS BASE STATION i.e. bs]                    
                     double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                     Random rand = new Random();
@@ -112,7 +113,7 @@ public class ConventionalMethod {
                     //Metric 1. Cumulative Throughput of this hour [ThCon]
                     double throughput_of_user_for_BS_this_hour = 180 * (Math.log(1 + user.SINR_user_one_BS) / (Math.log(2)));  //per (User,BS,Hour)
                     user.THROUGHPUT_user_one_BS = throughput_of_user_for_BS_this_hour;
-
+//                    System.out.println("THROUGHPUT = " + user.THROUGHPUT_user_one_BS);
                     //For Fairness Index
                     sum_of_squares_of_throughput_this_hr += (user.THROUGHPUT_user_one_BS * user.THROUGHPUT_user_one_BS);
 
@@ -128,12 +129,14 @@ public class ConventionalMethod {
 
             }
 
+            //Hourly Calculations
+            simResults.number_users_arr[hour] = total_num_users_this_hr;
             simResults.cumulative_throughput_arr[hour] = cumulative_throughput_this_hour;
-            simResults.number_users_arr[hour] = no_of_users;
-            sum_of_throughput_this_hr = cumulative_throughput_this_hour;
+            
             //Average fairness index.
             double J_of_T = 0;
-            J_of_T = ((sum_of_squares_of_throughput_this_hr) / ((double) (no_of_users) * sum_of_throughput_this_hr));
+            J_of_T = ((cumulative_throughput_this_hour * cumulative_throughput_this_hour)
+                    / (((double) (total_num_users_this_hr)) * sum_of_squares_of_throughput_this_hr));
             simResults.fairness_index_arr[hour] = J_of_T;
         }
 
@@ -141,14 +144,15 @@ public class ConventionalMethod {
         double num_bs_double = (double) (baseStations.size());
         for (int hr = 0; hr < 24; hr++) {
             //Average Throughput
-            simResults.average_throughput_arr[hr] = simResults.cumulative_throughput_arr[hr] / (double)simResults.number_users_arr[hr];
+            simResults.spectral_efficiency_arr[hr] = (simResults.cumulative_throughput_arr[hr]*1000) / (double)(simParams.bandwidth); //MBps divide by Mhz
+            simResults.average_throughput_arr[hr] = simResults.cumulative_throughput_arr[hr] / (double) simResults.number_users_arr[hr];
             double hourly_power_consumption_total = 0;
             for (int bs = 0; bs < baseStations.size(); bs++) {
                 hourly_power_consumption_total += simResults.power_consumption_arr[hr][bs];
             }
             //Average power consumption
             simResults.average_power_consumption_arr[hr] = hourly_power_consumption_total;
-            simResults.average_power_consumption_arr[hr] /= (double)simResults.number_users_arr[hr];
+            simResults.average_power_consumption_arr[hr] /= (double) simResults.number_users_arr[hr];
         }
 
         return simResults;
