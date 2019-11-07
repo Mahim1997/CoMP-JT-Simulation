@@ -2,15 +2,15 @@ package comp_simulation;
 
 public class Main {
 
-    public static String throughput_conventional = "Throughput vs Time in Conventional Setting";
+    public static String conventional_mode = "Conventional Mode";
 
     /*
     Existing modes:
-    1. throughput_conventional : To plot a graph for Throughput vs Time in Conventional Setting.
+    1. conventional_mode : least of distances from user to B.S.
      */
     public static void main(String[] args) {
 //        test1();
-        SimulationRunner.runSimulation(throughput_conventional);
+        SimulationRunner.runSimulation(conventional_mode);
     }
 
     static void test1() {

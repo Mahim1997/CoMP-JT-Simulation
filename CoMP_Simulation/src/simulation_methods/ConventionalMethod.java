@@ -28,8 +28,7 @@ public class ConventionalMethod {
 
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius;
         for (int i = 0; i < simParams.monte_carlo; i++) {
-            System.out.println("Simulation number i = " + (i+1) + " starting..");
- 
+            System.out.println("Simulation number i = " + (i + 1) + " starting..");
 
             SimulationResults_HourlyData oneSimulation = runSimulation_Once(inter_bs_distance, i, simParams, baseStations);
             results[i] = oneSimulation;
@@ -40,7 +39,7 @@ public class ConventionalMethod {
         finalResult.printAllData();
         //Copy CHI
         finalResult.copy_chi(simParams.chi);
-        
+
         //As CSV file
         Helper.write_to_file("Conventional.csv", finalResult);
         //Now take the average...
@@ -69,13 +68,18 @@ public class ConventionalMethod {
             //FOR EACH B.S.
             double cumulative_throughput_this_hour = 0;
 
+            //FOR FAIRNESS INDEX
+            double sum_of_squares_of_throughput_this_hr = 0;
+            double sum_of_throughput_this_hr = 0;
+            int no_of_users = 0;
+
             for (int baseStation_iter = 0; baseStation_iter < baseStations.size(); baseStation_iter++) {
                 BaseStation bs = baseStations.get(baseStation_iter);
                 //2. Take random traffic for each Base Station Using CHI //FLOOR(chi * num_resource_blocks * rand)
                 int num_users_this_bs = (int) (Math.random() * simParams.chi[hour] * no_resource_blocks);
                 //FOR EACH U.E.
                 for (int user_no = 0; user_no < num_users_this_bs; user_no++) {
-
+                    no_of_users++; //For fairness index
                     //Assume this user is connected to my Base station [THIS BASE STATION i.e. bs]                    
                     double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                     Random rand = new Random();
@@ -107,6 +111,10 @@ public class ConventionalMethod {
 
                     //Metric 1. Cumulative Throughput of this hour [ThCon]
                     double throughput_of_user_for_BS_this_hour = 180 * (Math.log(1 + user.SINR_user_one_BS) / (Math.log(2)));  //per (User,BS,Hour)
+                    user.THROUGHPUT_user_one_BS = throughput_of_user_for_BS_this_hour;
+
+                    //For Fairness Index
+                    sum_of_squares_of_throughput_this_hr += (user.THROUGHPUT_user_one_BS * user.THROUGHPUT_user_one_BS);
 
                     cumulative_throughput_this_hour += throughput_of_user_for_BS_this_hour; //Cumulative Throughput of this (Hour)
 //                    System.out.println("BS = " + bs.base_station_id + " ,hr = " + hour + " , user.SINR = " + user.SINR_user_one_BS
@@ -121,20 +129,44 @@ public class ConventionalMethod {
             }
 
             simResults.cumulative_throughput_arr[hour] = cumulative_throughput_this_hour;
+            simResults.number_users_arr[hour] = no_of_users;
+            sum_of_throughput_this_hr = cumulative_throughput_this_hour;
+            //Average fairness index.
+            double J_of_T = 0;
+            J_of_T = ((sum_of_squares_of_throughput_this_hr) / ((double) (no_of_users) * sum_of_throughput_this_hr));
+            simResults.fairness_index_arr[hour] = J_of_T;
         }
 
         //Measure Average METRICS..
         double num_bs_double = (double) (baseStations.size());
         for (int hr = 0; hr < 24; hr++) {
-            simResults.average_throughput_arr[hr] = simResults.cumulative_throughput_arr[hr] / num_bs_double;
-            double hourly_power_consumption = 0;
+            //Average Throughput
+            simResults.average_throughput_arr[hr] = simResults.cumulative_throughput_arr[hr] / (double)simResults.number_users_arr[hr];
+            double hourly_power_consumption_total = 0;
             for (int bs = 0; bs < baseStations.size(); bs++) {
-                hourly_power_consumption += simResults.power_consumption_arr[hr][bs];
+                hourly_power_consumption_total += simResults.power_consumption_arr[hr][bs];
             }
-            simResults.average_power_consumption_arr[hr] = hourly_power_consumption;
+            //Average power consumption
+            simResults.average_power_consumption_arr[hr] = hourly_power_consumption_total;
+            simResults.average_power_consumption_arr[hr] /= (double)simResults.number_users_arr[hr];
         }
 
         return simResults;
     }
 
 }
+
+/*
+            for (int i = 0; i < baseStations.size(); i++) {
+                BaseStation bs = baseStations.get(i);
+                for (int j = 0; j < bs.users_of_this_baseStation.size(); j++) {
+                    User user = bs.users_of_this_baseStation.get(j);
+                    number_users_arr++;
+                    sum_throughput_squares_this_hr += (user.THROUGHPUT_user_one_BS * user.THROUGHPUT_user_one_BS); //sum of squares
+                }
+            }
+            J_of_T = ((sum_throughput_this_hr * sum_throughput_this_hr) / ((double)(number_users_arr) * sum_throughput_squares_this_hr));
+            
+            simResults.fairness_index_arr[hour] = J_of_T;
+
+ */

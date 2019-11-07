@@ -6,11 +6,11 @@ import simulation_params.SimulationParameters;
 
 public class SimulationRunner {
 
-    public static void runSimulation(String method) {
-        if(method.equals(Main.throughput_conventional)){
-            System.out.println("Running simulation for " + method);
+    public static void runSimulation(String mode) {
+        if(mode.equals(Main.conventional_mode)){
+            System.out.println("Running simulation for " + mode);
             SimulationParameters simParams = SimulationParameterBuilder.buildSimulationParameters_Urban();
-            simParams.simulationType = method;
+            simParams.simulationType = mode;
             simParams.printParameters();
             ConventionalMethod.runConventionalSimulation(simParams);
         }

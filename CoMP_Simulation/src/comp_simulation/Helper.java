@@ -85,6 +85,7 @@ public class Helper {
                 writer.write(String.valueOf(finalResult.chi[i]) + ",");
                 writer.write(String.valueOf(finalResult.average_throughput_arr[i]) + ",");
                 writer.write(String.valueOf(finalResult.average_power_consumption_arr[i]) + ",");
+                writer.write(String.valueOf(finalResult.fairness_index_arr[i]));
                 //}
                 //New line
                 writer.write("\n");
