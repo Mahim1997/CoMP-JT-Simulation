@@ -69,9 +69,8 @@ public class User {
 
 //-------------------------------------------------------------------------------------------------------    
 //BELOW are for paper's work
-
     private SimulationParameters simParams;
-    public SortedMap<Double, BaseStation> sorted_map_of_ReceivedPower_vs_BS = new TreeMap<>();
+    public TreeMap<Double, BaseStation> sorted_map_of_ReceivedPower_vs_BS = new TreeMap<>();
 
     public void formSimulationParameters(SimulationParameters s) {
         this.simParams = s;
@@ -104,7 +103,32 @@ public class User {
             this.sorted_map_of_ReceivedPower_vs_BS.put(Pr_BS_mW, bs);
         }
     }
-    public void printSortedMap(){
+
+    public void sortMapDescending() {
+        // Create the map and provide the comparator as a argument
+        Map<Double, BaseStation> desc_sort_map = new TreeMap<>(new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        desc_sort_map.putAll(this.sorted_map_of_ReceivedPower_vs_BS);
+        this.sorted_map_of_ReceivedPower_vs_BS.clear();
+        this.sorted_map_of_ReceivedPower_vs_BS = new TreeMap<>(new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        this.sorted_map_of_ReceivedPower_vs_BS.putAll(desc_sort_map);
+    }
+
+    public void printSortedMap() {
         Helper.printMap(this.sorted_map_of_ReceivedPower_vs_BS);
+    }
+
+    public double[] getReceivedPowersFromSortedAscendingOrderMap() {
+        return null;
+
     }
 }
