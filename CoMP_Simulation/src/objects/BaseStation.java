@@ -17,7 +17,7 @@ public class BaseStation {
     
     @Override
     public String toString() {
-        return "BaseStation{" + "x_pos=" + x_pos + ", y_pos=" + y_pos + ", base_station_id=" + base_station_id + ", tier=" + tier + '}';
+        return "BaseStation{" + "bs_id = " + base_station_id + ", x_pos=" + x_pos + ", y_pos=" + y_pos + ", tier=" + tier + '}';
     }
 
     public BaseStation(int base_station_id, double x_pos, double y_pos, int tier) {
@@ -48,16 +48,16 @@ public class BaseStation {
         this.base_station_id = 0;
     }
 
-    public static void placeBaseStations(List<BaseStation> list, double radius, int tier) {
+    public static void placeBaseStations(List<BaseStation> baseStations_List, double radius, int tier) {
         if (tier < 1) {
-            list.add(new BaseStation(1, 0, 0, tier));
+            baseStations_List.add(new BaseStation(1, 0, 0, tier));
             return;
         }
 
         //Center Base Station
-        int baseStation_id = 1;
-        BaseStation center = new BaseStation(baseStation_id++, 0, 0, 0); //tier = 0
-        list.add(center);
+        int bs_id = 1;
+        BaseStation center = new BaseStation(bs_id++, 0, 0, 0); //tier = 0
+        baseStations_List.add(center);
 
         double interBS = Math.pow(3, 0.5) * radius; //root(3)/2 * cell_radius * 2 is the interCellBS
         double half_interBS = interBS * 0.5;
@@ -72,55 +72,59 @@ public class BaseStation {
         while (tiers_matched <= tier) {
             ibs += interBS;
 
+
             //Top Base Station
             y = ibs;
             x = 0;
-            list.add(new BaseStation(baseStation_id++, x, y, tiers_matched));
+            baseStations_List.add(new BaseStation(bs_id++, x, y, tiers_matched));
 
             //Right-Downs.
             for (int itr = 0; itr < tiers_matched; itr++) {
                 x = x + (1.5 * radius);
                 y = y - (half_interBS);
-                list.add(new BaseStation(baseStation_id++, x, y, tiers_matched));
+                baseStations_List.add(new BaseStation(bs_id++, x, y, tiers_matched));
 
             }
             //Just Downs
             for (int itr = 0; itr < tiers_matched; itr++) {
                 //No change in x.
                 y = y - (interBS);
-                list.add(new BaseStation(baseStation_id++, x, y, tiers_matched));
+                baseStations_List.add(new BaseStation(bs_id++, x, y, tiers_matched));
 
             }
             //Left-Downs.
             for (int itr = 0; itr < tiers_matched; itr++) {
                 x = x - (1.5 * radius);
                 y = y - (half_interBS);
-                list.add(new BaseStation(baseStation_id++, x, y, tiers_matched));
+                baseStations_List.add(new BaseStation(bs_id++, x, y, tiers_matched));
 
             }
             //Left UPS 
             for (int itr = 0; itr < tiers_matched; itr++) {
                 x = x - (1.5 * radius);
                 y = y + (half_interBS);
-                list.add(new BaseStation(baseStation_id++, x, y, tiers_matched));
+                baseStations_List.add(new BaseStation(bs_id++, x, y, tiers_matched));
             }
             //Just Ups
             for (int itr = 0; itr < tiers_matched; itr++) {
                 //No change in x.
                 y = y + (interBS);
-                list.add(new BaseStation(baseStation_id++, x, y, tiers_matched));
+                baseStations_List.add(new BaseStation(bs_id++, x, y, tiers_matched));
 
             }
             //Right-Ups.[ONE LESS ... since top was taken.]
-            for (int itr = 0; itr < tiers_matched; itr++) {
+            for (int itr = 0; itr < (tiers_matched - 1); itr++) {
                 x = x + (1.5 * radius);
                 y = y + (half_interBS);
-                list.add(new BaseStation(baseStation_id++, x, y, tiers_matched));
+                baseStations_List.add(new BaseStation(bs_id++, x, y, tiers_matched));
             }
 
             tiers_matched++; //increment the tiers.
         }
-
+        System.out.println("-->>AFTER placing base stations ... bs.size = " + baseStations_List.size());
+        for(int i=0; i<baseStations_List.size(); i++){
+            System.out.println(baseStations_List.get(i).toString());
+        }
     }
 
     @Override

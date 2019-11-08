@@ -2,6 +2,17 @@ package simulation_params;
 
 public class SimulationParameters {
 
+    /*
+    These parameters are for varying chi and measuring avg UE throughput [for paper work]
+     */
+//    public double initial_chi = 0.0;
+//    public double final_chi = 1.0;
+//    public double step_size = 0.01;
+    public double initial_chi = 0.5;
+    public double final_chi = 0.505;
+    public double step_size = 0.01;
+    //-----------------------------------------------------------------
+
     //Parameters for running the simulation.
     //Will be updated continuously.
     public String simulationType;
