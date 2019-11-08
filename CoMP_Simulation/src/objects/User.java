@@ -3,9 +3,11 @@ package objects;
 import comp_simulation.Helper;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 import simulation_params.SimulationParameters;
 
 public class User {
@@ -64,9 +66,11 @@ public class User {
         return distance_arr;
     }
 
-    //BELOW are for paper's work
+//-------------------------------------------------------------------------------------------------------    
+//BELOW are for paper's work
     public Map<BaseStation, Double> map_of_baseStation_vs_ReceivedPower = new HashMap<>();
     private SimulationParameters simParams;
+    public TreeMap<BaseStation, Double> sorted_map;
 
     public void formSimulationParameters(SimulationParameters s) {
         this.simParams = s;
@@ -92,10 +96,41 @@ public class User {
 
     public void calculateReceivedPowersOfAllBaseStations(double Pn_mW, double FSPL_dB, List<BaseStation> baseStations) {
         //Pn_mW is the noise power in mW AND is fixed, where Pn = -174 + 10*log_10(BW) and Pn_mW = to_mw(Pn)
-//        System.out.println("bs.size = " + baseStations.size());
-        for(int i=0; i<baseStations.size(); i++){
+        for (int i = 0; i < baseStations.size(); i++) {
             BaseStation bs = baseStations.get(i);
-//            System.out.println("BS Id = " + bs.base_station_id);
+
+            double Pr_BS_mW = calculateReceivedPowerFromOneBaseStation(Pn_mW, FSPL_dB, bs);
+            this.map_of_baseStation_vs_ReceivedPower.put(bs, Pr_BS_mW); //put it in the map
         }
+    }
+
+    public void printHashMap() {
+        Helper.printMap(map_of_baseStation_vs_ReceivedPower);
+    }
+
+    public void sortHashMapDescending() {
+        ValueComparator bvc = new ValueComparator(this.map_of_baseStation_vs_ReceivedPower);
+        sorted_map = new TreeMap<BaseStation, Double>(bvc);
+        sorted_map.putAll(this.map_of_baseStation_vs_ReceivedPower);
+    }
+
+}
+
+class ValueComparator implements Comparator<BaseStation> {
+
+    Map<BaseStation, Double> initial_map;
+
+    public ValueComparator(Map<BaseStation, Double> base) {
+        this.initial_map = base;
+    }
+
+    // Note: this comparator imposes orderings that are inconsistent with
+    // equals.
+    public int compare(BaseStation a, BaseStation b) {
+        if (initial_map.get(a) >= initial_map.get(b)) {
+            return -1;
+        } else {
+            return 1;
+        } // returning 0 would merge keys
     }
 }

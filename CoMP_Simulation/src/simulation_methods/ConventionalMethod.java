@@ -102,7 +102,7 @@ public class ConventionalMethod {
 
                     //JUST THIS BASE STATION'S RECEIVED POWER.
                     double power_received_from_THIS_BS = user.get_RECEIVED_POWER_mW_for_one_BS(FSPL_dB, bs, simParams);
-//                    System.out.println("Power RCV of THIS BS = " + power_received_from_THIS_BS);
+                    System.out.println("Power RCV of THIS BS in mW = " + power_received_from_THIS_BS);
                     double noise = Pn_mW;
 
                     double total_recv_power_of_just_other_BS = Helper.SUM_OF_ARRAY(power_received_from_ONLY_Other_BS_of_this_user);

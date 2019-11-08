@@ -55,7 +55,7 @@ public class BaseStation {
         }
 
         //Center Base Station
-        int bs_id = 1;
+        int bs_id = 0;
         BaseStation center = new BaseStation(bs_id++, 0, 0, 0); //tier = 0
         baseStations_List.add(center);
 
@@ -121,10 +121,7 @@ public class BaseStation {
 
             tiers_matched++; //increment the tiers.
         }
-        System.out.println("-->>AFTER placing base stations ... bs.size = " + baseStations_List.size());
-        for(int i=0; i<baseStations_List.size(); i++){
-            System.out.println(baseStations_List.get(i).toString());
-        }
+
     }
 
     @Override

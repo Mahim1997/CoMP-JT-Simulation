@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import objects.BaseStation;
 import java.util.List;
+import java.util.Map;
 import simulation_methods.SimulationResults_HourlyData;
 
 public class Helper {
@@ -50,6 +51,12 @@ public class Helper {
         return sum;
     }
 
+    public static void printMap(Map<BaseStation, Double> map) {
+        map.entrySet().forEach(entry -> {
+            System.out.println("BS:" + entry.getKey() + ", ReceivedPower_mW = " + entry.getValue());
+        });
+    }
+
     public static double convert_To_mW_From_dBM(double power) {
         return (Math.pow(10, (double) (power * 0.1))); //1mW = 10 ^ (dB/10)
     }
@@ -68,17 +75,17 @@ public class Helper {
                 new FileOutputStream(fileName), "utf-8"))) {
 //            writer.write("something");
 
-            for(int i=0; i<SimulationResults_HourlyData.things_to_save.length; i++){
+            for (int i = 0; i < SimulationResults_HourlyData.things_to_save.length; i++) {
                 writer.write(SimulationResults_HourlyData.things_to_save[i]);
-                if(i != (SimulationResults_HourlyData.things_to_save.length - 1 )){
+                if (i != (SimulationResults_HourlyData.things_to_save.length - 1)) {
                     writer.write(",");
                 }
             }
             //{"Hour", "Chi", "Average Throughput(kBps)", "Average Power Consumed (W)"}
             writer.write("\n");
             int num_hours = 24;
-            for(int i=0; i<num_hours; i++){
-                
+            for (int i = 0; i < num_hours; i++) {
+
                 //{
                 //Write all as columns of CSV file
                 writer.write(String.valueOf(finalResult.hour_arr[i]) + ",");
@@ -92,9 +99,7 @@ public class Helper {
                 //New line
                 writer.write("\n");
             }
-            
-            
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
