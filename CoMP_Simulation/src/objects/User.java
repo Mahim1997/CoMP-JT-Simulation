@@ -96,6 +96,13 @@ public class User {
 
     public void calculateReceivedPowersOfAllBaseStations(double Pn_mW, double FSPL_dB, List<BaseStation> baseStations) {
         //Pn_mW is the noise power in mW AND is fixed, where Pn = -174 + 10*log_10(BW) and Pn_mW = to_mw(Pn)
+        //To maintain a descending order sort.
+        this.sorted_map_of_ReceivedPower_vs_BS = new TreeMap<>(new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                return o2.compareTo(o1);
+            }
+        });
         for (int i = 0; i < baseStations.size(); i++) {
             BaseStation bs = baseStations.get(i);
 
@@ -104,7 +111,19 @@ public class User {
         }
     }
 
-    public void sortMapDescending() {
+    public void printSortedMap() {
+        Helper.printMap(this.sorted_map_of_ReceivedPower_vs_BS);
+    }
+
+    public double[] getReceivedPowersFromSortedAscendingOrderMap() {
+        return null;
+
+    }
+}
+
+/*
+//THIS IS NOT NEEDED ... but is still kept for any future use.
+public void sortMapDescending() {
         // Create the map and provide the comparator as a argument
         Map<Double, BaseStation> desc_sort_map = new TreeMap<>(new Comparator<Double>() {
             @Override
@@ -122,13 +141,4 @@ public class User {
         });
         this.sorted_map_of_ReceivedPower_vs_BS.putAll(desc_sort_map);
     }
-
-    public void printSortedMap() {
-        Helper.printMap(this.sorted_map_of_ReceivedPower_vs_BS);
-    }
-
-    public double[] getReceivedPowersFromSortedAscendingOrderMap() {
-        return null;
-
-    }
-}
+*/
