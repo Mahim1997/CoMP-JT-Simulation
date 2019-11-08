@@ -73,8 +73,11 @@ public class Sim_UE_Throughput_vs_Chi {
             for (int k = 0; k < bs.users_of_this_baseStation.size(); k++) {
                 User user = bs.users_of_this_baseStation.get(k);
                 //Calculate the received powers of EACH B.S. for THIS user. 
-                user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations); //will store a map in itself
-                user.sortHashMapDescending(); //SORTING works.
+                user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations); //will store in a map [already sorted]
+                user.printSortedMap();
+                System.out.println("-------------------------------------");
+                
+                //Now keep the first (JT) number of Base stations as myself.
                 
             }
         }

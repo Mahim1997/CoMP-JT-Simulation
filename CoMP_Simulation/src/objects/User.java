@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import simulation_params.SimulationParameters;
 
@@ -68,9 +69,9 @@ public class User {
 
 //-------------------------------------------------------------------------------------------------------    
 //BELOW are for paper's work
-    public Map<BaseStation, Double> map_of_baseStation_vs_ReceivedPower = new HashMap<>();
+
     private SimulationParameters simParams;
-    public TreeMap<BaseStation, Double> sorted_map;
+    public SortedMap<Double, BaseStation> sorted_map_of_ReceivedPower_vs_BS = new TreeMap<>();
 
     public void formSimulationParameters(SimulationParameters s) {
         this.simParams = s;
@@ -100,37 +101,10 @@ public class User {
             BaseStation bs = baseStations.get(i);
 
             double Pr_BS_mW = calculateReceivedPowerFromOneBaseStation(Pn_mW, FSPL_dB, bs);
-            this.map_of_baseStation_vs_ReceivedPower.put(bs, Pr_BS_mW); //put it in the map
+            this.sorted_map_of_ReceivedPower_vs_BS.put(Pr_BS_mW, bs);
         }
     }
-
-    public void printHashMap() {
-        Helper.printMap(map_of_baseStation_vs_ReceivedPower);
-    }
-
-    public void sortHashMapDescending() {
-        ValueComparator bvc = new ValueComparator(this.map_of_baseStation_vs_ReceivedPower);
-        sorted_map = new TreeMap<BaseStation, Double>(bvc);
-        sorted_map.putAll(this.map_of_baseStation_vs_ReceivedPower);
-    }
-
-}
-
-class ValueComparator implements Comparator<BaseStation> {
-
-    Map<BaseStation, Double> initial_map;
-
-    public ValueComparator(Map<BaseStation, Double> base) {
-        this.initial_map = base;
-    }
-
-    // Note: this comparator imposes orderings that are inconsistent with
-    // equals.
-    public int compare(BaseStation a, BaseStation b) {
-        if (initial_map.get(a) >= initial_map.get(b)) {
-            return -1;
-        } else {
-            return 1;
-        } // returning 0 would merge keys
+    public void printSortedMap(){
+        Helper.printMap(this.sorted_map_of_ReceivedPower_vs_BS);
     }
 }

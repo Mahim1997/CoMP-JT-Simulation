@@ -5,9 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Iterator;
 import objects.BaseStation;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import simulation_methods.SimulationResults_HourlyData;
 
 public class Helper {
@@ -51,10 +53,22 @@ public class Helper {
         return sum;
     }
 
-    public static void printMap(Map<BaseStation, Double> map) {
-        map.entrySet().forEach(entry -> {
-            System.out.println("BS:" + entry.getKey() + ", ReceivedPower_mW = " + entry.getValue());
-        });
+    public static void printMap(Map<Double, BaseStation> map) {
+        Set set = map.entrySet();
+
+        // Using iterator in SortedMap 
+        Iterator iterator = set.iterator();
+
+        // Traversing map. Note that the traversal 
+        // produced sorted (by keys) output . 
+        while (iterator.hasNext()) {
+            Map.Entry m = (Map.Entry) iterator.next();
+
+            double key = (Double) m.getKey();
+            BaseStation value = (BaseStation) m.getValue();
+
+            System.out.println("ReceivedPower_mW : " + key + ", BS : " + value);
+        }
     }
 
     public static double convert_To_mW_From_dBM(double power) {
