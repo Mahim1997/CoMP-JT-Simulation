@@ -11,13 +11,6 @@ import simulation_params.SimulationParameters;
 
 public class Sim_UE_Throughput_vs_Chi {
 
-    /*
-    JT = VALUE_OF_JT    = 0 -> Conventional [only distances]
-                        = 1 -> DPS
-                        = 2 -> JT (2 BS give power simultaneously to the UE)
-                        and so on...
-     */
-    public static int VALUE_OF_JT = 1;
     private SimulationParameters simParams;
 
     public Sim_UE_Throughput_vs_Chi(SimulationParameters simParams) {
@@ -49,8 +42,7 @@ public class Sim_UE_Throughput_vs_Chi {
         int num_users_per_BS = (int) (chi * no_resource_blocks); //All B.S. same chi
         double Pn = -174 + (10 * Math.log10(simParams.bandwidth));
         double Pn_mW = Helper.convert_To_mW_From_dBM(Pn);
-        
-        
+
         //Adding the users...
         for (int base_station_iter = 0; base_station_iter < baseStations.size(); base_station_iter++) {
             BaseStation bs = baseStations.get(base_station_iter);
@@ -74,12 +66,14 @@ public class Sim_UE_Throughput_vs_Chi {
                 User user = bs.users_of_this_baseStation.get(k);
                 //Calculate the received powers of EACH B.S. for THIS user. 
                 user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations); //will store in a map [already sorted BUT ascending order]
-//                user.sortMapDescending();
-                user.printSortedMap();
-                System.out.println("-------------------------------------");
-                
-                //Now keep the first (JT) number of Base stations as myself.
-                
+//                user.printSortedMap();
+//                System.out.println("-------------------------------------");
+
+                //power_arr[0] is the sum of received powers (in mW) of best (JT) number of Base stations.
+                //power_arr[1] is the sum of received powers (in mW) of the remaning others base stations.
+                //power_arr[2] is the TOTAL of received powers (in mW) of ALL base stations.
+                double[] power_arr = user.getBestAndOtherReceivedPower(simParams.JT_VALUE);
+                System.out.println("-->Power_arr[0] = " + power_arr[0] + " , Power_arr[1] = " + power_arr[1] + " , P_arr[2] = " + power_arr[2]);
             }
         }
 

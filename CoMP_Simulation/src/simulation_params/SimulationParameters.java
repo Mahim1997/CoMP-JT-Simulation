@@ -11,6 +11,13 @@ public class SimulationParameters {
     public double initial_chi = 0.5;
     public double final_chi = 0.505;
     public double step_size = 0.01;
+    /*
+    JT = JT_VALUE    = 0 -> Conventional [only distances]
+                        = 1 -> DPS
+                        = 2 -> JT (2 BS give power simultaneously to the UE)
+                        and so on...
+     */
+    public int JT_VALUE = 1;
     //-----------------------------------------------------------------
 
     //Parameters for running the simulation.

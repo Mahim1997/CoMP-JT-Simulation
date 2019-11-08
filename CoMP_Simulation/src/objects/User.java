@@ -2,12 +2,11 @@ package objects;
 
 import comp_simulation.Helper;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.SortedMap;
+import java.util.Set;
 import java.util.TreeMap;
 import simulation_params.SimulationParameters;
 
@@ -115,9 +114,36 @@ public class User {
         Helper.printMap(this.sorted_map_of_ReceivedPower_vs_BS);
     }
 
-    public double[] getReceivedPowersFromSortedAscendingOrderMap() {
-        return null;
+    public double[] getBestAndOtherReceivedPower(int JT) {
+        //power_arr[0] is the sum of received powers (in mW) of best (JT) number of Base stations.
+        //power_arr[1] is the sum of received powers (in mW) of the remaning others base stations.
+        //power_arr[2] is the TOTAL of received powers (in mW) of ALL base stations.
+        double[] power_arr = new double[3];
 
+        Set set = sorted_map_of_ReceivedPower_vs_BS.entrySet();
+        Iterator iterator = set.iterator();
+
+        int num_BS_selected_so_far = 0;
+
+        double total_power_received = 0, power_recv_of_coordinating_BS = 0;
+        while (iterator.hasNext()) {
+            Map.Entry m = (Map.Entry) iterator.next();
+
+            double received_power_from_BS_mW = (Double) m.getKey();
+            BaseStation baseStation = (BaseStation) m.getValue();
+            if (num_BS_selected_so_far < JT) {
+                //Only keep the co-ordinating Base Stations
+                power_recv_of_coordinating_BS += received_power_from_BS_mW;
+            }
+            //Add all base stations' received powers
+            total_power_received += received_power_from_BS_mW;
+            //Number of Co-ordinating Base Stations got so far
+            num_BS_selected_so_far++;
+        }
+        power_arr[0] = power_recv_of_coordinating_BS;
+        power_arr[1] = total_power_received - power_recv_of_coordinating_BS;
+        power_arr[2] = total_power_received;
+        return power_arr;
     }
 }
 
@@ -141,4 +167,4 @@ public void sortMapDescending() {
         });
         this.sorted_map_of_ReceivedPower_vs_BS.putAll(desc_sort_map);
     }
-*/
+ */
