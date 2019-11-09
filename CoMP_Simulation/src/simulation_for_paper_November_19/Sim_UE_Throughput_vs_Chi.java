@@ -33,7 +33,13 @@ public class Sim_UE_Throughput_vs_Chi {
             simResults.chi_list.add(chi_to_run);
             simResults.avg_UE_throughput_list.add(avg_throughput_one_chi);
         }
-        simResults.printLists();
+        System.out.println("-->>Writing to file CSV");
+        String folderName = "Avg_Th_Chi";
+        String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo) 
+                + "_JT_" + String.valueOf(simParams.JT_VALUE)  + ".csv";
+        simResults.writeToCSV(fileName);
+        
+//        simResults.printLists();
     }
 
     private double runSimulationForOneChi_MonteCarlo(double FSPL_dB, double inter_bs_distance,
