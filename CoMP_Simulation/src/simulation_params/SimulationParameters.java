@@ -6,8 +6,8 @@ public class SimulationParameters {
     These parameters are for varying chi and measuring avg UE throughput [for paper work]
      */
     public double chi_initial = 0.1;
-    public double chi_final = 0.15;
-    public double chi_step_size = 0.01;
+    public double chi_final = 0.98;
+    public double chi_step_size = 0.05;
     
 //-------------------------------------------------------
 //TESTING BELOW
@@ -20,7 +20,7 @@ public class SimulationParameters {
                         = 2 -> JT (2 BS give power simultaneously to the UE)
                         and so on...
      */
-    public int JT_VALUE = 1;
+    public int JT_VALUE = 1; //DPS
     //-----------------------------------------------------------------
 
     //Parameters for running the simulation.

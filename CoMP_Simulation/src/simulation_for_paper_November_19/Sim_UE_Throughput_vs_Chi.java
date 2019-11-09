@@ -54,7 +54,7 @@ public class Sim_UE_Throughput_vs_Chi {
             double chi, List<BaseStation> baseStations) {
         double avg_throughput = 0;
         System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs chi = " + chi
-                + " , monte_carlo = " + simParams.monte_carlo + " times.");
+                + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
         for (int mc = 0; mc < simParams.monte_carlo; mc++) {
             double avg_throughput_oneChi_oneMC = runSimulationForOneChi_OneIteration(FSPL_dB, inter_bs_distance, chi, baseStations);
             avg_throughput += avg_throughput_oneChi_oneMC;
