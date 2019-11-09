@@ -18,6 +18,14 @@ public class Sim_UE_Throughput_vs_Chi {
     }
 
     public void runSimulationChi() {
+        //Change JT and run the below function...
+        for (int JT = 1; JT <= 5; JT++) {
+            simParams.JT_VALUE = JT;
+            runSimulationChi_OneJT();
+        }
+    }
+
+    public void runSimulationChi_OneJT() {
         SimResults_Throughput_Chi simResults = new SimResults_Throughput_Chi(simParams);
         //Place Base Stations [Fixed Positions throughout all the simulations]
         List<BaseStation> baseStations = new ArrayList<>();
@@ -35,10 +43,10 @@ public class Sim_UE_Throughput_vs_Chi {
         }
         System.out.println("-->>Writing to file CSV");
         String folderName = "Avg_Th_Chi";
-        String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo) 
-                + "_JT_" + String.valueOf(simParams.JT_VALUE)  + ".csv";
+        String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
+                + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
         simResults.writeToCSV(fileName);
-        
+
 //        simResults.printLists();
     }
 
