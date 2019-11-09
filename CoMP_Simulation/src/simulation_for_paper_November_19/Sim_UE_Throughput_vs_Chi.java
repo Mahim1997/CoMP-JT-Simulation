@@ -28,7 +28,7 @@ public class Sim_UE_Throughput_vs_Chi {
         double FSPL_dB = (20 * Math.log10(simParams.path_loss_reference_distance))
                 + (20 * Math.log10(simParams.frequency_carrier)) + 92.45; //FSPL_dB = 20*log_10(d_0) + 20*log_10(fc) + 92.45
 
-        for (double chi_to_run = simParams.initial_chi; chi_to_run < simParams.final_chi; chi_to_run += simParams.step_size_chi) {
+        for (double chi_to_run = simParams.chi_initial; chi_to_run < simParams.chi_final; chi_to_run += simParams.chi_step_size) {
             double avg_throughput_one_chi = runSimulationForOneChi_MonteCarlo(FSPL_dB, inter_bs_distance, chi_to_run, baseStations);
             simResults.chi_list.add(chi_to_run);
             simResults.avg_UE_throughput_list.add(avg_throughput_one_chi);
@@ -39,6 +39,8 @@ public class Sim_UE_Throughput_vs_Chi {
     private double runSimulationForOneChi_MonteCarlo(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         double avg_throughput = 0;
+        System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs chi = " + chi
+                + " , monte_carlo = " + simParams.monte_carlo + " times.");
         for (int mc = 0; mc < simParams.monte_carlo; mc++) {
             double avg_throughput_oneChi_oneMC = runSimulationForOneChi_OneIteration(FSPL_dB, inter_bs_distance, chi, baseStations);
             avg_throughput += avg_throughput_oneChi_oneMC;
@@ -50,7 +52,7 @@ public class Sim_UE_Throughput_vs_Chi {
 
     private double runSimulationForOneChi_OneIteration(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
-        System.out.println("-->>Inside running for one chi = " + chi);
+//        System.out.println("-->>Inside running for one chi = " + chi);
 
         //Calculate fixed values beforehand to save computation time inside the loops.
         double num_users_total = 0;

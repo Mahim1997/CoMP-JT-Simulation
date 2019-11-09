@@ -126,8 +126,8 @@ public class Helper {
     }
 
     public static int how_many_chi_data_points(SimulationParameters simParams) {
-        return (int)((simParams.final_chi - simParams.initial_chi) / simParams.step_size_chi);
-        
+        return (int) ((simParams.chi_final - simParams.chi_initial) / simParams.chi_step_size);
+
     }
 
 }
