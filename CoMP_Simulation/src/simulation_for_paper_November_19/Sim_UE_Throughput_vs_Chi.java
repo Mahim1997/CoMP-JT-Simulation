@@ -18,6 +18,7 @@ public class Sim_UE_Throughput_vs_Chi {
     }
 
     public void runSimulationChi() {
+        SimResults_Throughput_Chi simResults = new SimResults_Throughput_Chi(simParams);
         //Place Base Stations [Fixed Positions throughout all the simulations]
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
@@ -27,16 +28,32 @@ public class Sim_UE_Throughput_vs_Chi {
         double FSPL_dB = (20 * Math.log10(simParams.path_loss_reference_distance))
                 + (20 * Math.log10(simParams.frequency_carrier)) + 92.45; //FSPL_dB = 20*log_10(d_0) + 20*log_10(fc) + 92.45
 
-        for (double chi_to_run = simParams.initial_chi; chi_to_run < simParams.final_chi; chi_to_run += simParams.step_size) {
-            runSimulationForOneChi(FSPL_dB, inter_bs_distance, chi_to_run, baseStations);
+        for (double chi_to_run = simParams.initial_chi; chi_to_run < simParams.final_chi; chi_to_run += simParams.step_size_chi) {
+            double avg_throughput_one_chi = runSimulationForOneChi_MonteCarlo(FSPL_dB, inter_bs_distance, chi_to_run, baseStations);
+            simResults.chi_list.add(chi_to_run);
+            simResults.avg_UE_throughput_list.add(avg_throughput_one_chi);
         }
+        simResults.printLists();
     }
 
-    private void runSimulationForOneChi(double FSPL_dB, double inter_bs_distance,
+    private double runSimulationForOneChi_MonteCarlo(double FSPL_dB, double inter_bs_distance,
+            double chi, List<BaseStation> baseStations) {
+        double avg_throughput = 0;
+        for (int mc = 0; mc < simParams.monte_carlo; mc++) {
+            double avg_throughput_oneChi_oneMC = runSimulationForOneChi_OneIteration(FSPL_dB, inter_bs_distance, chi, baseStations);
+            avg_throughput += avg_throughput_oneChi_oneMC;
+        }
+        avg_throughput /= ((double) (simParams.monte_carlo));
+
+        return avg_throughput;
+    }
+
+    private double runSimulationForOneChi_OneIteration(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         System.out.println("-->>Inside running for one chi = " + chi);
 
         //Calculate fixed values beforehand to save computation time inside the loops.
+        double num_users_total = 0;
         double bw_MHz = simParams.bandwidth / Math.pow(10, 6);
         int no_resource_blocks = ResourceBlockCalculator.numberOfResourceBlocks(bw_MHz);
         int num_users_per_BS = (int) (chi * no_resource_blocks); //All B.S. same chi
@@ -58,25 +75,24 @@ public class Sim_UE_Throughput_vs_Chi {
                 bs.users_of_this_baseStation.add(user);
             }
         }
-
+        double cumulative_throughput_kBps = 0;
         //Now power calculations... FOR EACH USER
         for (int i = 0; i < baseStations.size(); i++) {
             BaseStation bs = baseStations.get(i);
             for (int k = 0; k < bs.users_of_this_baseStation.size(); k++) {
                 User user = bs.users_of_this_baseStation.get(k);
-                //Calculate the received powers of EACH B.S. for THIS user. 
-                user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations); //will store in a map [already sorted BUT ascending order]
-//                user.printSortedMap();
-//                System.out.println("-------------------------------------");
-
-                //power_arr[0] is the sum of received powers (in mW) of best (JT) number of Base stations.
-                //power_arr[1] is the sum of received powers (in mW) of the remaning others base stations.
-                //power_arr[2] is the TOTAL of received powers (in mW) of ALL base stations.
+                num_users_total += 1;
+//Received Powers will be stored in a map [already sorted in DESCENDING order]
+                user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);
+//power_arr[0] = Pr_mW for co-ordinating BSs, arr[1] = Pr_mW of remaining OTHER BSs, arr[2] = TOTAL Pr_mW
                 double[] power_arr = user.getBestAndOtherReceivedPower(simParams.JT_VALUE);
-                System.out.println("-->Power_arr[0] = " + power_arr[0] + " , Power_arr[1] = " + power_arr[1] + " , P_arr[2] = " + power_arr[2]);
+                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
+                cumulative_throughput_kBps += user.THROUGHPUT_user_one_BS_KBps;
             }
         }
 
+        double average_throughput = cumulative_throughput_kBps / num_users_total; //num_users_total is ALREADY in double
+        return average_throughput;
     }
 
 }

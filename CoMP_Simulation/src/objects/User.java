@@ -14,10 +14,10 @@ public class User {
 
     public double x_pos;
     public double y_pos;
-
-    public double SINR_user_one_BS;
     public double PATH_LOSS_this_user_mW;
     public double POWER_RECEIVED_ONE_BS_mW;
+
+    public double SINR_user_one_BS;
     public double THROUGHPUT_user_one_BS_KBps;
 
     public double get_RECEIVED_POWER_mW_for_one_BS(double FSPL_dB, BaseStation bs,
@@ -144,6 +144,15 @@ public class User {
         power_arr[1] = total_power_received - power_recv_of_coordinating_BS;
         power_arr[2] = total_power_received;
         return power_arr;
+    }
+
+    //calculates the throughput and SINR [Pn_mW is the noise power in mW]
+    public void calculate_SINR_and_Throughput_of_UE(double Pn_mW, double[] received_powers_mW) {
+        double numerator = received_powers_mW[0];
+        double denominator = received_powers_mW[1];
+        this.SINR_user_one_BS = (numerator / (Pn_mW + denominator));
+        this.THROUGHPUT_user_one_BS_KBps = 180 * (Helper.log2(1 + this.SINR_user_one_BS));
+        
     }
 }
 

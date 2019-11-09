@@ -7,10 +7,10 @@ public class SimulationParameters {
      */
 //    public double initial_chi = 0.0;
 //    public double final_chi = 1.0;
-//    public double step_size = 0.01;
+//    public double step_size_chi = 0.01;
     public double initial_chi = 0.5;
     public double final_chi = 0.505;
-    public double step_size = 0.01;
+    public double step_size_chi = 0.01;
     /*
     JT = JT_VALUE    = 0 -> Conventional [only distances]
                         = 1 -> DPS

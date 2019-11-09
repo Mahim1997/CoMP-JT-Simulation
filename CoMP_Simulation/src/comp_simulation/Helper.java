@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import simulation_methods.SimulationResults_HourlyData;
+import simulation_params.SimulationParameters;
 
 public class Helper {
 
@@ -118,6 +119,15 @@ public class Helper {
             ex.printStackTrace();
         }
 
+    }
+
+    public static double log2(double d) {
+        return (Math.log(d) / Math.log(2.0));
+    }
+
+    public static int how_many_chi_data_points(SimulationParameters simParams) {
+        return (int)((simParams.final_chi - simParams.initial_chi) / simParams.step_size_chi);
+        
     }
 
 }
