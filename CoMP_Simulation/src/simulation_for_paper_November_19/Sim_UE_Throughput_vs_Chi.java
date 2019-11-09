@@ -107,7 +107,7 @@ public class Sim_UE_Throughput_vs_Chi {
             }
         }
 
-        double average_throughput = cumulative_throughput_kBps / num_users_total; //num_users_total is ALREADY in double
+        double average_throughput = (num_users_total == 0) ? 0 : (cumulative_throughput_kBps / num_users_total); //num_users_total is ALREADY in double
         return average_throughput;
     }
 
