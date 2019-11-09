@@ -2,8 +2,10 @@ package comp_simulation;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import objects.BaseStation;
@@ -127,6 +129,30 @@ public class Helper {
 
     public static int how_many_chi_data_points(SimulationParameters simParams) {
         return (int) ((simParams.chi_final - simParams.chi_initial) / simParams.chi_step_size);
+
+    }
+
+    public static void erase_csv_file(String fileName) {
+        try (FileWriter fw = new FileWriter(fileName);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            out.print("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void write_user_throughput_and_distance(String fileName, String THROUGHPUT_user_one_BS_KBps, String distanceFromBS) {
+        try (FileWriter fw = new FileWriter(fileName, true); //append
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            out.print(String.valueOf(THROUGHPUT_user_one_BS_KBps) + "," + String.valueOf(distanceFromBS));
+            out.println(); //print line.
+        } catch (IOException e) {
+            e.printStackTrace();
+            //exception handling left as an exercise for the reader
+        }
 
     }
 

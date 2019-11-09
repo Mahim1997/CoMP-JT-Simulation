@@ -30,14 +30,9 @@ public class GraphPlotter extends Application {
         Results rs = reader.readThingsFromFile();
 
         System.out.println("Plotting graph ...");
-        plotGraphAndSave("Avg Throughput (kBps)", "Time (hr)", "Conventional_Throughput_vs_Time.png", rs.average_throughput, rs.hour);
-        plotGraphAndSave("Avg Power Consumption (W)", "Time (hr)", "Conventional_Power_vs_Time.png", rs.average_power_consumption, rs.hour);
-        plotGraphAndSave("Chi (%)", "Time (hr)", "Conventional_Chi_vs_Time.png", rs.get_chi_percentage(), rs.hour);
-        plotGraphAndSave("Fairness Index", "Time (hr)", "Conventional_Fairness_Index_vs_Time.png", rs.fairness_index, rs.hour);
-        plotGraphAndSave("Spectral Efficiency", "Time (hr)", "Conventional_Spectral_Efficiency_vs_Time.png", rs.fairness_index, rs.hour);
-        plotGraphAndSave("Cell-Edge Throughput (kBps)", "Time (hr)", "Conventional_Cell-Edge_Throughput_vs_Time.png", rs.fairness_index, rs.hour);
+//        plotForNormalConventional(rs);
 
-        //stage.show();
+//stage.show();
         System.out.println("After saving files .... exiting SYS.exit(0)");
         System.exit(0);
     }
@@ -87,6 +82,16 @@ public class GraphPlotter extends Application {
         saveAsPng(scene, fileNameToSaveAndTitle);
         stage.setScene(scene);
 //        saveAsPng(scene, "chart1.png");
+
+    }
+
+    private void plotForNormalConventional(Results rs) {
+        plotGraphAndSave("Avg Throughput (kBps)", "Time (hr)", "Conventional_Throughput_vs_Time.png", rs.average_throughput, rs.hour);
+        plotGraphAndSave("Avg Power Consumption (W)", "Time (hr)", "Conventional_Power_vs_Time.png", rs.average_power_consumption, rs.hour);
+        plotGraphAndSave("Chi (%)", "Time (hr)", "Conventional_Chi_vs_Time.png", rs.get_chi_percentage(), rs.hour);
+        plotGraphAndSave("Fairness Index", "Time (hr)", "Conventional_Fairness_Index_vs_Time.png", rs.fairness_index, rs.hour);
+        plotGraphAndSave("Spectral Efficiency", "Time (hr)", "Conventional_Spectral_Efficiency_vs_Time.png", rs.fairness_index, rs.hour);
+        plotGraphAndSave("Cell-Edge Throughput (kBps)", "Time (hr)", "Conventional_Cell-Edge_Throughput_vs_Time.png", rs.fairness_index, rs.hour);
 
     }
 }

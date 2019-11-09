@@ -1,6 +1,6 @@
 package comp_simulation;
 
-import simulation_for_paper_November_19.Sim_UE_Throughput_vs_Chi;
+import simulation_for_paper_November_19.Sim_UE_New;
 import simulation_methods.ConventionalMethod;
 import simulation_params.SimulationParameterBuilder;
 import simulation_params.SimulationParameters;
@@ -19,8 +19,15 @@ public class SimulationRunner {
             SimulationParameters simParams = SimulationParameterBuilder.buildSimulationParameters_Urban();
             simParams.simulationType = mode;
             simParams.printParameters();
-            Sim_UE_Throughput_vs_Chi runner = new Sim_UE_Throughput_vs_Chi(simParams);
+            Sim_UE_New runner = new Sim_UE_New(simParams);
             runner.runSimulationChi();
+        }else if(mode.equals(Main.UE_T_vs_distance)){
+            System.out.println("Running simulation for " + (mode.replace("_", " ")));
+            SimulationParameters simParams = SimulationParameterBuilder.buildSimulationParameters_Urban();
+            simParams.simulationType = mode;
+            simParams.printParameters();
+            Sim_UE_New runner = new Sim_UE_New(simParams);
+            runner.runSimulationForSecondTask();
         }
         // to do 
     }
