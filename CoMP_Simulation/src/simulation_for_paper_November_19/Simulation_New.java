@@ -93,7 +93,8 @@ public class Simulation_New {
 
                 user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);
                 user.sortBaseStations_wrt_Pr_mW();
-
+//%% Power consumption of 7 BS's based on modified chi for hourly basis (BS x 24Hr )
+//PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
                 double[] power_arr = user.getReceivedPowerArray();
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
 /*

@@ -3,13 +3,47 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Reader {
 
-    //Read from CSV file
+    //Read from CSV file [Conventional Method only]
     public String fileNameToRead = GraphPlotter.FILE_NAME;
+
+    public List<Result_T_UE_vs_Chi> readResults_UE_vs_chi(int monte_carlo, int JT_initial, int JT_final) {
+        //form file names ... call another function
+
+        return null;
+    }
+
+    public Result_T_UE_vs_Chi read_UI_vs_Chi_once(String fileName) {
+        Result_T_UE_vs_Chi rs = new Result_T_UE_vs_Chi(fileName, 0);
+
+        BufferedReader csvReader = null;
+        String row = null;
+        try {
+            csvReader = new BufferedReader(new FileReader(fileName));
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split(",");
+//                System.out.println("data[0] = " + data[0] + " , data[1] = " + data[1]);
+                try{
+                    double chi, thpt_avg;
+                    chi = Double.parseDouble(data[0]);
+                    thpt_avg = Double.parseDouble(data[1]);
+                    rs.chi_list.add(chi);
+                    rs.avg_UE_throughput_list.add(thpt_avg);
+                }catch(NumberFormatException e2){
+                    //Do nothing ... just continue
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
 
     public Results readThingsFromFile() {
         BufferedReader csvReader = null;
@@ -19,16 +53,15 @@ public class Reader {
             rs.fileNameToSaveInPng = (fileNameToRead.replace("csv", "png"));
             String row = "";
             csvReader = new BufferedReader(new FileReader(fileNameToRead));
-            
+
             //Start at Title [so idx = -1]
             int idx = -1;
-            
-            
+
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");
-                
+
                 //Initial checking
-                if(idx != -1){
+                if (idx != -1) {
 //                    System.out.println("ENETRING... printing data[0] = " + data[0]);
                     rs.hour[idx] = Double.parseDouble(data[0]);
                     rs.chi[idx] = Double.parseDouble(data[1]);
