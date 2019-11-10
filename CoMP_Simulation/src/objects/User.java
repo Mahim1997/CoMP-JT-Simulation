@@ -47,7 +47,8 @@ public class User {
         double alpha = simParams.path_loss_exponent_alpha;
         double d0 = simParams.path_loss_reference_distance;
         Random rand = new Random();
-        double normal_random_generated_value = (rand.nextGaussian() * simParams.path_loss_standard_deviation);
+//For fading_effect
+        double normal_random_generated_value = (rand.nextGaussian() * simParams.path_loss_standard_deviation); //mean = 0
         double PL_dB = FSPL_dB /*fixed loss*/
                 + (10 * alpha * Math.log10(d_UE_from_BS / (d0 * 1000))) /*for distance based path loss*/
                 + normal_random_generated_value;/*for fading*/
@@ -97,10 +98,10 @@ public class User {
                 break;
             }
         }
-        double received_power_idx_0 = 0, others_power_idx_1 = 0, total_power_idx_2 = 0;
+        double coordinating_bs_received_power_idx_0 = 0, others_power_idx_1 = 0, total_power_idx_2 = 0;
         if (drop_ue) {
             //DROPPED
-            received_power_idx_0 = 0;
+            coordinating_bs_received_power_idx_0 = 0;
             for (int i = 0; i < baseStations.size(); i++) {
                 total_power_idx_2 += baseStations.get(i).power_received_by_user_mW;
             }
@@ -114,18 +115,19 @@ public class User {
                 if (num_BS_selected_so_far < simParams.JT_VALUE) {
                     //Within JT , so decrement no_available_slots for BS.
                     bs.num_available_slots--;
-                    received_power_idx_0 += bs.power_received_by_user_mW;
+                    coordinating_bs_received_power_idx_0 += bs.power_received_by_user_mW;
                 } else {
                     others_power_idx_1 += bs.power_received_by_user_mW;
                 }
                 num_BS_selected_so_far++;
             }
         }
-        power_arr[0] = received_power_idx_0;
+        power_arr[0] = coordinating_bs_received_power_idx_0;
         power_arr[1] = others_power_idx_1;
         power_arr[2] = total_power_idx_2;
         return power_arr;
     }
+
     //calculates the throughput and SINR [Pn_mW is the noise power in mW]
     public void calculate_SINR_and_Throughput_of_UE(double Pn_mW, double[] received_powers_mW) {
         double numerator = received_powers_mW[0];

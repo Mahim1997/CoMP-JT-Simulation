@@ -43,7 +43,8 @@ public class Simulation_New {
         for (double chi = simParams.chi_initial; chi <= simParams.chi_final; chi += simParams.chi_step_size) {
             System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs chi = " + chi
                     + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
-            double avg_tpt = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
+            //Run monte_carlo times for THIS value of CHI and write that to the CSV file.
+            double avg_tpt = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations); 
             Helper.write_chi_avg_throughput(fileName, String.valueOf(chi), String.valueOf(avg_tpt));
         }
         //run monte carlo
