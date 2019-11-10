@@ -1,27 +1,21 @@
 package objects;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BaseStation {
 
-    //Parameters
+//Normal Parameters
     public double x_pos;
     public double y_pos;
     public int base_station_id;
     public int tier;
 
-    public List<User> users_of_this_baseStation = new ArrayList<>();
+//For BS parameters
+    public int num_available_slots;
+//For UE paramaters
+    public double power_received_by_user_mW;
     
-    public int num_available_slots_for_users;
-    
-    
-    
-    @Override
-    public String toString() {
-        return "BaseStation{" + "bs_id = " + base_station_id + ", x_pos=" + x_pos + ", y_pos=" + y_pos + ", tier=" + tier + '}';
-    }
-
+//Constructors
     public BaseStation(int base_station_id, double x_pos, double y_pos, int tier) {
         this.x_pos = x_pos;
         this.y_pos = y_pos;
@@ -34,20 +28,6 @@ public class BaseStation {
         this.y_pos = 0;
         this.base_station_id = 0;
         this.tier = 0;
-    }
-
-    public BaseStation(double x_pos, double y_pos) {
-        this.x_pos = x_pos;
-        this.y_pos = y_pos;
-        this.base_station_id = 0;
-        this.tier = 0;
-    }
-
-    public BaseStation(double x_pos, double y_pos, int tier) {
-        this.x_pos = x_pos;
-        this.y_pos = y_pos;
-        this.tier = tier;
-        this.base_station_id = 0;
     }
 
     public static void placeBaseStations(List<BaseStation> baseStations_List, double radius, int tier) {
@@ -63,17 +43,11 @@ public class BaseStation {
 
         double interBS = Math.pow(3, 0.5) * radius; //root(3)/2 * cell_radius * 2 is the interCellBS
         double half_interBS = interBS * 0.5;
-
-        double[] xshift = {0, 1.5 * radius, 1.5 * radius, 0, -1.5 * radius, -1.5 * radius};
-        double[] yshift = {interBS, half_interBS, -half_interBS, -interBS, -half_interBS, half_interBS};
-
         int tiers_matched = 1;
         BaseStation bs;
         double ibs = 0, x = 0, y = 0;
-
         while (tiers_matched <= tier) {
             ibs += interBS;
-
 
             //Top Base Station
             y = ibs;
@@ -127,32 +101,8 @@ public class BaseStation {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 71 * hash + (int) (Double.doubleToLongBits(this.x_pos) ^ (Double.doubleToLongBits(this.x_pos) >>> 32));
-        hash = 71 * hash + (int) (Double.doubleToLongBits(this.y_pos) ^ (Double.doubleToLongBits(this.y_pos) >>> 32));
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BaseStation other = (BaseStation) obj;
-        if (Double.doubleToLongBits(this.x_pos) != Double.doubleToLongBits(other.x_pos)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.y_pos) != Double.doubleToLongBits(other.y_pos)) {
-            return false;
-        }
-        return true;
+    public String toString() {
+        return "BaseStation{" + "x_pos=" + x_pos + ", y_pos=" + y_pos + ", base_station_id=" + base_station_id + ", num_available_slots=" + num_available_slots + ", power_received_by_user_mW=" + power_received_by_user_mW + '}';
     }
 
 }

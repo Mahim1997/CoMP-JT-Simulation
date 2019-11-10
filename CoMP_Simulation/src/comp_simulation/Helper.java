@@ -12,7 +12,6 @@ import objects.BaseStation;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import simulation_methods.SimulationResults_HourlyData;
 import simulation_params.SimulationParameters;
 
 public class Helper {
@@ -86,43 +85,6 @@ public class Helper {
         return (degree * (Math.PI / 180.0));
     }
 
-    public static void write_to_file(String fileName, SimulationResults_HourlyData finalResult) {
-
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(fileName), "utf-8"))) {
-//            writer.write("something");
-
-            for (int i = 0; i < SimulationResults_HourlyData.things_to_save.length; i++) {
-                writer.write(SimulationResults_HourlyData.things_to_save[i]);
-                if (i != (SimulationResults_HourlyData.things_to_save.length - 1)) {
-                    writer.write(",");
-                }
-            }
-            //{"Hour", "Chi", "Average Throughput(kBps)", "Average Power Consumed (W)"}
-            writer.write("\n");
-            int num_hours = 24;
-            for (int i = 0; i < num_hours; i++) {
-
-                //{
-                //Write all as columns of CSV file
-                writer.write(String.valueOf(finalResult.hour_arr[i]) + ",");
-                writer.write(String.valueOf(finalResult.chi[i]) + ",");
-                writer.write(String.valueOf(finalResult.average_throughput_arr[i]) + ",");
-                writer.write(String.valueOf(finalResult.average_power_consumption_arr[i]) + ",");
-                writer.write(String.valueOf(finalResult.fairness_index_arr[i]) + ",");
-                writer.write(String.valueOf(finalResult.spectral_efficiency_arr[i]) + ",");
-                writer.write(String.valueOf(finalResult.cell_edge_throughput_arr[i]));
-                //}
-                //New line
-                writer.write("\n");
-            }
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-    }
-
     public static double log2(double d) {
         return (Math.log(d) / Math.log(2.0));
     }
@@ -154,6 +116,29 @@ public class Helper {
             //exception handling left as an exercise for the reader
         }
 
+    }
+    
+    public static void erase_chi_avg_throughput(String fileName){
+        try (FileWriter fw = new FileWriter(fileName); //append
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            out.print(String.valueOf("Chi") + "," + String.valueOf("T_avg (kBps)"));
+            out.println(); //print line.
+        } catch (IOException e) {
+            e.printStackTrace();
+            //exception handling left as an exercise for the reader
+        }
+    }
+    public static void write_chi_avg_throughput(String fileName, String chi, String thpt) {
+        try (FileWriter fw = new FileWriter(fileName, false); //append
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            out.print(String.valueOf(chi) + "," + String.valueOf(thpt));
+            out.println(); //print line.
+        } catch (IOException e) {
+            e.printStackTrace();
+            //exception handling left as an exercise for the reader
+        }
     }
 
 }
