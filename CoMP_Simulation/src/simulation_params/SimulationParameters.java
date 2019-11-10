@@ -6,7 +6,7 @@ public class SimulationParameters {
     These parameters are for varying chi and measuring avg UE throughput [for paper work]
      */
     public double chi_initial = 0.1;
-    public double chi_final = 1.0;
+    public double chi_final = 1;
     public double chi_step_size = 0.01;
 
     public double chi_for_position = 0.5;
