@@ -130,7 +130,7 @@ public class Helper {
         }
     }
     public static void write_chi_avg_throughput(String fileName, String chi, String thpt) {
-        try (FileWriter fw = new FileWriter(fileName, false); //append
+        try (FileWriter fw = new FileWriter(fileName, true); //append [TRUE]
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw)) {
             out.print(String.valueOf(chi) + "," + String.valueOf(thpt));

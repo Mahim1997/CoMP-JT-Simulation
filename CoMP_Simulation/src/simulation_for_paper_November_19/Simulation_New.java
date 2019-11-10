@@ -94,16 +94,17 @@ public class Simulation_New {
                 user.sortBaseStations_wrt_Pr_mW();
 
                 double[] power_arr = user.getReceivedPowerArray();
-                
+                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
+/*
                 System.out.println("AFTER SORTING ... printing base stations ....");
                 for(BaseStation bs1:user.getListOfBaseStations()){
                     System.out.println(bs1.toString());
                 }
                 System.out.println("PRINTING power_arr, 0->" + power_arr[0] + ", 1->" + power_arr[1] + ", 2->" + power_arr[2]);
+                System.out.println("UE Throughput = " + user.THROUGHPUT_user_one_BS_KBps + ", UE SINR = " + user.SINR_user_one_BS);
                 System.out.println("------------------------------------------------");
+*/
 
-
-                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 //After calculations... [to get the same num_slots_available]
                 baseStations = user.getListOfBaseStations();
