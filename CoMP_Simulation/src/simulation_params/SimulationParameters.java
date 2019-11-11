@@ -7,7 +7,7 @@ public class SimulationParameters {
      */
     public double chi_initial = 0;
     public double chi_final = 1;
-    public double chi_step_size = 0.001;
+    public double chi_step_size = 0.005;
 
     public double chi_for_position = 0.5;
 
@@ -19,7 +19,7 @@ public class SimulationParameters {
 //    public double chi_final = 0.505;
 //    public double chi_step_size = 0.01;
     /*
-    JT = JT_VALUE    = 0 -> Conventional [only distances]
+    JT = JT_VALUE    = 0 -> Conventional [only distances] {not included}
                         = 1 -> DPS
                         = 2 -> JT (2 BS give power simultaneously to the UE)
                         and so on...
