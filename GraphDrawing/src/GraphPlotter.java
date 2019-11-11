@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 public class GraphPlotter extends Application {
 
     public static String FILE_NAME = "Conventional.csv";
+    public static double THRESHOLD_CHI = 0.02;
 
     public static void main(String[] args) {
         launch(args);
@@ -166,12 +167,12 @@ public class GraphPlotter extends Application {
         List<Result_T_UE_vs_Chi> list = new ArrayList<>();
 
         String monte_carlo_str = "1000";
-        for (int JT = 1; JT <= 7; JT++) {
+        for (int JT = 1; JT <= 5; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
             System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
             Result_T_UE_vs_Chi res = reader.read_UI_vs_Chi_once(fileName);
-//            res.legendName = "JT=" + (String.valueOf(JT));
-            res.legendName = "" + (String.valueOf(JT));
+            res.legendName = "JT=" + (String.valueOf(JT));
+//            res.legendName = "" + (String.valueOf(JT));
             list.add(res);
         }
 

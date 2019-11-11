@@ -28,8 +28,11 @@ public class Reader {
                     double chi, thpt_avg;
                     chi = Double.parseDouble(data[0]);
                     thpt_avg = Double.parseDouble(data[1]);
-                    rs.chi_list.add(chi * 100);
-                    rs.avg_UE_throughput_list.add((thpt_avg));
+                    if (thpt_avg > GraphPlotter.THRESHOLD_CHI) {
+                        //Only take for chi > THRESHLOD [here, 0.02]
+                        rs.chi_list.add(chi * 100);
+                        rs.avg_UE_throughput_list.add((thpt_avg));
+                    }
                 } catch (NumberFormatException e2) {
                     //Do nothing ... just continue
                 }
