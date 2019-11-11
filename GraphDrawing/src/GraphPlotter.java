@@ -99,11 +99,12 @@ public class GraphPlotter extends Application {
     }
 
 //--------------------------------------  PAPER TASKS  -----------------------------------------------------
-    private void plotGraphAndSave(String y_axis_label, String x_axis_label,
-            String fileNameToSave, List<Result_T_UE_vs_Chi> listResults) {
+    private void plotGraphAndSave(String y_axis_label, String x_axis_label, String fileNameToSave, 
+            List<Result_T_UE_vs_Chi> listResults, String monte_carlo_str) {
 
         String titleGraph = fileNameToSave.replace(".png", "");
         titleGraph = titleGraph.replace("_", " ");
+        titleGraph += (", Monte Carlo = " + monte_carlo_str);
         stage.setTitle("Graphs");
         //defining the axes
 
@@ -115,7 +116,7 @@ public class GraphPlotter extends Application {
         //creating the chart
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-
+        lineChart.setCreateSymbols(false);
         lineChart.setTitle(titleGraph);
 
         //List of Serieses, initialization
@@ -142,13 +143,12 @@ public class GraphPlotter extends Application {
 //            series.getData().add(new XYChart.Data(x_axis_data[i], y_axis_data[i]));
 //        }
 
-        Scene scene = new Scene(lineChart, 800, 600); //Height and Width [Default values]
+        Scene scene = new Scene(lineChart, 1000, 800); //Height and Width [Default values]
 
         lineChart.setAnimated(false);
-        for(int i=0; i<series_list.size(); i++){
+        for (int i = 0; i < series_list.size(); i++) {
             lineChart.getData().add(series_list.get(i)); //append
         }
-
 
         saveAsPng(scene, fileNameToSave);
         stage.setScene(scene);
@@ -157,23 +157,24 @@ public class GraphPlotter extends Application {
     }
 
     public void plot_UI_vs_chi() {
-        String file1 = "test1.csv";
-        String file2 = "test2.csv";
+        String folderName = "Avg_Th_Chi";
+        String fileName = "";//"Avg_Throughput_vs_chi_MC_1000_JT_1";
 
-        String imageFile = "testImage.png";
+        String imageFile = "Avg UE Throughput vs Chi.png";
 
         Reader reader = new Reader();
-        Result_T_UE_vs_Chi res1 = reader.read_UI_vs_Chi_once(file1);
-        res1.legendName = "Legend 1";
-        Result_T_UE_vs_Chi res2 = reader.read_UI_vs_Chi_once(file2);
-        res2.legendName = "Legend 2";
-
-        res1.printResult();
-        res2.printResult();
-
         List<Result_T_UE_vs_Chi> list = new ArrayList<>();
-        list.add(res1);
-        list.add(res2);
-        plotGraphAndSave("UE T_avg (kBps)", "Chi [proportion]", imageFile, list);
+
+        String monte_carlo_str = "1000";
+        for (int JT = 1; JT <= 7; JT++) {
+            fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
+            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
+            Result_T_UE_vs_Chi res = reader.read_UI_vs_Chi_once(fileName);
+//            res.legendName = "JT=" + (String.valueOf(JT));
+            res.legendName = "" + (String.valueOf(JT));
+            list.add(res);
+        }
+
+        plotGraphAndSave("Average UE Throughput (kBps)", "Chi (%)", imageFile, list, monte_carlo_str);
     }
 }

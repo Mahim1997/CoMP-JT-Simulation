@@ -10,14 +10,10 @@ import java.util.logging.Logger;
 public class Reader {
 
     //Read from CSV file [Conventional Method only]
+    //For Conventional Task
     public String fileNameToRead = GraphPlotter.FILE_NAME;
 
-    public List<Result_T_UE_vs_Chi> readResults_UE_vs_chi(int monte_carlo, int JT_initial, int JT_final) {
-        //form file names ... call another function
-
-        return null;
-    }
-
+    //For Task 1 of paper'.
     public Result_T_UE_vs_Chi read_UI_vs_Chi_once(String fileName) {
         Result_T_UE_vs_Chi rs = new Result_T_UE_vs_Chi(fileName, 0);
 
@@ -28,13 +24,13 @@ public class Reader {
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");
 //                System.out.println("data[0] = " + data[0] + " , data[1] = " + data[1]);
-                try{
+                try {
                     double chi, thpt_avg;
                     chi = Double.parseDouble(data[0]);
                     thpt_avg = Double.parseDouble(data[1]);
-                    rs.chi_list.add(chi);
-                    rs.avg_UE_throughput_list.add(thpt_avg);
-                }catch(NumberFormatException e2){
+                    rs.chi_list.add(chi * 100);
+                    rs.avg_UE_throughput_list.add((thpt_avg));
+                } catch (NumberFormatException e2) {
                     //Do nothing ... just continue
                 }
             }
