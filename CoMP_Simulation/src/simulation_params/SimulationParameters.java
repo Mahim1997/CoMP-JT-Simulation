@@ -7,7 +7,7 @@ public class SimulationParameters {
      */
     public double chi_initial = 0;
     public double chi_final = 1;
-    public double chi_step_size = 0.01;
+    public double chi_step_size = 0.001;
 
     public double chi_for_position = 0.5;
 

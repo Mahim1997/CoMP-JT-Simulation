@@ -74,7 +74,7 @@ public class Simulation_New {
 
         //Make each Base Station have num available slots as THIS NUMBER intially ... will decrement as UE is added.
         for (BaseStation baseStation : baseStations) {
-            baseStation.num_available_slots = num_users_per_BS;
+            baseStation.num_available_slots = (int) (1 * no_resource_blocks); //chi = 1 IS the max
         }
 
         for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
