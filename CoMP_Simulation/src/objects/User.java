@@ -18,6 +18,10 @@ public class User {
     public double SINR_user_one_BS;
     public double THROUGHPUT_user_one_BS_KBps;
 
+    //For Task 2
+    public double distance_min_BS;
+    
+    
     public User(double x, double y) {
         this.x_pos = x;
         this.y_pos = y;

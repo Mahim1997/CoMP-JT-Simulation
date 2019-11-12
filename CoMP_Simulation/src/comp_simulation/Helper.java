@@ -131,6 +131,11 @@ public class Helper {
         }
     }
 
+    public static void writeCSV_row1_row2(String fileName, double row1, double row2) {
+        writeCSV_row1_row2(fileName, String.valueOf(row1), String.valueOf(row2));
+    }
+    
+    
     public static void writeCSV_row1_row2(String fileName, String row1, String row2) {
         try (FileWriter fw = new FileWriter(fileName, true); //append [TRUE]
                 BufferedWriter bw = new BufferedWriter(fw);

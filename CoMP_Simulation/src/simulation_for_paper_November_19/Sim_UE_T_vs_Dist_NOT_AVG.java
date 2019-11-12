@@ -9,11 +9,11 @@ import objects.BaseStation;
 import objects.User;
 import simulation_params.SimulationParameters;
 
-public class Sim_T_avg_vs_Distance {
+public class Sim_UE_T_vs_Dist_NOT_AVG {
 
     private SimulationParameters simParams;
 
-    public Sim_T_avg_vs_Distance(SimulationParameters simParams) {
+    public Sim_UE_T_vs_Dist_NOT_AVG(SimulationParameters simParams) {
         this.simParams = simParams;
     }
 
@@ -40,8 +40,8 @@ public class Sim_T_avg_vs_Distance {
         //Place Base Stations [Fixed Positions throughout all the simulations]
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
-        String folderName = "UE_T_avg_vs_minDis_BS";
-        String fileName = folderName + "/UE_T_avg_vs_minDis_BS_MC_" + String.valueOf(simParams.monte_carlo)
+        String folderName = "UE_T_vs_minDis_BS";
+        String fileName = folderName + "/UE_T_vs_minDis_BS_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
         //Always fixed parameters for all chi.
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius; // root(3) * cell_radius = IBS
@@ -49,34 +49,33 @@ public class Sim_T_avg_vs_Distance {
                 + (20 * Math.log10(simParams.frequency_carrier)) + 92.45; //FSPL_dB = 20*log_10(d_0) + 20*log_10(fc) + 92.45
 
         //Erase CSV files.
-        Helper.erase_CSV_file(fileName, "Distance(km)", "T_avg (kBps)");
+        Helper.erase_CSV_file(fileName, "UE_BS_min_dist(km)", "T_UE (kBps)");
         double chi = simParams.chi_for_position;
-        for (double distance = simParams.distance_initial; distance <= simParams.distance_final; distance += simParams.distance_increment) {
-            simParams.distance_taken = distance;
 
-            System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs distance(km) = " + simParams.distance_taken
-                    + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
-            //Run monte_carlo times for THIS value of CHI and write that to the CSV file.
-            double avg_tpt = run_sim_one_distance_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
-            Helper.writeCSV_row1_row2(fileName, String.valueOf(distance), String.valueOf(avg_tpt));
+        System.out.println("-->>Runnning simulation of ONLY UE throughput (kBps) vs distance(km) random "
+                + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
+
+        List<User> list_ans = run_sim_one_distance_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
+        //Helper.writeCSV_row1_row2(fileName, String.valueOf(distance), String.valueOf(avg_tpt));
+        for(User u: list_ans){
+            Helper.writeCSV_row1_row2(fileName, u.distance_min_BS, u.THROUGHPUT_user_one_BS_KBps);
         }
-        //run monte carlo
-
     }
 
-    public double run_sim_one_distance_monte_carlo(double FSPL_dB, double inter_bs_distance,
+    public List<User> run_sim_one_distance_monte_carlo(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         double avg_throughput = 0;
+        List<User> list_ans = new ArrayList<>();
         for (int mc = 0; mc <= simParams.monte_carlo; mc++) {
-            double thpt = run_sim_for_one_distance_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
-            avg_throughput += thpt;
+            List<User> list2 = run_sim_for_one_distance_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
+            list_ans.addAll(list2);
         }
-        avg_throughput /= ((double) (simParams.monte_carlo));
-        return avg_throughput;
+        return list_ans;
     }
 
-    public double run_sim_for_one_distance_one_iteration(double FSPL_dB, double inter_bs_distance,
+    public List<User> run_sim_for_one_distance_one_iteration(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
+        List<User> list = new ArrayList<>();
         double cumulative_throughput = 0;
         double num_users_total = 0;
         double bw_MHz = simParams.bandwidth / Math.pow(10, 6);
@@ -96,14 +95,10 @@ public class Sim_T_avg_vs_Distance {
                 double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                 Random rand = new Random();
 
-                double radial_distance_wrt_BS = simParams.distance_taken;
-                /*double distance_wrt_BS = rand.nextDouble();
+                double distance_wrt_BS = rand.nextDouble();
                 double x_user = (inter_bs_distance * distance_wrt_BS * Math.cos(theta)) + bs.x_pos;
                 double y_user = (inter_bs_distance * distance_wrt_BS * Math.sin(theta)) + bs.y_pos;
-                 */
-                double x_user = (radial_distance_wrt_BS * Math.cos(theta)) + bs.x_pos; //r*cos(theta) + bs.x
-                double y_user = (radial_distance_wrt_BS * Math.sin(theta)) + bs.y_pos; //r*sin(theta) + bs.y
-
+                
                 User user = new User(x_user, y_user);
                 user.formSimulationParameters(simParams);
 
@@ -126,14 +121,14 @@ public class Sim_T_avg_vs_Distance {
                 System.out.println("------------------------------------------------");
                  */
 
-                cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
+                user.distance_min_BS = user.getDistanceFromBS(bs); //get min distance [i.e. distance of THIS B.S]
                 //After calculations... [to get the same num_slots_available]
                 baseStations = user.getListOfBaseStations();
                 num_users_total++;
+                list.add(user);
             }
         }
-        double avg_throughput = (num_users_total == 0) ? 0 : (cumulative_throughput / num_users_total);
-        return avg_throughput;
+        return list;
     }
 
 //----------------------------------------------------------------------------------------------------------
