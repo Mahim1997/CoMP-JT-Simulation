@@ -9,28 +9,39 @@ import objects.BaseStation;
 import objects.User;
 import simulation_params.SimulationParameters;
 
-public class Simulation_New {
+public class Sim_T_avg_vs_Distance {
 
     private SimulationParameters simParams;
 
-    public Simulation_New(SimulationParameters simParams) {
+    public Sim_T_avg_vs_Distance(SimulationParameters simParams) {
         this.simParams = simParams;
     }
 
-    public void runSimulationTask1() {
+    //BELOW for Task 2 ... varying distance and calculating avg UE throughput
+    public void runSimulationForSecondTask() {
+
+        simParams.chi_for_position = 0.6; // To keep consistent wrt task 1 [so , JTs don't fluctuate themselves]
+        simParams.distance_initial = 0.1;
+        simParams.distance_final = simParams.cell_radius;
+        simParams.distance_increment = 10; //All in km
+
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
+//            for(double chi = 0.1; chi < 0.9; chi++){
+//                
+//            }
             simParams.JT_VALUE = JT;
-            run_UE_Tavg_vs_chi();
+
+            run_T_avg_vs_Distance();
         }
     }
 
-    public void run_UE_Tavg_vs_chi() {
+    public void run_T_avg_vs_Distance() {
         SimResults_Throughput_Chi simResults = new SimResults_Throughput_Chi(simParams);
         //Place Base Stations [Fixed Positions throughout all the simulations]
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
-        String folderName = "Avg_Th_Chi";
-        String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
+        String folderName = "UE_T_vs_minDis_BS";
+        String fileName = folderName + "/UE_T_vs_minDis_BS_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
         //Always fixed parameters for all chi.
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius; // root(3) * cell_radius = IBS
@@ -38,31 +49,33 @@ public class Simulation_New {
                 + (20 * Math.log10(simParams.frequency_carrier)) + 92.45; //FSPL_dB = 20*log_10(d_0) + 20*log_10(fc) + 92.45
 
         //Erase CSV files.
-        Helper.erase_CSV_file(fileName, "Chi", "T_avg (kBps)");
-        //for each chi
-        for (double chi = simParams.chi_initial; chi <= simParams.chi_final; chi += simParams.chi_step_size) {
-            System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs chi = " + chi
+        Helper.erase_CSV_file(fileName, "Distance(km)", "T_avg (kBps)");
+        double chi = simParams.chi_for_position;
+        for (double distance = simParams.distance_initial; distance <= simParams.distance_final; distance += simParams.distance_increment) {
+            simParams.distance_taken = distance;
+
+            System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs distance(km) = " + simParams.distance_taken
                     + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
             //Run monte_carlo times for THIS value of CHI and write that to the CSV file.
-            double avg_tpt = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations); 
-            Helper.writeCSV_row1_row2(fileName, String.valueOf(chi), String.valueOf(avg_tpt));
+            double avg_tpt = run_sim_one_distance_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
+            Helper.writeCSV_row1_row2(fileName, String.valueOf(distance), String.valueOf(avg_tpt));
         }
         //run monte carlo
 
     }
 
-    public double run_sim_one_chi_monte_carlo(double FSPL_dB, double inter_bs_distance,
+    public double run_sim_one_distance_monte_carlo(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         double avg_throughput = 0;
         for (int mc = 0; mc <= simParams.monte_carlo; mc++) {
-            double thpt = run_sim_for_one_chi_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
+            double thpt = run_sim_for_one_distance_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
             avg_throughput += thpt;
         }
         avg_throughput /= ((double) (simParams.monte_carlo));
         return avg_throughput;
     }
 
-    public double run_sim_for_one_chi_one_iteration(double FSPL_dB, double inter_bs_distance,
+    public double run_sim_for_one_distance_one_iteration(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         double cumulative_throughput = 0;
         double num_users_total = 0;
@@ -82,9 +95,15 @@ public class Simulation_New {
             for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
                 double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                 Random rand = new Random();
-                double ibs_random_user_wrt_BS = rand.nextDouble();
-                double x_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.cos(theta)) + bs.x_pos;
-                double y_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.sin(theta)) + bs.y_pos;
+
+                double radial_distance_wrt_BS = simParams.distance_taken;
+                /*double distance_wrt_BS = rand.nextDouble();
+                double x_user = (inter_bs_distance * distance_wrt_BS * Math.cos(theta)) + bs.x_pos;
+                double y_user = (inter_bs_distance * distance_wrt_BS * Math.sin(theta)) + bs.y_pos;
+                 */
+                double x_user = (radial_distance_wrt_BS * Math.cos(theta)) + bs.x_pos; //r*cos(theta) + bs.x
+                double y_user = (radial_distance_wrt_BS * Math.sin(theta)) + bs.y_pos; //r*sin(theta) + bs.y
+
                 User user = new User(x_user, y_user);
                 user.formSimulationParameters(simParams);
 
@@ -97,7 +116,7 @@ public class Simulation_New {
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
                 double[] power_arr = user.getReceivedPowerArray();
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
-/*
+                /*
                 System.out.println("AFTER SORTING ... printing base stations ....");
                 for(BaseStation bs1:user.getListOfBaseStations()){
                     System.out.println(bs1.toString());
@@ -105,7 +124,7 @@ public class Simulation_New {
                 System.out.println("PRINTING power_arr, 0->" + power_arr[0] + ", 1->" + power_arr[1] + ", 2->" + power_arr[2]);
                 System.out.println("UE Throughput = " + user.THROUGHPUT_user_one_BS_KBps + ", UE SINR = " + user.SINR_user_one_BS);
                 System.out.println("------------------------------------------------");
-*/
+                 */
 
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 //After calculations... [to get the same num_slots_available]
@@ -118,6 +137,4 @@ public class Simulation_New {
     }
 
 //----------------------------------------------------------------------------------------------------------
-    
-
 }

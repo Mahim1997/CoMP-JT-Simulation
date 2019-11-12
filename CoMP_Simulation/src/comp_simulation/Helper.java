@@ -117,23 +117,25 @@ public class Helper {
         }
 
     }
-    
-    public static void erase_chi_avg_throughput(String fileName){
+
+    public static void erase_CSV_file(String fileName, String row1, String row2) {
         try (FileWriter fw = new FileWriter(fileName); //append
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw)) {
-            out.print(String.valueOf("Chi") + "," + String.valueOf("T_avg (kBps)"));
+//            out.print(String.valueOf("Chi") + "," + String.valueOf("T_avg (kBps)"));
+            out.print(row1 + "," + row2);
             out.println(); //print line.
         } catch (IOException e) {
             e.printStackTrace();
             //exception handling left as an exercise for the reader
         }
     }
-    public static void write_chi_avg_throughput(String fileName, String chi, String thpt) {
+
+    public static void writeCSV_row1_row2(String fileName, String row1, String row2) {
         try (FileWriter fw = new FileWriter(fileName, true); //append [TRUE]
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw)) {
-            out.print(String.valueOf(chi) + "," + String.valueOf(thpt));
+            out.print(String.valueOf(row1) + "," + String.valueOf(row2));
             out.println(); //print line.
         } catch (IOException e) {
             e.printStackTrace();

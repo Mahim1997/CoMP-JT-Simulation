@@ -9,10 +9,10 @@ public class SimulationParameters {
     public double chi_final = 1;
     public double chi_step_size = 0.005;
 
-    public double chi_for_position = 0.5;
+    public double chi_for_position = 0.3;
 
     public int JT_INITIAL = 1;
-    public int JT_FINAL = 7;
+    public int JT_FINAL = 3;
 //-------------------------------------------------------
 //TESTING BELOW
 //    public double chi_initial = 0.5;
@@ -25,6 +25,11 @@ public class SimulationParameters {
                         and so on...
      */
     public int JT_VALUE = 1; //DPS
+//Task 2
+    public double distance_initial = 0.1; //km
+    public double distance_final = 1; //km
+    public double distance_taken = distance_initial;
+    public double distance_increment = 0.1; //km
     //-----------------------------------------------------------------
 
     //Parameters for running the simulation.
