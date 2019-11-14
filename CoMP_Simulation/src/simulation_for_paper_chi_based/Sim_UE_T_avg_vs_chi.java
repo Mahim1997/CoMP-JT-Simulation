@@ -8,6 +8,7 @@ import java.util.Random;
 import sim_objects.BaseStation;
 import sim_objects.User;
 import sim_results.SimResult_oneMC;
+import sim_results.SimResults;
 import simulation_params.SimulationParameters;
 
 public class Sim_UE_T_avg_vs_chi {
@@ -38,16 +39,17 @@ public class Sim_UE_T_avg_vs_chi {
                 + (20 * Math.log10(simParams.frequency_carrier)) + 92.45; //FSPL_dB = 20*log_10(d_0) + 20*log_10(fc) + 92.45
 
         //for each chi
-        SimResult_oneMC final_res;
+        SimResults simResults = new SimResults();
+        SimResult_oneMC res_one_MC;
         for (double chi = simParams.chi_initial; chi <= simParams.chi_final; chi += simParams.chi_step_size) {
             System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs chi = " + chi
                     + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
             //Run monte_carlo times for THIS value of CHI and write that to the CSV file.
-            final_res = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
-            //TO DO [write to csv]
-//            Helper.writeCSV_row1_row2(fileName, String.valueOf(chi), String.valueOf(avg_tpt));
+            res_one_MC = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
+            simResults.enterMetricsForOneMC(chi, res_one_MC);
+            simResults.write_to_csv_file(fileName);
+            
         }
-
 
     }
 

@@ -13,15 +13,26 @@ public class SimResults {
     public List<Double> cell_edge_throughput_list = new ArrayList<>();
     public List<Double> discrimination_index_list = new ArrayList<>();
     public List<Double> entropy_list = new ArrayList<>();
-    
+
     public String[] headings_arr = {"Chi(%)", "Avg UE Throughput(kBps)", "Spectral Efficiency", "Fairness Idx",
-    "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy"};
-    
-    public void write_to_csv_file(String fileName){
+        "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy"};
+
+    public void write_to_csv_file(String fileName) {
         FileWriter_CSV.erase_csv_file(fileName);
         FileWriter_CSV.write_to_csv_file(fileName, this);
         System.out.println("-->>Writing to file done.");
     }
 
-  
+    public void enterMetricsForOneMC(double chi, SimResult_oneMC res) {
+        //Add to lists.
+        this.chi_list.add(chi);
+        this.avg_throughput_list.add(res.avg_throughput);
+        this.spectral_efficiency_list.add(res.spectral_efficiency);
+        this.fairness_index_jain_list.add(res.fairness_index);
+        this.cell_edge_throughput_list.add(res.cell_edge_throughput);
+        this.discrimination_index_list.add(res.discrimination_index);
+        this.entropy_list.add(res.entropy);
+    
+    }
+
 }

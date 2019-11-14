@@ -5,8 +5,8 @@ import java.util.Arrays;
 public class CalculatorECDF {
 
     public static void ECDF(double[] arr, double[] x_axis_data, double[] y_axis_data) {
-        x_axis_data = new double[arr.length];
-        y_axis_data = new double[arr.length];
+//        x_axis_data = new double[arr.length];
+//        y_axis_data = new double[arr.length];
         int num_points = arr.length;
         System.arraycopy(arr, 0, x_axis_data, 0, x_axis_data.length);
         Arrays.sort(x_axis_data);

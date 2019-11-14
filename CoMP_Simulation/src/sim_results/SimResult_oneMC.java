@@ -46,8 +46,8 @@ public class SimResult_oneMC {
         for (int i = 0; i < throughput_data.length; i++) {
             throughput_data[i] = list_users.get(i).THROUGHPUT_user_one_BS_KBps;
         }
-        double[] x_axis_data = null;
-        double[] y_axis_data = null;
+        double[] x_axis_data = new double[throughput_data.length];
+        double[] y_axis_data = new double[throughput_data.length];
         CalculatorECDF.ECDF(throughput_data, x_axis_data, y_axis_data);
         this.cell_edge_throughput = CalculatorECDF.get5thPercentile(x_axis_data, y_axis_data);
 
