@@ -1,12 +1,13 @@
-package simulation_for_paper_November_19;
+package simulation_for_paper_distance_based;
 
-import comp_simulation.Helper;
-import comp_simulation.ResourceBlockCalculator;
+import util_and_calculators.Helper;
+import util_and_calculators.ResourceBlockCalculator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import objects.BaseStation;
 import objects.User;
+import sim_results.SimResults_Throughput_Chi;
 import simulation_params.SimulationParameters;
 
 public class Sim_UE_T_vs_Dist_NOT_AVG {

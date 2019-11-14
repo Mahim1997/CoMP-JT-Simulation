@@ -1,6 +1,6 @@
 package simulation_params;
 
-import comp_simulation.Helper;
+import util_and_calculators.Helper;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

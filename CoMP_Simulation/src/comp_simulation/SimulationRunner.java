@@ -1,8 +1,8 @@
 package comp_simulation;
 
-import simulation_for_paper_November_19.Sim_T_avg_vs_Distance;
-import simulation_for_paper_November_19.Sim_UE_T_vs_Dist_NOT_AVG;
-import simulation_for_paper_November_19.Sim_UE_T_avg_vs_chi;
+import simulation_for_paper_distance_based.Sim_T_avg_vs_Distance;
+import simulation_for_paper_distance_based.Sim_UE_T_vs_Dist_NOT_AVG;
+import simulation_for_paper_chi_based.Sim_UE_T_avg_vs_chi;
 import simulation_params.SimulationParameterBuilder;
 import simulation_params.SimulationParameters;
 

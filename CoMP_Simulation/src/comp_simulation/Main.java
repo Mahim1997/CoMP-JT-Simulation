@@ -9,8 +9,8 @@ public class Main {
 
     public static void main(String[] args) {
 //        SimulationRunner.runSimulation(conventional_mode);
-//        SimulationRunner.runSimulation(throughput_vs_chi); //For Task 1
-        SimulationRunner.runSimulation(UE_T_avg_vs_distance); //For Task 2.a
+        SimulationRunner.runSimulation(throughput_vs_chi); //For Task 1
+//        SimulationRunner.runSimulation(UE_T_avg_vs_distance); //For Task 2.a
 //        SimulationRunner.runSimulation(UE_T_vs_distance); //For Task 2.b
     }
 }

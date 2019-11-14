@@ -1,4 +1,4 @@
-package simulation_for_paper_November_19;
+package sim_results;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package comp_simulation;
+package util_and_calculators;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
