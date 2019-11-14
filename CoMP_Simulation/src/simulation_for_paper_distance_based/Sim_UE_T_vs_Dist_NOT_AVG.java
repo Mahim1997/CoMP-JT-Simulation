@@ -5,9 +5,8 @@ import util_and_calculators.ResourceBlockCalculator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import objects.BaseStation;
-import objects.User;
-import sim_results.SimResults_Throughput_Chi;
+import sim_objects.BaseStation;
+import sim_objects.User;
 import simulation_params.SimulationParameters;
 
 public class Sim_UE_T_vs_Dist_NOT_AVG {
@@ -37,7 +36,6 @@ public class Sim_UE_T_vs_Dist_NOT_AVG {
     }
 
     public void run_T_avg_vs_Distance() {
-        SimResults_Throughput_Chi simResults = new SimResults_Throughput_Chi(simParams);
         //Place Base Stations [Fixed Positions throughout all the simulations]
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);

@@ -1,4 +1,4 @@
-package objects;
+package sim_objects;
 
 import util_and_calculators.Helper;
 import java.util.ArrayList;

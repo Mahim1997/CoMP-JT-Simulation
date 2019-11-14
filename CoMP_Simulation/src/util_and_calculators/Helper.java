@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Iterator;
-import objects.BaseStation;
+import sim_objects.BaseStation;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

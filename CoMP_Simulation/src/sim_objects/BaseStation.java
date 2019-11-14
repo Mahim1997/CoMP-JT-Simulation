@@ -1,4 +1,4 @@
-package objects;
+package sim_objects;
 
 import java.util.List;
 
