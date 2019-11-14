@@ -23,7 +23,7 @@ public class Sim_T_avg_vs_Distance {
         simParams.chi_for_position = 0.6; // To keep consistent wrt task 1 [so , JTs don't fluctuate themselves]
         simParams.distance_initial = 0.1;
         simParams.distance_final = simParams.cell_radius;
-        simParams.distance_increment = 10; //All in km
+        simParams.distance_increment = 10; //All in m
 
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
 //            for(double chi = 0.1; chi < 0.9; chi++){
@@ -49,12 +49,12 @@ public class Sim_T_avg_vs_Distance {
                 + (20 * Math.log10(simParams.frequency_carrier)) + 92.45; //FSPL_dB = 20*log_10(d_0) + 20*log_10(fc) + 92.45
 
         //Erase CSV files.
-        Helper.erase_CSV_file(fileName, "Distance(km)", "T_avg (kBps)");
+        Helper.erase_CSV_file(fileName, "Distance(m)", "T_avg (kBps)");
         double chi = simParams.chi_for_position;
-        for (double distance = simParams.distance_initial; distance <= simParams.distance_final; distance += simParams.distance_increment) {
+        for (double distance = simParams.distance_initial; distance <= inter_bs_distance; distance += simParams.distance_increment) {
             simParams.distance_taken = distance;
 
-            System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs distance(km) = " + simParams.distance_taken
+            System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs distance(m) = " + simParams.distance_taken
                     + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
             //Run monte_carlo times for THIS value of CHI and write that to the CSV file.
             double avg_tpt = run_sim_one_distance_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
@@ -82,6 +82,12 @@ public class Sim_T_avg_vs_Distance {
         double bw_MHz = simParams.bandwidth / Math.pow(10, 6);
         int no_resource_blocks = ResourceBlockCalculator.numberOfResourceBlocks(bw_MHz);
         int num_users_per_BS = (int) (chi * no_resource_blocks); //All B.S. same chi
+        
+        
+//        //TESTING ...
+//        num_users_per_BS = 1;
+        
+        
         double Pn = -174 + (10 * Math.log10(simParams.bandwidth));
         double Pn_mW = Helper.convert_To_mW_From_dBM(Pn);
 
@@ -97,9 +103,9 @@ public class Sim_T_avg_vs_Distance {
                 Random rand = new Random();
 
                 double radial_distance_wrt_BS = simParams.distance_taken;
-                /*double distance_wrt_BS = rand.nextDouble();
-                double x_user = (inter_bs_distance * distance_wrt_BS * Math.cos(theta)) + bs.x_pos;
-                double y_user = (inter_bs_distance * distance_wrt_BS * Math.sin(theta)) + bs.y_pos;
+                /*double random_double = rand.nextDouble();
+                double x_user = (inter_bs_distance * random_double * Math.cos(theta)) + bs.x_pos;
+                double y_user = (inter_bs_distance * random_double * Math.sin(theta)) + bs.y_pos;
                  */
                 double x_user = (radial_distance_wrt_BS * Math.cos(theta)) + bs.x_pos; //r*cos(theta) + bs.x
                 double y_user = (radial_distance_wrt_BS * Math.sin(theta)) + bs.y_pos; //r*sin(theta) + bs.y
@@ -114,7 +120,7 @@ public class Sim_T_avg_vs_Distance {
                 user.sortBaseStations_wrt_Pr_mW();
 //%% Power consumption of 7 BS's based on modified chi for hourly basis (BS x 24Hr )
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
-                double[] power_arr = user.getReceivedPowerArray();
+                double[] power_arr = user.getReceivedPowerArray();//arr[0]:Total received power in mW, arr[1]:OTHERs P_Rx, arr[2]:TOTAL
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
                 /*
                 System.out.println("AFTER SORTING ... printing base stations ....");

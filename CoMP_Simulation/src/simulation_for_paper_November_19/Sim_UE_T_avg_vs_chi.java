@@ -9,11 +9,11 @@ import objects.BaseStation;
 import objects.User;
 import simulation_params.SimulationParameters;
 
-public class Simulation_New {
+public class Sim_UE_T_avg_vs_chi {
 
     private SimulationParameters simParams;
 
-    public Simulation_New(SimulationParameters simParams) {
+    public Sim_UE_T_avg_vs_chi(SimulationParameters simParams) {
         this.simParams = simParams;
     }
 

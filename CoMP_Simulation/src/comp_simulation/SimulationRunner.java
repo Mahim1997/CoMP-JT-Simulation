@@ -2,7 +2,7 @@ package comp_simulation;
 
 import simulation_for_paper_November_19.Sim_T_avg_vs_Distance;
 import simulation_for_paper_November_19.Sim_UE_T_vs_Dist_NOT_AVG;
-import simulation_for_paper_November_19.Simulation_New;
+import simulation_for_paper_November_19.Sim_UE_T_avg_vs_chi;
 import simulation_params.SimulationParameterBuilder;
 import simulation_params.SimulationParameters;
 
@@ -12,7 +12,7 @@ public class SimulationRunner {
 
         if (mode.equals(Main.throughput_vs_chi)) { //Task 1
             SimulationParameters simParams = SimulationParameterBuilder.buildSimulationParameters_Urban();
-            Simulation_New runner = new Simulation_New(simParams);
+            Sim_UE_T_avg_vs_chi runner = new Sim_UE_T_avg_vs_chi(simParams);
             System.out.println("Running simulation for " + (mode.replace("_", " ")));
             simParams.simulationType = mode;
             simParams.printParameters();

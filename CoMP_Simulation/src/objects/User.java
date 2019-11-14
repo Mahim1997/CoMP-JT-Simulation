@@ -20,8 +20,7 @@ public class User {
 
     //For Task 2
     public double distance_min_BS;
-    
-    
+
     public User(double x, double y) {
         this.x_pos = x;
         this.y_pos = y;

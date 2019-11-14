@@ -20,10 +20,10 @@ public class Sim_UE_T_vs_Dist_NOT_AVG {
     //BELOW for Task 2 ... varying distance and calculating avg UE throughput
     public void runSimulationForSecondTask() {
 
-        simParams.chi_for_position = 0.6; // To keep consistent wrt task 1 [so , JTs don't fluctuate themselves]
+        simParams.chi_for_position = 0.25; // To keep consistent wrt task 1 [so , JTs don't fluctuate themselves]
         simParams.distance_initial = 0.1;
         simParams.distance_final = simParams.cell_radius;
-        simParams.distance_increment = 10; //All in km
+        simParams.distance_increment = 10; //All in m
 
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
 //            for(double chi = 0.1; chi < 0.9; chi++){
@@ -49,10 +49,10 @@ public class Sim_UE_T_vs_Dist_NOT_AVG {
                 + (20 * Math.log10(simParams.frequency_carrier)) + 92.45; //FSPL_dB = 20*log_10(d_0) + 20*log_10(fc) + 92.45
 
         //Erase CSV files.
-        Helper.erase_CSV_file(fileName, "UE_BS_min_dist(km)", "T_UE (kBps)");
+        Helper.erase_CSV_file(fileName, "UE_BS_min_dist(m)", "T_UE (kBps)");
         double chi = simParams.chi_for_position;
 
-        System.out.println("-->>Runnning simulation of ONLY UE throughput (kBps) vs distance(km) random "
+        System.out.println("-->>Runnning simulation of ONLY UE throughput (kBps) vs distance(m) random "
                 + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
 
         List<User> list_ans = run_sim_one_distance_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
