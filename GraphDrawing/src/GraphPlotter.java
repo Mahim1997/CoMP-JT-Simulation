@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
 public class GraphPlotter extends Application {
-
+    public static String OUTPUT_FOLDER_NAME_TASK1 = "Graphs_UE_vs_CHI";
     public static String FILE_NAME = "Conventional.csv";
     public static double THRESHOLD_FOR_NOT_TAKING = 0.02;
 
@@ -32,7 +32,7 @@ public class GraphPlotter extends Application {
         System.out.println("Reading data... from csv file ...");
 //        Reader reader = new Reader();
 //        Results rs = reader.readThingsFromFile();
-        System.out.println("Plotting graph UI vs Chi ...");
+        System.out.println("Plotting graph UI metrics vs Chi ...");
 //        plotForNormalConventional(rs);
         plot_UE_things_vs_chi();
 
@@ -169,6 +169,7 @@ public class GraphPlotter extends Application {
 
         stage.setScene(scene);
 //        scene.getStylesheets().add("file.css");
+        fileNameToSave = OUTPUT_FOLDER_NAME_TASK1 + "/" + fileNameToSave;
         saveAsPng(scene, fileNameToSave);
 
     }

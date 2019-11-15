@@ -45,7 +45,9 @@ public class BaseStation {
         double half_interBS = interBS * 0.5;
         int tiers_matched = 1;
         BaseStation bs;
+        
         double ibs = 0, x = 0, y = 0;
+        
         while (tiers_matched <= tier) {
             ibs += interBS;
 
