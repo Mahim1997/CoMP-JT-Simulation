@@ -3,9 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Reader {
 
@@ -25,13 +22,23 @@ public class Reader {
                 String[] data = row.split(",");
 //                System.out.println("data[0] = " + data[0] + " , data[1] = " + data[1]);
                 try {
-                    double chi, thpt_avg;
+                    double chi, avg_throughput, spectral_efficiency, cell_edge_thpt, fairness_idx, discrimination_idx, entropy;
                     chi = Double.parseDouble(data[0]);
-                    thpt_avg = Double.parseDouble(data[1]);
-                    if (thpt_avg > GraphPlotter.THRESHOLD_CHI) {
+                    avg_throughput = Double.parseDouble(data[1]);
+                    spectral_efficiency = Double.parseDouble(data[2]);
+                    fairness_idx = Double.parseDouble(data[3]);
+                    cell_edge_thpt = Double.parseDouble(data[4]);
+                    discrimination_idx = Double.parseDouble(data[5]);
+                    entropy = Double.parseDouble(data[6]);
+                    if (avg_throughput > GraphPlotter.THRESHOLD_FOR_NOT_TAKING) {
                         //Only take for chi > THRESHLOD [here, 0.02]
                         rs.chi_list.add(chi * 100);
-                        rs.avg_UE_throughput_list.add((thpt_avg));
+                        rs.avg_UE_throughput_list.add((avg_throughput));
+                        rs.spectral_efficiency_list.add(spectral_efficiency);
+                        rs.cell_edge_throughput_list.add(cell_edge_thpt);
+                        rs.fairness_index_jain_list.add(fairness_idx);
+                        rs.discrimination_index_list.add(discrimination_idx);
+                        rs.entropy_list.add(entropy);
                     }
                 } catch (NumberFormatException e2) {
                     //Do nothing ... just continue

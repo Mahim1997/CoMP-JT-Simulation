@@ -4,26 +4,21 @@ import java.util.List;
 public class Result_T_UE_vs_Chi {
     public List<Double> chi_list;
     public List<Double> avg_UE_throughput_list;
+    public List<Double> spectral_efficiency_list = new ArrayList<>();
+    public List<Double> fairness_index_jain_list = new ArrayList<>();
+    public List<Double> cell_edge_throughput_list = new ArrayList<>();
+    public List<Double> discrimination_index_list = new ArrayList<>();
+    public List<Double> entropy_list = new ArrayList<>();
+    
+    
     public String legendName;
     public int JT_num;
 
-    public Result_T_UE_vs_Chi(String l, int jt){
+    public Result_T_UE_vs_Chi(String name_of_legend, int jt_value){
         this.chi_list = new ArrayList<>();
         this.avg_UE_throughput_list = new ArrayList<>();
-        this.legendName = l;
-        this.JT_num = jt;
+        this.legendName = name_of_legend;
+        this.JT_num = jt_value;
     }
-    public void printResult(){
-        System.out.print("Chi: ");
-        printList(chi_list);
-        System.out.print("UE_T_avg: ");
-        printList(avg_UE_throughput_list);
-    }
-    
-    private void printList(List<Double> list){
-        list.forEach((d) -> {
-            System.out.print(d + " ");
-        });
-        System.out.println("");
-    }
+
 }

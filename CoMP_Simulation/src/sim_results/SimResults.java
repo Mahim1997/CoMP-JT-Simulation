@@ -14,7 +14,7 @@ public class SimResults {
     public List<Double> discrimination_index_list = new ArrayList<>();
     public List<Double> entropy_list = new ArrayList<>();
 
-    public String[] headings_arr = {"Chi(%)", "Avg UE Throughput(kBps)", "Spectral Efficiency", "Fairness Idx",
+    public String[] headings_arr = {"Chi(proportion)", "Avg UE Throughput(kBps)", "Spectral Efficiency", "Fairness Idx",
         "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy"};
 
     public void write_to_csv_file(String fileName) {

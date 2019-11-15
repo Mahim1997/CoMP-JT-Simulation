@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 public class GraphPlotter extends Application {
 
     public static String FILE_NAME = "Conventional.csv";
-    public static double THRESHOLD_CHI = 0.02;
+    public static double THRESHOLD_FOR_NOT_TAKING = 0.02;
 
     public static void main(String[] args) {
         launch(args);
@@ -34,7 +34,7 @@ public class GraphPlotter extends Application {
 //        Results rs = reader.readThingsFromFile();
         System.out.println("Plotting graph UI vs Chi ...");
 //        plotForNormalConventional(rs);
-        plot_UI_vs_chi();
+        plot_UE_things_vs_chi();
 
 //stage.show();
         System.out.println("After saving files .... exiting SYS.exit(0)");
@@ -100,8 +100,8 @@ public class GraphPlotter extends Application {
     }
 
 //--------------------------------------  PAPER TASKS  -----------------------------------------------------
-    private void plotGraphAndSave(String y_axis_label, String x_axis_label, String fileNameToSave, 
-            List<Result_T_UE_vs_Chi> listResults, String monte_carlo_str) {
+    private void plotGraphAndSave(String y_axis_label, String x_axis_label, String fileNameToSave,
+            List<Result_T_UE_vs_Chi> listResults, String monte_carlo_str, String mode) {
 
         String titleGraph = fileNameToSave.replace(".png", "");
         titleGraph = titleGraph.replace("_", " ");
@@ -117,6 +117,7 @@ public class GraphPlotter extends Application {
         //creating the chart
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
+
         lineChart.setCreateSymbols(false);
         lineChart.setTitle(titleGraph);
 
@@ -133,16 +134,31 @@ public class GraphPlotter extends Application {
         //populating the series with data
         int num_data_points = listResults.get(0).chi_list.size();
 
-        for (int s_itr = 0; s_itr < series_list.size(); s_itr++) {
-            XYChart.Series series = series_list.get(s_itr);
+        for (int series_iter = 0; series_iter < series_list.size(); series_iter++) {
+            XYChart.Series series = series_list.get(series_iter);
             for (int i = 0; i < num_data_points; i++) {
-                series.getData().add(new XYChart.Data(listResults.get(s_itr).chi_list.get(i),
-                        listResults.get(s_itr).avg_UE_throughput_list.get(i)));
+                if (mode.equalsIgnoreCase(Mode.AVG_UE_Throughput)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).avg_UE_throughput_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.SPECTRAL_EFFICIENCY)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).spectral_efficiency_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.CELL_EDGE_THROUGHPUT)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).cell_edge_throughput_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.FAIRNESS_INDEX)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).fairness_index_jain_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.DISCRIMINATION_INDEX)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).discrimination_index_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.ENTROPY)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).entropy_list.get(i)));
+                }
+
             }
         }
-//        for (int i = 0; i < num_data_points; i++) {
-//            series.getData().add(new XYChart.Data(x_axis_data[i], y_axis_data[i]));
-//        }
 
         Scene scene = new Scene(lineChart, 1000, 800); //Height and Width [Default values]
 
@@ -151,31 +167,34 @@ public class GraphPlotter extends Application {
             lineChart.getData().add(series_list.get(i)); //append
         }
 
-        saveAsPng(scene, fileNameToSave);
         stage.setScene(scene);
-//        saveAsPng(scene, "chart1.png");
+//        scene.getStylesheets().add("file.css");
+        saveAsPng(scene, fileNameToSave);
 
     }
 
-    public void plot_UI_vs_chi() {
+    public void plot_UE_things_vs_chi() {
         String folderName = "Avg_Th_Chi";
         String fileName = "";//"Avg_Throughput_vs_chi_MC_1000_JT_1";
-
-        String imageFile = "Avg UE Throughput vs Chi.png";
-
+//        String imageFile = "Avg UE Throughput vs Chi.png";
         Reader reader = new Reader();
         List<Result_T_UE_vs_Chi> list = new ArrayList<>();
 
         String monte_carlo_str = "1000";
         for (int JT = 1; JT <= 5; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
-            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
+//            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
             Result_T_UE_vs_Chi res = reader.read_UI_vs_Chi_once(fileName);
             res.legendName = "JT=" + (String.valueOf(JT));
 //            res.legendName = "" + (String.valueOf(JT));
             list.add(res);
         }
 
-        plotGraphAndSave("Average UE Throughput (kBps)", "Chi (%)", imageFile, list, monte_carlo_str);
+        plotGraphAndSave("Average UE Throughput (kBps)", "Chi (%)", "Avg UE Throughput vs Chi.png", list, monte_carlo_str, Mode.AVG_UE_Throughput);
+        plotGraphAndSave("Spectral Efficiency", "Chi (%)", "Avg Spectral Efficiency vs Chi.png", list, monte_carlo_str, Mode.SPECTRAL_EFFICIENCY);
+        plotGraphAndSave("Jain's Fairness Index", "Chi (%)", "Jain's Fairness Index vs Chi.png", list, monte_carlo_str, Mode.FAIRNESS_INDEX);
+        plotGraphAndSave("Cell-Edge Throughput (kBps)", "Chi (%)", "Cell Edge Throughput vs Chi.png", list, monte_carlo_str, Mode.CELL_EDGE_THROUGHPUT);
+        plotGraphAndSave("Discrimination Index", "Chi (%)", "Discrimination Index vs Chi.png", list, monte_carlo_str, Mode.DISCRIMINATION_INDEX);
+        plotGraphAndSave("Entropy", "Chi (%)", "Entropy vs Chi.png", list, monte_carlo_str, Mode.ENTROPY);
     }
 }

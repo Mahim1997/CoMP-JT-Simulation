@@ -60,7 +60,7 @@ public class SimResult_oneMC {
             per_user_value = (T_f - user.THROUGHPUT_user_one_BS_KBps) / (T_f); //for discrimination index
             cumulative_discrimination_index += per_user_value;
             p_i = (user.THROUGHPUT_user_one_BS_KBps) / sum_throughput; //for entropy
-            cumulative_entropy += (p_i * Helper.log2(p_i));            
+            cumulative_entropy += ((p_i == 0) ? 0 : (p_i * Helper.log2(p_i)));            
         }
         this.discrimination_index = cumulative_discrimination_index / num_users_double;
         this.entropy = -1.0 * cumulative_entropy;
