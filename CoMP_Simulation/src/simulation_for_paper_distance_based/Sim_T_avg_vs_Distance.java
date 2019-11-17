@@ -117,7 +117,7 @@ public class Sim_T_avg_vs_Distance {
                 user.copyListOfBaseStations(baseStations);
 
                 user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);
-                user.sortBaseStations_wrt_Pr_mW();
+                user.sortBaseStations_wrt_Pr_mW_DESC();
 //%% Power consumption of 7 BS's based on modified chi for hourly basis (BS x 24Hr )
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
                 double[] power_arr = user.getReceivedPowerArray();//arr[0]:Total received power in mW, arr[1]:OTHERs P_Rx, arr[2]:TOTAL

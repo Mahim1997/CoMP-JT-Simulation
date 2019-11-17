@@ -1,5 +1,6 @@
 package simulation_for_paper_chi_based;
 
+import comp_simulation.Main;
 import util_and_calculators.Helper;
 import util_and_calculators.ResourceBlockCalculator;
 import java.util.ArrayList;
@@ -20,8 +21,14 @@ public class Sim_UE_T_avg_vs_chi {
     }
 
     public void runSimulationTask1() {
+        Main.PREV_MODE_JT = Main.JT_MODE;
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
             simParams.JT_VALUE = JT;
+            if (JT == 0) {
+                Main.JT_MODE = Main.JT_CONVENTIONAL;
+            } else {
+                Main.JT_MODE = Main.PREV_MODE_JT;
+            }
             run_UE_Tavg_vs_chi();
         }
     }
@@ -48,7 +55,7 @@ public class Sim_UE_T_avg_vs_chi {
             res_one_MC = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
             simResults.enterMetricsForOneMC(chi, res_one_MC);
             simResults.write_to_csv_file(fileName);
-            
+
         }
 
     }
@@ -99,11 +106,30 @@ public class Sim_UE_T_avg_vs_chi {
                 user.formSimulationParameters(simParams);
                 //Now calculation parts ...
                 user.copyListOfBaseStations(baseStations);
-                user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);
-                user.sortBaseStations_wrt_Pr_mW();
+                user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);//Calculate received powers
+
+                //WHICH APPROACH...
+                if (Main.JT_MODE.equals(Main.JT_SINR)) {
+                    user.sortBaseStations_wrt_Pr_mW_DESC();
+                } else if (Main.JT_MODE.equals(Main.JT_DISTANCE)) {
+                    user.sortBaseStations_wrt_Distances_ASC();
+                } else if (Main.JT_MODE.equals(Main.JT_HYBRID)) {
+                    //TO DO HYBRID....
+                    System.out.println("-->>TO DO JT_HYBRID ... 117 of Sim_HT_T_avg_vs_chi.java");
+                }
+
 //%% Power consumption of 7 BS's based on modified chi for hourly basis (BS x 24Hr )
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
+//power_arr[0]:Co-ordinating BS's received power, arr[1]:Other's Pr_mW, arr[2]:TOTAL
                 double[] power_arr = user.getReceivedPowerArray();
+                //FOR CONVENTIONAL APPROACH.
+                if (Main.JT_MODE.equals(Main.JT_CONVENTIONAL)) {
+                    double power_recv_bs = user.getListOfBaseStations().get(bs_iter).power_received_by_user_mW;
+                    double total_power_of_all_bs = power_arr[2];
+                    power_arr[0] = power_recv_bs;
+                    power_arr[1] = total_power_of_all_bs - power_recv_bs;
+                    //total power_arr[2] is SAME.
+                }
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 //After calculations... [to get the same num_slots_available]

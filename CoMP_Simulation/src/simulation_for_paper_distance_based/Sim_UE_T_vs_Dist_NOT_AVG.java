@@ -105,7 +105,7 @@ public class Sim_UE_T_vs_Dist_NOT_AVG {
                 user.copyListOfBaseStations(baseStations);
 
                 user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);
-                user.sortBaseStations_wrt_Pr_mW();
+                user.sortBaseStations_wrt_Pr_mW_DESC();
 //%% Power consumption of 7 BS's based on modified chi for hourly basis (BS x 24Hr )
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
                 double[] power_arr = user.getReceivedPowerArray();

@@ -8,6 +8,17 @@ import simulation_params.SimulationParameters;
 
 public class SimulationRunner {
 
+//    public static void runSimulation(String mode){
+//        if(Main.JT_MODE.equals(Main.JT_SINR)){
+//            runSimulation_JT_SINR(mode);
+//        }
+//        else if(Main.JT_MODE.equals(Main.JT_DISTANCE)){
+//            runSimulation_JT_Distance(mode);
+//        }
+//        else if(Main.JT_MODE.equals(Main.JT_HYBRID)){
+//            runSimulation_JT_Hybrid(mode);
+//        }
+//    }
     public static void runSimulation(String mode) {
 
         if (mode.equals(Main.throughput_vs_chi)) { //Task 1
@@ -34,4 +45,6 @@ public class SimulationRunner {
         }
         // to do 
     }
+
+
 }

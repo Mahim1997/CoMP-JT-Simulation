@@ -21,15 +21,16 @@ public class User {
     //For Task 2
     public double distance_min_BS;
 
+    public List<BaseStation> getListOfBaseStations(){
+        return this.baseStations;
+    }
+    
     public User(double x, double y) {
         this.x_pos = x;
         this.y_pos = y;
         this.baseStations = new ArrayList<>();
     }
 
-    public List<BaseStation> getListOfBaseStations() {
-        return this.baseStations;
-    }
 
     public void copyListOfBaseStations(List<BaseStation> baseStationList) {
         this.baseStations.clear();
@@ -73,7 +74,19 @@ public class User {
         }
     }
 
-    public void sortBaseStations_wrt_Pr_mW() {
+    public void sortBaseStations_wrt_Distances_ASC(){
+        //Ascending order sort
+        Collections.sort(this.baseStations, (BaseStation b1, BaseStation b2) -> {
+//            if (b2.power_received_by_user_mW < b1.power_received_by_user_mW) {
+            if(getDistanceFromBS(b2) < getDistanceFromBS(b1)){
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+    }
+    
+    public void sortBaseStations_wrt_Pr_mW_DESC() {
         //Descending order sort
         Collections.sort(this.baseStations, (BaseStation b1, BaseStation b2) -> {
             if (b1.power_received_by_user_mW < b2.power_received_by_user_mW) {
