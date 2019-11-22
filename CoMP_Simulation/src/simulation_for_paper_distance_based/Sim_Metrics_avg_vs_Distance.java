@@ -10,11 +10,11 @@ import sim_objects.User;
 
 import simulation_params.SimulationParameters;
 
-public class Sim_T_avg_vs_Distance {
+public class Sim_Metrics_avg_vs_Distance {
 
     private SimulationParameters simParams;
 
-    public Sim_T_avg_vs_Distance(SimulationParameters simParams) {
+    public Sim_Metrics_avg_vs_Distance(SimulationParameters simParams) {
         this.simParams = simParams;
     }
 

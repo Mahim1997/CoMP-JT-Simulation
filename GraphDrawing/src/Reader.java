@@ -11,7 +11,7 @@ public class Reader {
     public String fileNameToRead = GraphPlotter.FILE_NAME;
 
     //For Task 1 of paper'.
-    public Result_T_UE_vs_Chi read_UI_vs_Chi_once(String fileName) {
+    public Result_T_UE_vs_Chi read_UE_vs_Chi_once(String fileName) {
         Result_T_UE_vs_Chi rs = new Result_T_UE_vs_Chi(fileName, 0);
 
         BufferedReader csvReader = null;
@@ -22,7 +22,8 @@ public class Reader {
                 String[] data = row.split(",");
 //                System.out.println("data[0] = " + data[0] + " , data[1] = " + data[1]);
                 try {
-                    double chi, avg_throughput, spectral_efficiency, cell_edge_thpt, fairness_idx, discrimination_idx, entropy;
+                    double chi, avg_throughput, spectral_efficiency, cell_edge_thpt, fairness_idx, discrimination_idx,
+                            entropy, proportion_UE_dropped_avg;
                     chi = Double.parseDouble(data[0]);
                     avg_throughput = Double.parseDouble(data[1]);
                     spectral_efficiency = Double.parseDouble(data[2]);
@@ -30,15 +31,18 @@ public class Reader {
                     cell_edge_thpt = Double.parseDouble(data[4]);
                     discrimination_idx = Double.parseDouble(data[5]);
                     entropy = Double.parseDouble(data[6]);
+                    proportion_UE_dropped_avg = Double.parseDouble(data[7]);
                     if (avg_throughput > GraphPlotter.THRESHOLD_FOR_NOT_TAKING) {
                         //Only take for chi > THRESHLOD [here, 0.02]
-                        rs.chi_list.add(chi * 100);
+                        rs.chi_list.add(chi * 100); //PERCENTAGE
                         rs.avg_UE_throughput_list.add((avg_throughput));
                         rs.spectral_efficiency_list.add(spectral_efficiency);
                         rs.cell_edge_throughput_list.add(cell_edge_thpt);
                         rs.fairness_index_jain_list.add(fairness_idx);
                         rs.discrimination_index_list.add(discrimination_idx);
                         rs.entropy_list.add(entropy);
+                        rs.proportion_UE_dropped_list.add(proportion_UE_dropped_avg * 100); //PERCENTAGE
+                        
                     }
                 } catch (NumberFormatException e2) {
                     //Do nothing ... just continue
@@ -51,6 +55,7 @@ public class Reader {
         return rs;
     }
 
+    //For CONVENTIONAL [NOT AVG METRICS]
     public Results readThingsFromFile() {
         BufferedReader csvReader = null;
         try {

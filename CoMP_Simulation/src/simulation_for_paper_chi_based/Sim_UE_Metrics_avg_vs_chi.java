@@ -12,11 +12,11 @@ import sim_results.SimResult_oneMC;
 import sim_results.SimResults;
 import simulation_params.SimulationParameters;
 
-public class Sim_UE_T_avg_vs_chi {
+public class Sim_UE_Metrics_avg_vs_chi {
 
     private SimulationParameters simParams;
 
-    public Sim_UE_T_avg_vs_chi(SimulationParameters simParams) {
+    public Sim_UE_Metrics_avg_vs_chi(SimulationParameters simParams) {
         this.simParams = simParams;
     }
 
@@ -69,6 +69,7 @@ public class Sim_UE_T_avg_vs_chi {
         for (int mc = 0; mc <= simParams.monte_carlo; mc++) {
             list_users = run_sim_for_one_chi_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
             currentSimResult = new SimResult_oneMC();
+//Calculate metrics like Avg T, Spectral Efficiency, etc
             currentSimResult.calculate_metrics(list_users, simParams);
             finalSimResult.addMetrics(currentSimResult);
         }

@@ -7,4 +7,5 @@ public class Mode {
     public static String CELL_EDGE_THROUGHPUT = "CELL_EDGE_THROUGHPUT";
     public static String DISCRIMINATION_INDEX = "DISCRIMINATION_INDEX";
     public static String ENTROPY = "ENTROPY";
+    public static String PROPORTION_UE_DROPPED = "PROPORTION_UE_DROPPED";
 }

@@ -35,7 +35,11 @@ public class FileWriter_CSV {
                 out.print(res.chi_list.get(i) + "," + res.avg_throughput_list.get(i) + ","
                         + res.spectral_efficiency_list.get(i) + "," + res.fairness_index_jain_list.get(i) + ","
                         + res.cell_edge_throughput_list.get(i) + "," + res.discrimination_index_list.get(i) + ","
-                        + res.entropy_list.get(i));
+                        + res.entropy_list.get(i) + ","
+                        + res.proportion_UE_dropped_list.get(i) + ","
+                        + res.power_consumed_avg_BS_list.get(i)
+                );
+
                 out.println(); //newline
             }
 

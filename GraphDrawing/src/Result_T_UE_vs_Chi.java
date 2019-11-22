@@ -9,6 +9,7 @@ public class Result_T_UE_vs_Chi {
     public List<Double> cell_edge_throughput_list = new ArrayList<>();
     public List<Double> discrimination_index_list = new ArrayList<>();
     public List<Double> entropy_list = new ArrayList<>();
+    public List<Double> proportion_UE_dropped_list = new ArrayList<>();
     
     
     public String legendName;

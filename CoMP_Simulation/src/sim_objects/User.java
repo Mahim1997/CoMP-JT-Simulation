@@ -3,7 +3,6 @@ package sim_objects;
 import util_and_calculators.Helper;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import simulation_params.SimulationParameters;
@@ -21,6 +20,11 @@ public class User {
     //For Task 2
     public double distance_min_BS;
 
+    public boolean is_UE_dropped = false;    
+    //For power things
+    public double power_received_UE;
+    
+    
     public List<BaseStation> getListOfBaseStations(){
         return this.baseStations;
     }
@@ -29,6 +33,7 @@ public class User {
         this.x_pos = x;
         this.y_pos = y;
         this.baseStations = new ArrayList<>();
+        this.is_UE_dropped = false;
     }
 
 
@@ -111,11 +116,12 @@ public class User {
             if (baseStations.get((i)).num_available_slots <= 0) { //descending order ... sorted wrt Received power in mW
                 //NO MORE AVAILABLE FOR USERS....
                 drop_ue = true;
+                this.is_UE_dropped = true; //DROP UE.
                 break;
             }
         }
         double coordinating_bs_received_power_idx_0 = 0, others_power_idx_1 = 0, total_power_idx_2 = 0;
-        if (drop_ue) {
+        if (drop_ue == true) {
             //DROPPED
             coordinating_bs_received_power_idx_0 = 0;
             for (int i = 0; i < baseStations.size(); i++) {

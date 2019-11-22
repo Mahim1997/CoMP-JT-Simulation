@@ -16,6 +16,8 @@ public class SimResult_oneMC {
     public double cell_edge_throughput = 0;
     public double discrimination_index = 0;
     public double entropy = 0;
+    public double power_consumed_avg_BS = 0;
+    public double proportion_UE_dropped = 0;
 
     public void calculate_metrics(List<User> list_users, SimulationParameters simParams) {
 
@@ -55,15 +57,20 @@ public class SimResult_oneMC {
         T_f = (sum_squares_of_throughput) / (sum_throughput);
         double per_user_value, cumulative_discrimination_index = 0;
         double p_i, cumulative_entropy = 0;
+        
+        double num_UE_dropped_double = 0;
+        
         for(int i=0; i<total_users_num; i++){
             User user = list_users.get(i);
             per_user_value = (T_f - user.THROUGHPUT_user_one_BS_KBps) / (T_f); //for discrimination index
             cumulative_discrimination_index += per_user_value;
             p_i = (user.THROUGHPUT_user_one_BS_KBps) / sum_throughput; //for entropy
-            cumulative_entropy += ((p_i == 0) ? 0 : (p_i * Helper.log2(p_i)));            
+            cumulative_entropy += ((p_i == 0) ? 0 : (p_i * Helper.log2(p_i)));    
+            num_UE_dropped_double += ((user.is_UE_dropped) ? 1.0 : 0.0);
         }
         this.discrimination_index = cumulative_discrimination_index / num_users_double;
         this.entropy = -1.0 * cumulative_entropy;
+        this.proportion_UE_dropped = num_UE_dropped_double / num_users_double;
     }
 
     public void addMetrics(SimResult_oneMC res) {
@@ -73,6 +80,8 @@ public class SimResult_oneMC {
         this.entropy += res.entropy;
         this.fairness_index += res.fairness_index;
         this.spectral_efficiency += res.spectral_efficiency;
+        this.power_consumed_avg_BS += res.power_consumed_avg_BS;
+        this.proportion_UE_dropped += res.proportion_UE_dropped;
     }
     
     public void divideMetricsBy(double div){
@@ -82,5 +91,7 @@ public class SimResult_oneMC {
         this.entropy /= div;
         this.fairness_index /= div;
         this.spectral_efficiency /= div;
+        this.power_consumed_avg_BS /= div;
+        this.proportion_UE_dropped /= div;
     }
 }

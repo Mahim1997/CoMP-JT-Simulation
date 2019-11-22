@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
 public class GraphPlotter extends Application {
+
     public static String OUTPUT_FOLDER_NAME_TASK1 = "Graphs_UE_vs_CHI";
     public static String FILE_NAME = "Conventional.csv";
     public static double THRESHOLD_FOR_NOT_TAKING = 0.02;
@@ -32,7 +33,7 @@ public class GraphPlotter extends Application {
         System.out.println("Reading data... from csv file ...");
 //        Reader reader = new Reader();
 //        Results rs = reader.readThingsFromFile();
-        System.out.println("Plotting graph UI metrics vs Chi ...");
+        System.out.println("Plotting graph UE metrics vs Chi ...");
 //        plotForNormalConventional(rs);
         plot_UE_things_vs_chi();
 
@@ -155,6 +156,9 @@ public class GraphPlotter extends Application {
                 } else if (mode.equalsIgnoreCase(Mode.ENTROPY)) {
                     series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
                             listResults.get(series_iter).entropy_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
                 }
 
             }
@@ -185,7 +189,7 @@ public class GraphPlotter extends Application {
         for (int JT = 1; JT <= 5; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
 //            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
-            Result_T_UE_vs_Chi res = reader.read_UI_vs_Chi_once(fileName);
+            Result_T_UE_vs_Chi res = reader.read_UE_vs_Chi_once(fileName);
             res.legendName = "JT=" + (String.valueOf(JT));
 //            res.legendName = "" + (String.valueOf(JT));
             list.add(res);
@@ -197,5 +201,6 @@ public class GraphPlotter extends Application {
         plotGraphAndSave("Cell-Edge Throughput (kBps)", "Chi (%)", "Cell Edge Throughput vs Chi.png", list, monte_carlo_str, Mode.CELL_EDGE_THROUGHPUT);
         plotGraphAndSave("Discrimination Index", "Chi (%)", "Discrimination Index vs Chi.png", list, monte_carlo_str, Mode.DISCRIMINATION_INDEX);
         plotGraphAndSave("Entropy", "Chi (%)", "Entropy vs Chi.png", list, monte_carlo_str, Mode.ENTROPY);
+        plotGraphAndSave("% UE dropped", "Chi (%)", "%UE dropped vs Chi.png", list, monte_carlo_str, Mode.PROPORTION_UE_DROPPED);
     }
 }

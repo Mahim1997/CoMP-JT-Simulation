@@ -13,9 +13,11 @@ public class SimResults {
     public List<Double> cell_edge_throughput_list = new ArrayList<>();
     public List<Double> discrimination_index_list = new ArrayList<>();
     public List<Double> entropy_list = new ArrayList<>();
+    public List<Double> power_consumed_avg_BS_list = new ArrayList<>();
+    public List<Double> proportion_UE_dropped_list = new ArrayList<>();
 
     public String[] headings_arr = {"Chi(proportion)", "Avg UE Throughput(kBps)", "Spectral Efficiency", "Fairness Idx",
-        "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy"};
+        "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy", "Proportion UE dropped", "Avg Power Consumed by BS (kW)"};
 
     public void write_to_csv_file(String fileName) {
         FileWriter_CSV.erase_csv_file(fileName);
@@ -32,7 +34,8 @@ public class SimResults {
         this.cell_edge_throughput_list.add(res.cell_edge_throughput);
         this.discrimination_index_list.add(res.discrimination_index);
         this.entropy_list.add(res.entropy);
-    
+        this.power_consumed_avg_BS_list.add(res.power_consumed_avg_BS);
+        this.proportion_UE_dropped_list.add(res.proportion_UE_dropped);
     }
 
 }
