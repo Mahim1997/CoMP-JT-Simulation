@@ -49,6 +49,8 @@ public class SimulationParameters {
     public double path_loss_exponent_alpha; //alpha: usually 3.574
     public double path_loss_standard_deviation; //sigma: usually 8
 
+    public double NOISE_SPECTRAL_POWER_DENSITY; //-174 dBm/Hz
+    
     //3. Energy Parameters
     public double power_max; //P_max = 10^(Pt/10) * 10^-3  ... to convert dBm to watts
     public double power_zeroOutput; //P_0 usually 130 W

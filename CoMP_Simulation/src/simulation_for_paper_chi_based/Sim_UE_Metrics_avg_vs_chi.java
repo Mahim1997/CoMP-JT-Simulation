@@ -86,7 +86,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
         double bw_MHz = simParams.bandwidth / Math.pow(10, 6);
         int no_resource_blocks = ResourceBlockCalculator.numberOfResourceBlocks(bw_MHz);
         int num_users_per_BS = (int) (chi * no_resource_blocks); //All B.S. same chi
-        double Pn = -174 + (10 * Math.log10(simParams.bandwidth));
+        double Pn = simParams.NOISE_SPECTRAL_POWER_DENSITY + (10 * Math.log10(simParams.bandwidth)); //Pn = -174 + 10*log(BW)
         double Pn_mW = Helper.convert_To_mW_From_dBM(Pn);
 
         //Make each Base Station have num available slots as THIS NUMBER intially ... will decrement as UE is added.

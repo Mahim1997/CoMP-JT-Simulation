@@ -20,6 +20,8 @@ public class SimulationParameterBuilder {
         s.bandwidth = 5 * Math.pow(10, 6); //5 Mhz
         s.monte_carlo = 1000;
 
+        s.NOISE_SPECTRAL_POWER_DENSITY = -174; //-174 dBm/Hz
+        
         //2. Path loss params
         s.path_loss_reference_distance = 0.1; //km
         s.path_loss_exponent_alpha = 3.574;
