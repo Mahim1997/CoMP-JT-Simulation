@@ -25,7 +25,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
 
         simParams.distance_initial = 0.1;
         simParams.distance_final = simParams.cell_radius;
-        simParams.distance_increment = 50; //All in m
+        simParams.distance_increment = 10; //All in m
 
         
         String folderName = "UE_T_avg_vs_distance_BS";

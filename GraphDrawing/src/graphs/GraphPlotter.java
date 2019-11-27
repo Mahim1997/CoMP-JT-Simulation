@@ -34,7 +34,7 @@ public class GraphPlotter extends Application {
         System.out.println("Reading data... from csv file ...");
 //        Reader reader = new Reader();
 //        Results rs = reader.readThingsFromFile();
-        System.out.println("Plotting graph UE metrics vs Chi ...");
+        System.out.println("Plotting graph ...");
 //        plotForNormalConventional(rs);
 //        plot_UE_things_vs_chi();
         plot_avg_T_vs_dist();
@@ -179,22 +179,57 @@ public class GraphPlotter extends Application {
     }
 
     private void plotGraphAndSaveForTask2(String x_axis_title,
-            String y_axis_title, String titleGraph, String[] headings, List< List<Double>> data_list, String outputFileNameToSave) {
+            String y_axis_title, String titleGraph, String[] headings, List< List<Double>> column_data_list, String outputFileNameToSave) {
 
         //headings[0]: Distance(m)
         //headings[1]: Chi = 0.1 and so on...
-        System.out.println("-->>Printing data and headings ... data_list.0.size = " + data_list.get(0).size());
-        for(String x: headings){
-            System.out.print(x + " <><> ");
+        //column_data_list[0]: Distance column
+        //column_data_list[1]: Chi = 0.1 column of UE avg Throughputs
+        stage.setTitle("Graphs");
+        //defining the axes
+
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+
+        xAxis.setLabel(x_axis_title);
+        yAxis.setLabel(y_axis_title);
+        //creating the chart
+
+        LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
+
+        lineChart.setCreateSymbols(false);
+        lineChart.setTitle(titleGraph);
+
+        //List of Serieses, initialization
+        List<XYChart.Series> series_list = new ArrayList<>();
+        for (int i = 0; i < (column_data_list.size() - 1); i++) { //since column_data_list[0] is Distance column
+            series_list.add(new XYChart.Series());
         }
-        for(List<Double> list_one_col: data_list){
-            for(double x: list_one_col){
-                System.out.print(x + "  ");
+        //Set legends
+        for (int i = 0; i < series_list.size(); i++) {
+            series_list.get(i).setName(headings[i + 1]); //headings[i] is Distance
+        }
+
+        //populating the series with data
+        int num_data_points = column_data_list.get(0).size();
+
+        for (int series_iter = 0; series_iter < series_list.size(); series_iter++) {
+            XYChart.Series series = series_list.get(series_iter);
+            for (int i = 0; i < num_data_points; i++) {
+                series.getData().add(new XYChart.Data(column_data_list.get(0).get(i),
+                        column_data_list.get(series_iter + 1).get(i))); //[0] is distance, [series_iter] is other column
             }
-            System.out.println("");
         }
-        
-        System.out.println("\n\n\n");
+
+        Scene scene = new Scene(lineChart, 1000, 800); //Height and Width [Default values]
+
+        lineChart.setAnimated(false);
+        for (int i = 0; i < series_list.size(); i++) {
+            lineChart.getData().add(series_list.get(i)); //append
+        }
+
+        stage.setScene(scene);
+        saveAsPng(scene, outputFileNameToSave);
     }
 
 }

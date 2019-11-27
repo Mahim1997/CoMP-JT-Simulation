@@ -4,10 +4,45 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Reader {
+
+    private static double round_value(double d, int NUM_SIG_FIG) {
+
+        BigDecimal bd = new BigDecimal(d);
+        bd = bd.round(new MathContext(NUM_SIG_FIG));
+        double rounded = bd.doubleValue();
+        return rounded;
+    }
+
+    private static double round_value(double d) {
+
+        BigDecimal bd = new BigDecimal(d);
+        bd = bd.round(new MathContext(3));
+        double rounded = bd.doubleValue();
+        return rounded;
+    }
+
+    private static String get3SigFigStr(String s) {
+        String[] arr = s.split("=");
+        if (arr.length == 1) {
+            return s;
+        }
+        String num_str = arr[1].trim();
+        try {
+            double d = Double.parseDouble(num_str);
+            double d_3SF = round_value(d, 3);
+            String to_ret = arr[0] + "= " + String.valueOf(d_3SF);
+            return to_ret;
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
 
     public static List< List<Double>> read_data(String fileName, int num) {
         List< List<Double>> list_of_columns = new ArrayList<>();
@@ -26,7 +61,7 @@ public class Reader {
                 try {
 //                    double distance = Double.parseDouble(data[0]);
                     for (int i = 0; i < data.length; i++) {
-                        list_of_columns.get(i).add(Double.parseDouble(data[i]));
+                        list_of_columns.get(i).add((Double.parseDouble(data[i])));
                     }
 
                 } catch (NumberFormatException e) {
@@ -49,6 +84,11 @@ public class Reader {
             csvReader = new BufferedReader(new FileReader(fileName));
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");
+                
+                for(int i=0; i<data.length; i++){
+                    data[i] = get3SigFigStr(data[i]);
+                }
+                
                 return data;
 
             }
