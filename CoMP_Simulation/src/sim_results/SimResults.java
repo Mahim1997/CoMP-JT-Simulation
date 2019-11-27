@@ -5,7 +5,7 @@ import java.util.List;
 import util_and_calculators.FileWriter_CSV;
 
 public class SimResults {
-
+// ------------------------------------- TASK 1 --------------------------------
     public List<Double> chi_list = new ArrayList<>();
     public List<Double> avg_throughput_list = new ArrayList<>();
     public List<Double> spectral_efficiency_list = new ArrayList<>();
@@ -18,6 +18,7 @@ public class SimResults {
 
     public String[] headings_arr = {"Chi(proportion)", "Avg UE Throughput(kBps)", "Spectral Efficiency", "Fairness Idx",
         "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy", "Proportion UE dropped", "Avg Power Consumed by BS (kW)"};
+
 
     public void write_to_csv_file(String fileName) {
         FileWriter_CSV.erase_csv_file(fileName);

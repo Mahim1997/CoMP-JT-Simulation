@@ -14,7 +14,7 @@ import simulation_params.SimulationParameters;
 
 public class Sim_UE_Metrics_avg_vs_chi {
 
-    private SimulationParameters simParams;
+    private final SimulationParameters simParams;
 
     public Sim_UE_Metrics_avg_vs_chi(SimulationParameters simParams) {
         this.simParams = simParams;
@@ -142,5 +142,5 @@ public class Sim_UE_Metrics_avg_vs_chi {
         return list_of_all_users;
     }
 
-//----------------------------------------------------------------------------------------------------------
+//----------------------------------------  CLASS ENDS -----------------------------------------------------------
 }

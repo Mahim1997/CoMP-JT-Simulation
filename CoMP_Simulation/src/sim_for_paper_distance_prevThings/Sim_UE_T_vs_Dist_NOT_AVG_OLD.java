@@ -9,16 +9,16 @@ import sim_objects.BaseStation;
 import sim_objects.User;
 import simulation_params.SimulationParameters;
 
-public class Sim_UE_T_vs_Dist_NOT_AVG {
+public class Sim_UE_T_vs_Dist_NOT_AVG_OLD {
 
     private SimulationParameters simParams;
 
-    public Sim_UE_T_vs_Dist_NOT_AVG(SimulationParameters simParams) {
+    public Sim_UE_T_vs_Dist_NOT_AVG_OLD(SimulationParameters simParams) {
         this.simParams = simParams;
     }
 
     //BELOW for Task 2 ... varying distance and calculating avg UE throughput
-    public void runSimulationForSecondTask() {
+    public void runSimulationForSecondTask_OLD() {
 
         simParams.chi_for_position = 0.25; // To keep consistent wrt task 1 [so , JTs don't fluctuate themselves]
         simParams.distance_initial = 0.1;
@@ -39,7 +39,7 @@ public class Sim_UE_T_vs_Dist_NOT_AVG {
         //Place Base Stations [Fixed Positions throughout all the simulations]
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
-        String folderName = "UE_T_vs_minDis_BS";
+        String folderName = "OLD_Throughput_vs_dist/UE_T_vs_minDis_BS";
         String fileName = folderName + "/UE_T_vs_minDis_BS_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
         //Always fixed parameters for all chi.

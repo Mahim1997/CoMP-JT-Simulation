@@ -1,17 +1,15 @@
 package util_and_calculators;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.Iterator;
 import sim_objects.BaseStation;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import sim_results.SimResult_Avg_T_vs_dist_per_chi;
 import simulation_params.SimulationParameters;
 
 public class Helper {
@@ -134,8 +132,7 @@ public class Helper {
     public static void writeCSV_row1_row2(String fileName, double row1, double row2) {
         writeCSV_row1_row2(fileName, String.valueOf(row1), String.valueOf(row2));
     }
-    
-    
+
     public static void writeCSV_row1_row2(String fileName, String row1, String row2) {
         try (FileWriter fw = new FileWriter(fileName, true); //append [TRUE]
                 BufferedWriter bw = new BufferedWriter(fw);
@@ -146,6 +143,61 @@ public class Helper {
             e.printStackTrace();
             //exception handling left as an exercise for the reader
         }
+    }
+
+    public static void write_to_csv_UE_T_avg_vs_dist_for_diff_chis(List<SimResult_Avg_T_vs_dist_per_chi> list_results,
+            String fileName) {
+        try (FileWriter fw = new FileWriter(fileName, false); //append [TRUE]
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            //HEADINGS
+            out.print("Distance/m" + ",");
+            for (int i = 0; i < list_results.size(); i++) {
+                out.print("Chi = " + list_results.get(i).chi_value);
+                if (i != (list_results.size() - 1)) {
+                    out.print(",");
+                }
+            }
+            out.println(); //print line.
+            //NOW DATAs
+            double[][] dataMatrix = getData_dist_UE_avg_T_different_chi(list_results);
+            for (double[] row_data : dataMatrix) {
+                for (int j = 0; j < row_data.length; j++) {
+                    //PRINT EACH ROW
+                    out.print(row_data[j]);
+                    out.print(",");
+                }
+                out.println();
+            }
+            
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            //exception handling left as an exercise for the reader
+        }
+    }
+
+    public static double[][] getData_dist_UE_avg_T_different_chi(List<SimResult_Avg_T_vs_dist_per_chi> list_results) {
+        int num_rows = list_results.get(0).avg_throughput_UE_list.size();
+        int num_columns = list_results.size() + 1; // EXTRA 1 for the distance column [1st col, col idx = 0]
+
+        double[][] arr_data = new double[num_rows][];
+        for (int i = 0; i < num_rows; i++) {
+            arr_data[i] = new double[num_columns];
+        }
+
+        //First column ONLY distance
+        for (int i = 0; i < num_rows; i++) {
+            arr_data[i][0] = list_results.get(0).distance_list.get(i); //DISTANCE LIST is same for all.
+        }
+        //Now fill up other values.
+        for (int row_iter = 0; row_iter < num_rows; row_iter++) {
+            for (int col_iter = 0; col_iter < list_results.size(); col_iter++) {
+                arr_data[row_iter][col_iter + 1] = list_results.get(col_iter).avg_throughput_UE_list.get(row_iter);
+            }
+        }
+
+        return arr_data;
     }
 
 }

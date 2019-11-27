@@ -5,14 +5,16 @@ public class SimulationParameters {
     /*
     These parameters are for varying chi and measuring avg UE throughput [for paper work]
      */
-    public double chi_initial = 0;
-    public double chi_final = 1;
+    public double chi_initial = 0.1;
+    public double chi_final = 0.5;
     public double chi_step_size = 0.005;
+
+    public double chi_step_size_task_2 = 0.1;
 
     public double chi_for_position = 0.3;
 
     public int JT_INITIAL = 0; //0->Conventional, 1->DPS
-    public int JT_FINAL = 5;
+    public int JT_FINAL = 3;
 //-------------------------------------------------------
 //TESTING BELOW
 //    public double chi_initial = 0.5;
@@ -26,10 +28,10 @@ public class SimulationParameters {
      */
     public int JT_VALUE = 1; //DPS
 //Task 2
-    public double distance_initial = 0.1; //km
-    public double distance_final = 1; //km
+    public double distance_initial;
+    public double distance_final;
     public double distance_taken = distance_initial;
-    public double distance_increment = 0.1; //km
+    public double distance_increment;
     //-----------------------------------------------------------------
 
     //Parameters for running the simulation.
@@ -50,7 +52,7 @@ public class SimulationParameters {
     public double path_loss_standard_deviation; //sigma: usually 8
 
     public double NOISE_SPECTRAL_POWER_DENSITY; //-174 dBm/Hz
-    
+
     //3. Energy Parameters
     public double power_max; //P_max = 10^(Pt/10) * 10^-3  ... to convert dBm to watts
     public double power_zeroOutput; //P_0 usually 130 W
