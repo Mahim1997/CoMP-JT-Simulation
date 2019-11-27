@@ -1,11 +1,63 @@
+package graphs;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Reader {
 
+    public static List< List<Double>> read_data(String fileName, int num) {
+        List< List<Double>> list_of_columns = new ArrayList<>();
+
+        for (int i = 0; i < num; i++) { //INITIALIZE [Little In-efficient]
+            list_of_columns.add(new ArrayList<>());
+        }
+
+        BufferedReader csvReader = null;
+        String row = null;
+        int row_num = 0;
+        try {
+            csvReader = new BufferedReader(new FileReader(fileName));
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split(",");
+                try {
+//                    double distance = Double.parseDouble(data[0]);
+                    for (int i = 0; i < data.length; i++) {
+                        list_of_columns.get(i).add(Double.parseDouble(data[i]));
+                    }
+
+                } catch (NumberFormatException e) {
+
+                }
+
+            }
+
+        } catch (Exception e) {
+
+        }
+        return list_of_columns;
+    }
+
+    public static String[] read_headings(String fileName) {
+        BufferedReader csvReader = null;
+        String row = null;
+        int row_num = 0;
+        try {
+            csvReader = new BufferedReader(new FileReader(fileName));
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split(",");
+                return data;
+
+            }
+
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
     //Read from CSV file [Conventional Method only]
     //For Conventional Task
     public String fileNameToRead = GraphPlotter.FILE_NAME;
@@ -42,7 +94,7 @@ public class Reader {
                         rs.discrimination_index_list.add(discrimination_idx);
                         rs.entropy_list.add(entropy);
                         rs.proportion_UE_dropped_list.add(proportion_UE_dropped_avg * 100); //PERCENTAGE
-                        
+
                     }
                 } catch (NumberFormatException e2) {
                     //Do nothing ... just continue

@@ -27,7 +27,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
         simParams.distance_final = simParams.cell_radius;
         simParams.distance_increment = 50; //All in m
 
-        List<SimResult_Avg_T_vs_dist_per_chi> list_results = new ArrayList<>();
+        
         String folderName = "UE_T_avg_vs_distance_BS";
         Main.PREV_MODE_JT = Main.JT_MODE;
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
@@ -39,7 +39,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
             }
             String fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
-
+            List<SimResult_Avg_T_vs_dist_per_chi> list_results = new ArrayList<>();
             for (double chi = simParams.chi_initial; chi < simParams.chi_final; chi += simParams.chi_step_size_task_2) {
 
                 simParams.chi_for_position = chi;

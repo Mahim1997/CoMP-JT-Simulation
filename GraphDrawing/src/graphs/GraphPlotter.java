@@ -1,3 +1,4 @@
+package graphs;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class GraphPlotter extends Application {
         launch(args);
     }
 
-    static Stage stage;
+    public static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -35,7 +36,8 @@ public class GraphPlotter extends Application {
 //        Results rs = reader.readThingsFromFile();
         System.out.println("Plotting graph UE metrics vs Chi ...");
 //        plotForNormalConventional(rs);
-        plot_UE_things_vs_chi();
+//        plot_UE_things_vs_chi();
+        plot_avg_T_vs_dist();
 
 //stage.show();
         System.out.println("After saving files .... exiting SYS.exit(0)");
@@ -52,56 +54,8 @@ public class GraphPlotter extends Application {
         }
     }
 
-    private void plotSaveGraph_Conventional(String y_axis_label, String x_axis_label,
-            String fileNameToSaveAndTitle, double[] y_axis_data, double[] x_axis_data) {
-
-        String titleGraph = fileNameToSaveAndTitle.replace(".png", "");
-        titleGraph = titleGraph.replace("_", " ");
-        stage.setTitle("Graphs");
-        //defining the axes
-
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-
-        xAxis.setLabel(x_axis_label);
-        yAxis.setLabel(y_axis_label);
-        //creating the chart
-
-        LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-
-        lineChart.setTitle(titleGraph);
-        //defining a series
-        XYChart.Series series = new XYChart.Series();
-        series.setName(titleGraph);
-        //populating the series with data
-        int num_data_points = x_axis_data.length;
-        for (int i = 0; i < num_data_points; i++) {
-            series.getData().add(new XYChart.Data(x_axis_data[i], y_axis_data[i]));
-        }
-
-        Scene scene = new Scene(lineChart, 800, 600); //Height and Width [Default values]
-
-        lineChart.setAnimated(false);
-        lineChart.getData().add(series);
-
-        saveAsPng(scene, fileNameToSaveAndTitle);
-        stage.setScene(scene);
-//        saveAsPng(scene, "chart1.png");
-
-    }
-
-    private void plotForNormalConventional(Results rs) {
-        plotSaveGraph_Conventional("Avg Throughput (kBps)", "Time (hr)", "Conventional_Throughput_vs_Time.png", rs.average_throughput, rs.hour);
-        plotSaveGraph_Conventional("Avg Power Consumption (W)", "Time (hr)", "Conventional_Power_vs_Time.png", rs.average_power_consumption, rs.hour);
-        plotSaveGraph_Conventional("Chi (%)", "Time (hr)", "Conventional_Chi_vs_Time.png", rs.get_chi_percentage(), rs.hour);
-        plotSaveGraph_Conventional("Fairness Index", "Time (hr)", "Conventional_Fairness_Index_vs_Time.png", rs.fairness_index, rs.hour);
-        plotSaveGraph_Conventional("Spectral Efficiency", "Time (hr)", "Conventional_Spectral_Efficiency_vs_Time.png", rs.fairness_index, rs.hour);
-        plotSaveGraph_Conventional("Cell-Edge Throughput (kBps)", "Time (hr)", "Conventional_Cell-Edge_Throughput_vs_Time.png", rs.fairness_index, rs.hour);
-
-    }
-
 //--------------------------------------  PAPER TASKS  -----------------------------------------------------
-    private void plotGraphAndSave(String y_axis_label, String x_axis_label, String fileNameToSave,
+    private void plotGraphAndSaveForTask1(String y_axis_label, String x_axis_label, String fileNameToSave,
             List<Result_T_UE_vs_Chi> listResults, String monte_carlo_str, String mode) {
 
         String titleGraph = fileNameToSave.replace(".png", "");
@@ -195,12 +149,52 @@ public class GraphPlotter extends Application {
             list.add(res);
         }
 
-        plotGraphAndSave("Average UE Throughput (kBps)", "Chi (%)", "Avg UE Throughput vs Chi.png", list, monte_carlo_str, Mode.AVG_UE_Throughput);
-        plotGraphAndSave("Spectral Efficiency", "Chi (%)", "Avg Spectral Efficiency vs Chi.png", list, monte_carlo_str, Mode.SPECTRAL_EFFICIENCY);
-        plotGraphAndSave("Jain's Fairness Index", "Chi (%)", "Jain's Fairness Index vs Chi.png", list, monte_carlo_str, Mode.FAIRNESS_INDEX);
-        plotGraphAndSave("Cell-Edge Throughput (kBps)", "Chi (%)", "Cell Edge Throughput vs Chi.png", list, monte_carlo_str, Mode.CELL_EDGE_THROUGHPUT);
-        plotGraphAndSave("Discrimination Index", "Chi (%)", "Discrimination Index vs Chi.png", list, monte_carlo_str, Mode.DISCRIMINATION_INDEX);
-        plotGraphAndSave("Entropy", "Chi (%)", "Entropy vs Chi.png", list, monte_carlo_str, Mode.ENTROPY);
-        plotGraphAndSave("% UE dropped", "Chi (%)", "%UE dropped vs Chi.png", list, monte_carlo_str, Mode.PROPORTION_UE_DROPPED);
+        plotGraphAndSaveForTask1("Average UE Throughput (kBps)", "Chi (%)", "Avg UE Throughput vs Chi.png", list, monte_carlo_str, Mode.AVG_UE_Throughput);
+        plotGraphAndSaveForTask1("Spectral Efficiency", "Chi (%)", "Avg Spectral Efficiency vs Chi.png", list, monte_carlo_str, Mode.SPECTRAL_EFFICIENCY);
+        plotGraphAndSaveForTask1("Jain's Fairness Index", "Chi (%)", "Jain's Fairness Index vs Chi.png", list, monte_carlo_str, Mode.FAIRNESS_INDEX);
+        plotGraphAndSaveForTask1("Cell-Edge Throughput (kBps)", "Chi (%)", "Cell Edge Throughput vs Chi.png", list, monte_carlo_str, Mode.CELL_EDGE_THROUGHPUT);
+        plotGraphAndSaveForTask1("Discrimination Index", "Chi (%)", "Discrimination Index vs Chi.png", list, monte_carlo_str, Mode.DISCRIMINATION_INDEX);
+        plotGraphAndSaveForTask1("Entropy", "Chi (%)", "Entropy vs Chi.png", list, monte_carlo_str, Mode.ENTROPY);
+        plotGraphAndSaveForTask1("% UE dropped", "Chi (%)", "%UE dropped vs Chi.png", list, monte_carlo_str, Mode.PROPORTION_UE_DROPPED);
     }
+
+    // ----------------------------------------------- TASK 2 ----------------------------------
+    private void plot_avg_T_vs_dist() {
+        String folderName = "UE_T_avg_vs_distance_BS";
+        String fileName = "", outputFileNameToSave = "";
+        int JT_final = 3, JT_initial = 0;
+        String monte_carlo = "1000";
+
+        for (int JT = JT_initial; JT <= JT_final; JT++) {
+            fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_" + String.valueOf(JT) + ".csv";
+            outputFileNameToSave = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_" + String.valueOf(JT) + ".png";
+            String[] headings = Reader.read_headings(fileName);
+            List< List<Double>> data_matrix = Reader.read_data(fileName, headings.length);
+
+            plotGraphAndSaveForTask2("Distance(m)", "Avg UE Throughput (kBps)", "Avg UE Throughput vs Distance for various chi",
+                    headings, data_matrix, outputFileNameToSave);
+
+        }
+
+    }
+
+    private void plotGraphAndSaveForTask2(String x_axis_title,
+            String y_axis_title, String titleGraph, String[] headings, List< List<Double>> data_list, String outputFileNameToSave) {
+
+        //headings[0]: Distance(m)
+        //headings[1]: Chi = 0.1 and so on...
+        System.out.println("-->>Printing data and headings ... data_list.0.size = " + data_list.get(0).size());
+        for(String x: headings){
+            System.out.print(x + " <><> ");
+        }
+        for(List<Double> list_one_col: data_list){
+            for(double x: list_one_col){
+                System.out.print(x + "  ");
+            }
+            System.out.println("");
+        }
+        
+        System.out.println("\n\n\n");
+    }
+
 }
