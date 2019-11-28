@@ -121,7 +121,7 @@ public class User {
 
     public double[] getReceivedPowerArray() {
         double[] power_arr = new double[4]; //arr[0]:Co-ordinating BS's received power, arr[1]:Other's Pr_mW, arr[2]:TOTAL, arr[3]:factor
-        double factor = 1;
+        double factor = 0;
         if (simParams.JT_VALUE > baseStations.size()) {
             System.out.println("In User.getReceivedPowerArray() ... simParams.JT_VALUE > baseStations.size() .. exiting -1");
             System.exit(-1);
@@ -158,7 +158,8 @@ public class User {
                     coordinating_bs_received_power_idx_0 += bs.power_received_by_user_mW;
                 } else {
                     //Competing Base-Stations is here.
-                    factor += (double) (((bs.num_initial_slots - bs.num_available_slots) / (bs.num_initial_slots)));
+                    factor += (double) ((((double) (bs.num_initial_slots - bs.num_available_slots))
+                            / ((double) (bs.num_initial_slots))));
                     others_power_idx_1 += bs.power_received_by_user_mW;
                 }
                 num_BS_selected_so_far++;

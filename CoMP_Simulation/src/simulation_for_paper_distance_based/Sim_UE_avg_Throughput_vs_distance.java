@@ -24,8 +24,8 @@ public class Sim_UE_avg_Throughput_vs_distance {
     public void runSimulationForSecondTask_NEW() {
 
         simParams.distance_initial = 0.1;
-//        simParams.distance_final = simParams.cell_radius;
-        simParams.distance_final = 2; //DEBUG DISTANCE
+        simParams.distance_final = simParams.cell_radius;
+//        simParams.distance_final = 2; //DEBUG DISTANCE
         simParams.distance_increment = 10; //All in m
 
         String folderName = "UE_T_avg_vs_distance_BS";
@@ -160,13 +160,12 @@ public class Sim_UE_avg_Throughput_vs_distance {
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr, factor);
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 //After calculations... [to get the same num_slots_available]
-                user.sortBaseStations_wrt_baseStationID();
-                baseStations = user.getListOfBaseStations();
-//                System.out.println("-->>>AFTER UE BS LIST is copied ... printing list.");
-//                Helper.printBaseStations(baseStations);
+                user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
+                baseStations = user.getListOfBaseStations(); //COPY base stations to get the available_tokens
                 num_users_total++;
-                list_users.add(user);
-                bs.list_users.add(user);
+
+                list_users.add(user); //FOR DEBUG
+                bs.list_users.add(user); //FOR DEBUG
             }
 //            System.out.println("");
         }
