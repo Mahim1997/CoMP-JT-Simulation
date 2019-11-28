@@ -200,4 +200,12 @@ public class Helper {
         return arr_data;
     }
 
+    public static void printBaseStations(List<BaseStation> baseStations) {
+        System.out.println("[Helper] >> Printing list of base stations.");
+        for(BaseStation bs: baseStations){
+            System.out.print(bs.base_station_id + ", ");
+        }
+        System.out.println("");
+    }
+
 }

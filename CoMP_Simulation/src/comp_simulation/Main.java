@@ -4,10 +4,10 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Running for JT MODE = " + JT_MODE);
-        SimulationRunner.runSimulation(chi_based); //For Task 1
+//        SimulationRunner.runSimulation(chi_based); //For Task 1
 //        SimulationRunner.runSimulation(distance_based_prev_avg); //For Task 2.a
 //        SimulationRunner.runSimulation(distance_based_prev_all_UEs); //For Task 2.b
-//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
+        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

@@ -13,7 +13,7 @@ import sim_results.SimResults;
 import simulation_params.SimulationParameters;
 
 public class Sim_UE_Metrics_avg_vs_chi {
-
+    private static boolean IS_CONVENTIONAL = false;
     private final SimulationParameters simParams;
 
     public Sim_UE_Metrics_avg_vs_chi(SimulationParameters simParams) {
@@ -25,8 +25,12 @@ public class Sim_UE_Metrics_avg_vs_chi {
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
             simParams.JT_VALUE = JT;
             if (JT == 0) {
-                Main.JT_MODE = Main.JT_CONVENTIONAL;
+                IS_CONVENTIONAL = true;
+//                Main.JT_MODE = Main.JT_CONVENTIONAL;
+                Main.JT_MODE = Main.JT_DISTANCE;
+                simParams.JT_VALUE = 1;
             } else {
+                IS_CONVENTIONAL = false;
                 Main.JT_MODE = Main.PREV_MODE_JT;
             }
             run_UE_Tavg_vs_chi();
@@ -40,6 +44,11 @@ public class Sim_UE_Metrics_avg_vs_chi {
         String folderName = "Avg_Th_Chi";
         String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
+        if(IS_CONVENTIONAL){
+            System.out.println("-->>HEREE >>>> Running for Conventional ... ");
+            fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
+                + "_JT_0.csv";
+        }
         //Always fixed parameters for all chi.
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius; // root(3) * cell_radius = IBS
         double FSPL_dB = (20 * Math.log10(simParams.path_loss_reference_distance))
@@ -50,7 +59,8 @@ public class Sim_UE_Metrics_avg_vs_chi {
         SimResult_oneMC res_one_MC;
         for (double chi = simParams.chi_initial; chi <= simParams.chi_final; chi += simParams.chi_step_size) {
             System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs chi = " + chi
-                    + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE);
+                    + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE
+                    + " , fileName = " + fileName);
             //Run monte_carlo times for THIS value of CHI and write that to the CSV file.
             res_one_MC = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
             simResults.enterMetricsForOneMC(chi, res_one_MC);
@@ -90,8 +100,9 @@ public class Sim_UE_Metrics_avg_vs_chi {
         double Pn_mW = Helper.convert_To_mW_From_dBM(Pn);
 
         //Make each Base Station have num available slots as THIS NUMBER intially ... will decrement as UE is added.
-        for (BaseStation baseStation : baseStations) {
-            baseStation.num_available_slots = (int) (1 * no_resource_blocks); //chi = 1 IS the max
+        for (BaseStation bs : baseStations) {
+            bs.num_available_slots = (int) (1 * no_resource_blocks); //chi = 1 IS the max
+            bs.num_initial_slots = bs.num_available_slots;
         }
 
         List<User> list_of_all_users = new ArrayList<>();
@@ -101,8 +112,10 @@ public class Sim_UE_Metrics_avg_vs_chi {
                 double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                 Random rand = new Random();
                 double ibs_random_user_wrt_BS = rand.nextDouble();
-                double x_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.cos(theta)) + bs.x_pos;
-                double y_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.sin(theta)) + bs.y_pos;
+//                double x_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.cos(theta)) + bs.x_pos;
+//                double y_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.sin(theta)) + bs.y_pos;
+                double x_user = (simParams.cell_radius * ibs_random_user_wrt_BS * Math.cos(theta)) + bs.x_pos;
+                double y_user = (simParams.cell_radius * ibs_random_user_wrt_BS * Math.sin(theta)) + bs.y_pos;
                 User user = new User(x_user, y_user);
                 user.formSimulationParameters(simParams);
                 //Now calculation parts ...
@@ -131,10 +144,11 @@ public class Sim_UE_Metrics_avg_vs_chi {
                     power_arr[1] = total_power_of_all_bs - power_recv_bs;
                     //total power_arr[2] is SAME.
                 }
-                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
+                double factor = power_arr[3];
+                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr, factor);
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
-                //After calculations... [to get the same num_slots_available]
-                baseStations = user.getListOfBaseStations();
+                user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
+                baseStations = user.getListOfBaseStations();  //After calculations... [to get the same num_slots_available]
                 num_users_total++;
                 list_of_all_users.add(user); //for further computations...
             }

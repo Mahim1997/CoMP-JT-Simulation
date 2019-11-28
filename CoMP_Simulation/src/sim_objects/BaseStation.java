@@ -1,5 +1,6 @@
 package sim_objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaseStation {
@@ -12,8 +13,12 @@ public class BaseStation {
 
 //For BS parameters
     public int num_available_slots;
+    public int num_initial_slots;
 //For UE paramaters
     public double power_received_by_user_mW;
+
+//For DEBUG
+   public List<User> list_users = new ArrayList<>();
     
 //Constructors
     public BaseStation(int base_station_id, double x_pos, double y_pos, int tier) {

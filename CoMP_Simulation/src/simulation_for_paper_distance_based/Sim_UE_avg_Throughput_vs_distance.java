@@ -24,10 +24,10 @@ public class Sim_UE_avg_Throughput_vs_distance {
     public void runSimulationForSecondTask_NEW() {
 
         simParams.distance_initial = 0.1;
-        simParams.distance_final = simParams.cell_radius;
+//        simParams.distance_final = simParams.cell_radius;
+        simParams.distance_final = 2; //DEBUG DISTANCE
         simParams.distance_increment = 10; //All in m
 
-        
         String folderName = "UE_T_avg_vs_distance_BS";
         Main.PREV_MODE_JT = Main.JT_MODE;
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
@@ -41,7 +41,6 @@ public class Sim_UE_avg_Throughput_vs_distance {
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
             List<SimResult_Avg_T_vs_dist_per_chi> list_results = new ArrayList<>();
             for (double chi = simParams.chi_initial; chi < simParams.chi_final; chi += simParams.chi_step_size_task_2) {
-
                 simParams.chi_for_position = chi;
                 SimResult_Avg_T_vs_dist_per_chi result_one_sim = run_T_avg_vs_Distance();
                 list_results.add(result_one_sim);
@@ -88,6 +87,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
             double thpt = run_sim_for_one_distance_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
             avg_throughput += thpt;
         }
+
         avg_throughput /= ((double) (simParams.monte_carlo));
         return avg_throughput;
     }
@@ -99,25 +99,30 @@ public class Sim_UE_avg_Throughput_vs_distance {
         double bw_MHz = simParams.bandwidth / Math.pow(10, 6);
         int no_resource_blocks = ResourceBlockCalculator.numberOfResourceBlocks(bw_MHz);
         int num_users_per_BS = (int) (chi * no_resource_blocks); //All B.S. same chi
-
+//        System.out.println("-->>num_users_per_BS = " + num_users_per_BS + " , no_resource_blocks = " + no_resource_blocks);
 //        //TESTING ...
 //        num_users_per_BS = 1;
         double Pn = simParams.NOISE_SPECTRAL_POWER_DENSITY + (10 * Math.log10(simParams.bandwidth));
         double Pn_mW = Helper.convert_To_mW_From_dBM(Pn);
 
         //Make each Base Station have num available slots as THIS NUMBER intially ... will decrement as UE is added.
-        for (BaseStation baseStation : baseStations) {
-            baseStation.num_available_slots = (int) (1 * no_resource_blocks); //chi = 1 IS the max
+        for (BaseStation bs : baseStations) {
+            bs.num_available_slots = (int) (1 * no_resource_blocks); //chi = 1 IS the max
+            bs.num_initial_slots = bs.num_available_slots;
         }
 
+//        Helper.printBaseStations(baseStations);
+
+        List<User> list_users = new ArrayList<>();
         for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
             BaseStation bs = baseStations.get(bs_iter);
             for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+//                System.out.println("-->>TRYING TO CONNECT TO bs.id = " + bs.base_station_id + " , UE_id = " + itr_user);
                 double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
-                Random rand = new Random();
-
                 double radial_distance_wrt_BS = simParams.distance_taken;
-                /*double random_double = rand.nextDouble();
+                /*
+                Random rand = new Random();
+                double random_double = rand.nextDouble();
                 double x_user = (inter_bs_distance * random_double * Math.cos(theta)) + bs.x_pos;
                 double y_user = (inter_bs_distance * random_double * Math.sin(theta)) + bs.y_pos;
                  */
@@ -151,14 +156,39 @@ public class Sim_UE_avg_Throughput_vs_distance {
                     power_arr[1] = total_power_of_all_bs - power_recv_bs;
                     //total power_arr[2] is SAME.
                 }
-
-                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr);
+                double factor = power_arr[3];
+                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr, factor);
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 //After calculations... [to get the same num_slots_available]
+                user.sortBaseStations_wrt_baseStationID();
                 baseStations = user.getListOfBaseStations();
+//                System.out.println("-->>>AFTER UE BS LIST is copied ... printing list.");
+//                Helper.printBaseStations(baseStations);
                 num_users_total++;
+                list_users.add(user);
+                bs.list_users.add(user);
             }
+//            System.out.println("");
         }
+
+
+        /*
+        //-->>>FOR DEBUGGING...
+        List<BaseStation> list2 = list_users.get(list_users.size() - 1).getListOfBaseStations(); //Get final instance.
+        for (int i = 0; i < list2.size(); i++) {
+            BaseStation bs = list2.get(i);
+            int x = 0;
+            for (int j = 0; j < bs.list_users.size(); j++) {
+                User ue = bs.list_users.get(j);
+                if (ue.is_UE_dropped) {
+                    x++;
+                }
+            }
+            System.out.println("BS = " + bs.base_station_id + " , # UE dropped = " + x
+                    + ", BS initialSlots = " + bs.num_initial_slots + " , BS available slots = " + bs.num_available_slots);
+        }
+        */
+
         double avg_throughput = (num_users_total == 0) ? 0 : (cumulative_throughput / num_users_total);
         return avg_throughput;
     }

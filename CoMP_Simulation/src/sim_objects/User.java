@@ -20,15 +20,14 @@ public class User {
     //For Task 2
     public double distance_min_BS;
 
-    public boolean is_UE_dropped = false;    
+    public boolean is_UE_dropped = false;
     //For power things
     public double power_received_UE;
-    
-    
-    public List<BaseStation> getListOfBaseStations(){
+
+    public List<BaseStation> getListOfBaseStations() {
         return this.baseStations;
     }
-    
+
     public User(double x, double y) {
         this.x_pos = x;
         this.y_pos = y;
@@ -36,10 +35,28 @@ public class User {
         this.is_UE_dropped = false;
     }
 
+    private String getBaseStationIDs(List<BaseStation> bs_l) {
+        String s = "";
+        for (BaseStation bs : bs_l) {
+            s += (String.valueOf(bs.base_station_id) + ",");
+        }
+        return s;
+    }
 
     public void copyListOfBaseStations(List<BaseStation> baseStationList) {
         this.baseStations.clear();
         this.baseStations = new ArrayList<>(baseStationList);
+    }
+
+    public void sortBaseStations_wrt_baseStationID() {
+        //Ascending order sort
+        Collections.sort(this.baseStations, (BaseStation b1, BaseStation b2) -> {
+            if (b2.base_station_id < b1.base_station_id) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
     }
 
     public void formSimulationParameters(SimulationParameters simParams) {
@@ -79,18 +96,18 @@ public class User {
         }
     }
 
-    public void sortBaseStations_wrt_Distances_ASC(){
+    public void sortBaseStations_wrt_Distances_ASC() {
         //Ascending order sort
         Collections.sort(this.baseStations, (BaseStation b1, BaseStation b2) -> {
 //            if (b2.power_received_by_user_mW < b1.power_received_by_user_mW) {
-            if(getDistanceFromBS(b2) < getDistanceFromBS(b1)){
+            if (getDistanceFromBS(b2) < getDistanceFromBS(b1)) {
                 return 1;
             } else {
                 return -1;
             }
         });
     }
-    
+
     public void sortBaseStations_wrt_Pr_mW_DESC() {
         //Descending order sort
         Collections.sort(this.baseStations, (BaseStation b1, BaseStation b2) -> {
@@ -103,8 +120,8 @@ public class User {
     }
 
     public double[] getReceivedPowerArray() {
-        double[] power_arr = new double[3]; //arr[0]:Co-ordinating BS's received power, arr[1]:Other's Pr_mW, arr[2]:TOTAL
-
+        double[] power_arr = new double[4]; //arr[0]:Co-ordinating BS's received power, arr[1]:Other's Pr_mW, arr[2]:TOTAL, arr[3]:factor
+        double factor = 1;
         if (simParams.JT_VALUE > baseStations.size()) {
             System.out.println("In User.getReceivedPowerArray() ... simParams.JT_VALUE > baseStations.size() .. exiting -1");
             System.exit(-1);
@@ -131,14 +148,17 @@ public class User {
         } else {
             //TAKEN
             int num_BS_selected_so_far = 0;
+            factor = 0;
             for (int i = 0; i < baseStations.size(); i++) {
                 BaseStation bs = baseStations.get(i);
                 total_power_idx_2 += bs.power_received_by_user_mW;
                 if (num_BS_selected_so_far < simParams.JT_VALUE) {
-                    //Within JT , so decrement no_available_slots for BS.
+                    //Within JT , so decrement no_available_slots for BS. [Co-ordinating Base Stations]
                     bs.num_available_slots--;
                     coordinating_bs_received_power_idx_0 += bs.power_received_by_user_mW;
                 } else {
+                    //Competing Base-Stations is here.
+                    factor += (double) (((bs.num_initial_slots - bs.num_available_slots) / (bs.num_initial_slots)));
                     others_power_idx_1 += bs.power_received_by_user_mW;
                 }
                 num_BS_selected_so_far++;
@@ -147,14 +167,23 @@ public class User {
         power_arr[0] = coordinating_bs_received_power_idx_0;
         power_arr[1] = others_power_idx_1;
         power_arr[2] = total_power_idx_2;
+        power_arr[3] = factor;
         return power_arr;
     }
 
     //calculates the throughput and SINR [Pn_mW is the noise power in mW]
-    public void calculate_SINR_and_Throughput_of_UE(double Pn_mW, double[] received_powers_mW) {
-        double numerator = received_powers_mW[0];
-        double denominator = received_powers_mW[1];
-        this.SINR_user_one_BS = (numerator / (Pn_mW + denominator));
+    public void calculate_SINR_and_Throughput_of_UE(double power_noise_mW, double[] received_powers_mW) {
+        double powers_of_coordinating_baseStations = received_powers_mW[0];
+        double powers_of_competing_baseStations = received_powers_mW[1];
+        this.SINR_user_one_BS = (powers_of_coordinating_baseStations / (power_noise_mW + powers_of_competing_baseStations));
+        this.THROUGHPUT_user_one_BS_KBps = 180 * (Helper.log2(1 + this.SINR_user_one_BS));
+
+    }
+
+    public void calculate_SINR_and_Throughput_of_UE(double power_noise_mW, double[] received_powers_mW, double factor) {
+        double powers_of_coordinating_baseStations = received_powers_mW[0];
+        double powers_of_competing_baseStations = received_powers_mW[1];
+        this.SINR_user_one_BS = (powers_of_coordinating_baseStations / (power_noise_mW + (factor * powers_of_competing_baseStations)));
         this.THROUGHPUT_user_one_BS_KBps = 180 * (Helper.log2(1 + this.SINR_user_one_BS));
 
     }
