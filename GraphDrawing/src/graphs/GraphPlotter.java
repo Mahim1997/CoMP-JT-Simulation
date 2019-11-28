@@ -16,8 +16,10 @@ import javax.imageio.ImageIO;
 
 public class GraphPlotter extends Application {
 
-    public static String OUTPUT_FOLDER_NAME_TASK1 = "Graphs_UE_vs_CHI";
     public static String FILE_NAME = "Conventional.csv";
+
+    public static String OUTPUT_FOLDER_NAME_TASK1 = "Avg_Metrics_vs_Chi/GRAPHS_UE_vs_CHI";
+
     public static double THRESHOLD_FOR_NOT_TAKING = 0.02;
 
     public static void main(String[] args) {
@@ -36,8 +38,8 @@ public class GraphPlotter extends Application {
 //        Results rs = reader.readThingsFromFile();
         System.out.println("Plotting graph ...");
 //        plotForNormalConventional(rs);
-//        plot_UE_things_vs_chi();
-        plot_avg_T_vs_dist();
+        plot_UE_things_vs_chi();
+//        plot_avg_T_vs_dist();
 
 //stage.show();
         System.out.println("After saving files .... exiting SYS.exit(0)");
@@ -57,8 +59,11 @@ public class GraphPlotter extends Application {
 //--------------------------------------  PAPER TASKS  -----------------------------------------------------
     private void plotGraphAndSaveForTask1(String y_axis_label, String x_axis_label, String fileNameToSave,
             List<Result_T_UE_vs_Chi> listResults, String monte_carlo_str, String mode) {
+        String onlyFileNameWithoutPath = fileNameToSave;
+        fileNameToSave = OUTPUT_FOLDER_NAME_TASK1 + "/" + fileNameToSave;
 
-        String titleGraph = fileNameToSave.replace(".png", "");
+        System.out.println("Running plotGraphAndSaveForTask1()  fileToSaveName = " + fileNameToSave);
+        String titleGraph = onlyFileNameWithoutPath.replace(".png", "");
         titleGraph = titleGraph.replace("_", " ");
         titleGraph += (", Monte Carlo = " + monte_carlo_str);
         stage.setTitle("Graphs");
@@ -127,13 +132,13 @@ public class GraphPlotter extends Application {
 
         stage.setScene(scene);
 //        scene.getStylesheets().add("file.css");
-        fileNameToSave = OUTPUT_FOLDER_NAME_TASK1 + "/" + fileNameToSave;
+
         saveAsPng(scene, fileNameToSave);
 
     }
 
     public void plot_UE_things_vs_chi() {
-        String folderName = "Avg_Th_Chi";
+        String folderName = "Avg_Metrics_vs_Chi";
         String fileName = "";//"Avg_Throughput_vs_chi_MC_1000_JT_1";
 //        String imageFile = "Avg UE Throughput vs Chi.png";
         Reader reader = new Reader();
