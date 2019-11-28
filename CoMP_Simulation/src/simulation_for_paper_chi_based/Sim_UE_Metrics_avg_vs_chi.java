@@ -128,6 +128,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
                 if (Main.JT_MODE.equals(Main.JT_SINR)) {
                     user.sortBaseStations_wrt_Pr_mW_DESC();
                 } else if (Main.JT_MODE.equals(Main.JT_DISTANCE)) {
+//                    System.out.println("Distance based sorting...");
                     user.sortBaseStations_wrt_Distances_ASC();
                 } else if (Main.JT_MODE.equals(Main.JT_HYBRID)) {
                     //TO DO HYBRID....
@@ -150,11 +151,36 @@ public class Sim_UE_Metrics_avg_vs_chi {
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr, factor);
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
+                
+//                System.out.println("-->>AFTER sorting wrt CID ... printing basestaiotns. ");
+//                Helper.printBaseStations(baseStations);
+                
                 baseStations = user.getListOfBaseStations();  //After calculations... [to get the same num_slots_available]
                 num_users_total++;
                 list_of_all_users.add(user); //for further computations...
+                bs.list_users.add(user);
             }
         }
+        
+        /*
+        //-->>>FOR DEBUGGING...
+        List<BaseStation> list2 = list_of_all_users.get(list_of_all_users.size() - 1).getListOfBaseStations(); //Get final instance.
+        for (int i = 0; i < list2.size(); i++) {
+            BaseStation bs = list2.get(i);
+            int x = 0;
+            for (int j = 0; j < bs.list_users.size(); j++) {
+                User ue = bs.list_users.get(j);
+                if (ue.is_UE_dropped) {
+                    x++;
+                }
+            }
+            System.out.println("BS = " + bs.base_station_id + " , # UE dropped = " + x
+                    + ", BS initialSlots = " + bs.num_initial_slots + " , BS available slots = " + bs.num_available_slots);
+        }
+        */
+
+        
+        
         return list_of_all_users;
     }
 

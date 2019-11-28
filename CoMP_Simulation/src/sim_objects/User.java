@@ -132,6 +132,8 @@ public class User {
         for (int i = 0; i < simParams.JT_VALUE; i++) {
             if (baseStations.get((i)).num_available_slots <= 0) { //descending order ... sorted wrt Received power in mW
                 //NO MORE AVAILABLE FOR USERS....
+//                System.out.println("-->>Inside User.java, UE dropped .. bs_id = " + baseStations.get(i).base_station_id + " , num_available slots = "
+//                 + baseStations.get(i).num_available_slots);
                 drop_ue = true;
                 this.is_UE_dropped = true; //DROP UE.
                 break;
