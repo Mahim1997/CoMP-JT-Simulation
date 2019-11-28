@@ -111,11 +111,13 @@ public class Sim_UE_Metrics_avg_vs_chi {
             for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
                 double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                 Random rand = new Random();
-                double ibs_random_user_wrt_BS = rand.nextDouble();
-//                double x_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.cos(theta)) + bs.x_pos;
-//                double y_user = (inter_bs_distance * ibs_random_user_wrt_BS * Math.sin(theta)) + bs.y_pos;
-                double x_user = (simParams.cell_radius * ibs_random_user_wrt_BS * Math.cos(theta)) + bs.x_pos;
-                double y_user = (simParams.cell_radius * ibs_random_user_wrt_BS * Math.sin(theta)) + bs.y_pos;
+                double random_double_val = rand.nextDouble();
+//                double x_user = (inter_bs_distance * random_double_val * Math.cos(theta)) + bs.x_pos;
+//                double y_user = (inter_bs_distance * random_double_val * Math.sin(theta)) + bs.y_pos;
+
+// --------------------------- Keep UE within cell-radius of each Base Station -------------------------------------
+                double x_user = (simParams.cell_radius * random_double_val * Math.cos(theta)) + bs.x_pos;
+                double y_user = (simParams.cell_radius * random_double_val * Math.sin(theta)) + bs.y_pos;
                 User user = new User(x_user, y_user);
                 user.formSimulationParameters(simParams);
                 //Now calculation parts ...
