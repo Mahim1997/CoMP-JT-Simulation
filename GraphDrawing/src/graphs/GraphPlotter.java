@@ -145,7 +145,7 @@ public class GraphPlotter extends Application {
         List<Result_T_UE_vs_Chi> list = new ArrayList<>();
 
         String monte_carlo_str = "1000";
-        for (int JT = 0; JT <= 5; JT++) {
+        for (int JT = 0; JT <= 3; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
 //            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
             Result_T_UE_vs_Chi res = reader.read_UE_vs_Chi_once(fileName);
