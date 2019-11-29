@@ -162,29 +162,10 @@ public class Sim_UE_Metrics_avg_vs_chi {
             }
         }
 
-        /*
-        //-->>>FOR DEBUGGING...
-        List<BaseStation> list2 = list_of_all_users.get(list_of_all_users.size() - 1).getListOfBaseStations(); //Get final instance.
-        for (int i = 0; i < list2.size(); i++) {
-            BaseStation bs = list2.get(i);
-            int x = 0;
-            for (int j = 0; j < bs.list_users.size(); j++) {
-                User ue = bs.list_users.get(j);
-                if (ue.is_UE_dropped) {
-                    x++;
-                }
-            }
-            System.out.println("BS = " + bs.base_station_id + " , # UE dropped = " + x
-                    + ", BS initialSlots = " + bs.num_initial_slots + " , BS available slots = " + bs.num_available_slots);
-        }
-         */
         for (int i = 0; i < list_of_all_users.size(); i++) {
             User user = list_of_all_users.get(i);
-            if(!user.is_UE_dropped){
-                
-                for(int k=0; k<user.base_stations_connected_ids.size(); k++){
-                    BaseStation bs = baseStations.get(k);
-                }
+            if(!user.is_UE_dropped){ //UE is taken.
+                System.out.println("-->>UE " + i + " is taken, len power recv array BSs = " + user.power_received_from_eachBS.size());
             }
         }
 

@@ -19,8 +19,6 @@ public class BaseStation {
 
 //For DEBUG
 //   public List<User> list_users = new ArrayList<>();
-    
-    
 //Constructors
     public BaseStation(int base_station_id, double x_pos, double y_pos, int tier) {
         this.x_pos = x_pos;
@@ -34,6 +32,14 @@ public class BaseStation {
         this.y_pos = 0;
         this.base_station_id = 0;
         this.tier = 0;
+    }
+
+    public double get_current_chi() {
+        double available_RB_double = (double) this.num_available_slots;
+        double initial_RB_double = (double) this.num_initial_slots;
+        double used_RB_double = initial_RB_double - available_RB_double;
+        double current_chi = used_RB_double / initial_RB_double;
+        return current_chi;
     }
 
     public static void placeBaseStations(List<BaseStation> baseStations_List, double radius, int tier) {
@@ -51,9 +57,9 @@ public class BaseStation {
         double half_interBS = interBS * 0.5;
         int tiers_matched = 1;
         BaseStation bs;
-        
+
         double ibs = 0, x = 0, y = 0;
-        
+
         while (tiers_matched <= tier) {
             ibs += interBS;
 

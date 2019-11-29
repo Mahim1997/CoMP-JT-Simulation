@@ -13,8 +13,8 @@ public class SimulationParameters {
 
     public double chi_for_position = 0.3;
 
-    public int JT_INITIAL = 0; //0->Conventional, 1->DPS
-    public int JT_FINAL = 0;
+    public int JT_INITIAL = 1; //0->Conventional, 1->DPS
+    public int JT_FINAL = 1;
 //-------------------------------------------------------
 //TESTING BELOW
 //    public double chi_initial = 0.5;

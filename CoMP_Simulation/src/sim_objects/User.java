@@ -21,10 +21,9 @@ public class User {
     public double distance_min_BS;
 
     public boolean is_UE_dropped = false;
-    //For power things
-    public double power_received_UE;
-
-    public List<Integer> base_stations_connected_ids;
+    
+    public List<Double> power_received_from_eachBS; //wrt base station ID
+    
     
     public List<BaseStation> getListOfBaseStations() {
         return this.baseStations;
@@ -35,7 +34,7 @@ public class User {
         this.y_pos = y;
         this.baseStations = new ArrayList<>();
         this.is_UE_dropped = false;
-        this.base_stations_connected_ids = new ArrayList<>();
+        this.power_received_from_eachBS = new ArrayList<>();
     }
 
     private String getBaseStationIDs(List<BaseStation> bs_l) {
@@ -85,7 +84,10 @@ public class User {
         double Pt_dB = simParams.power_transmitted;
         //Pr_mW is the received power from THIS BS in mW unit
         double Pr_mW = Helper.convert_To_mW_From_dBM(Pt_dB - PL_dB);
-
+        
+        //Store it in the power array.
+        this.power_received_from_eachBS.add(Pr_mW);
+        
         return Pr_mW;
     }
 
@@ -158,10 +160,9 @@ public class User {
                 BaseStation bs = baseStations.get(i);
                 total_power_idx_2 += bs.power_received_by_user_mW;
                 if (num_BS_selected_so_far < simParams.JT_VALUE) {
-                    //Within JT , so decrement no_available_slots for BS. [Co-ordinating Base Stations]
-                    bs.num_available_slots--;
+                    bs.num_available_slots--;//Within JT , so decrement no_available_slots for BS. [Co-ordinating BSs]
                     coordinating_bs_received_power_idx_0 += bs.power_received_by_user_mW;
-                    this.base_stations_connected_ids.add(bs.base_station_id); //Add to base station ID
+//                    this.base_stations_connected_ids.add(bs.base_station_id); //Add to base station ID
                 } else {
                     //Competing Base-Stations is here.
                     factor += (double) ((((double) (bs.num_initial_slots - bs.num_available_slots))

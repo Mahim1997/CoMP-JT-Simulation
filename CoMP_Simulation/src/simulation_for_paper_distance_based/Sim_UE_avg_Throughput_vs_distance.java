@@ -15,6 +15,7 @@ import simulation_params.SimulationParameters;
 public class Sim_UE_avg_Throughput_vs_distance {
 
     private SimulationParameters simParams;
+    private boolean IS_CONVENTIONAL_TAKEN = false;
 
     public Sim_UE_avg_Throughput_vs_distance(SimulationParameters simParams) {
         this.simParams = simParams;
@@ -33,14 +34,21 @@ public class Sim_UE_avg_Throughput_vs_distance {
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
             simParams.JT_VALUE = JT;
             if (JT == 0) {
-//                Main.JT_MODE = Main.JT_CONVENTIONAL;
+                this.IS_CONVENTIONAL_TAKEN = true;
                 Main.JT_MODE = Main.JT_DISTANCE;
                 simParams.JT_VALUE = 1;
             } else {
+                this.IS_CONVENTIONAL_TAKEN = false;
                 Main.JT_MODE = Main.PREV_MODE_JT;
             }
             String fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
+            
+            if(this.IS_CONVENTIONAL_TAKEN){
+                fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
+                    + "_JT_0.csv";
+            }
+            
             List<SimResult_Avg_T_vs_dist_per_chi> list_results = new ArrayList<>();
             for (double chi = simParams.chi_initial; chi < simParams.chi_final; chi += simParams.chi_step_size_task_2) {
                 simParams.chi_for_position = chi;
