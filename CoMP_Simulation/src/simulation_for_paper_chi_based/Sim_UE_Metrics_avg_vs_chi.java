@@ -144,7 +144,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
                 double powers_recv_coordinating_BS = power_arr[0];
                 double powers_recv_competing_BS_X_chi = power_arr[3];
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, powers_recv_coordinating_BS, powers_recv_competing_BS_X_chi);
-                
+
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
 
@@ -157,9 +157,12 @@ public class Sim_UE_Metrics_avg_vs_chi {
             }
         }
 
-//        List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users, baseStations, simParams, Pn_mW);
+        if (Main.TAKE_AFTER_CALCULATION) {
+            List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users, baseStations, simParams, Pn_mW);
 
-//        return new_user_list;
+            return new_user_list;
+        }
+
         return list_of_all_users;
     }
 

@@ -10,6 +10,7 @@ import sim_objects.User;
 import sim_results.SimResult_Avg_T_vs_dist_per_chi;
 
 import simulation_params.SimulationParameters;
+import util_and_calculators.MetricCalculatorAfter;
 
 public class Sim_UE_avg_Throughput_vs_distance {
 
@@ -42,12 +43,12 @@ public class Sim_UE_avg_Throughput_vs_distance {
             }
             String fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
-            
-            if(this.IS_CONVENTIONAL_TAKEN){
+
+            if (this.IS_CONVENTIONAL_TAKEN) {
                 fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
-                    + "_JT_0.csv";
+                        + "_JT_0.csv";
             }
-            
+
             List<SimResult_Avg_T_vs_dist_per_chi> list_results = new ArrayList<>();
             for (double chi = simParams.chi_initial; chi < simParams.chi_final; chi += simParams.chi_step_size_task_2) {
                 simParams.chi_for_position = chi;
@@ -121,8 +122,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
         }
 
 //        Helper.printBaseStations(baseStations);
-
-        List<User> list_users = new ArrayList<>();
+        List<User> list_of_all_users = new ArrayList<>();
         for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
             BaseStation bs = baseStations.get(bs_iter);
             for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
@@ -161,15 +161,14 @@ public class Sim_UE_avg_Throughput_vs_distance {
                 double powers_recv_coordinating_BS = power_arr[0];
                 double powers_recv_competing_BS_X_chi = power_arr[3];
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, powers_recv_coordinating_BS, powers_recv_competing_BS_X_chi);
-                
-                
+
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 //After calculations... [to get the same num_slots_available]
                 user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
                 baseStations = user.getListOfBaseStations(); //COPY base stations to get the available_tokens
                 num_users_total++;
 
-                list_users.add(user); //FOR DEBUG
+                list_of_all_users.add(user); //FOR DEBUG
 //                bs.list_users.add(user); //FOR DEBUG
             }
 //            System.out.println("");
@@ -191,9 +190,20 @@ public class Sim_UE_avg_Throughput_vs_distance {
             System.out.println("BS = " + bs.base_station_id + " , # UE dropped = " + x
                     + ", BS initialSlots = " + bs.num_initial_slots + " , BS available slots = " + bs.num_available_slots);
         }
-        */
-
+         */
         double avg_throughput = (num_users_total == 0) ? 0 : (cumulative_throughput / num_users_total);
+
+        if (Main.TAKE_AFTER_CALCULATION) {
+            List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users, 
+                    baseStations, simParams, Pn_mW);
+
+            double cuml_throughput = 0.0;
+            for(int i=0; i<new_user_list.size(); i++){
+                cuml_throughput += (new_user_list.get(i).THROUGHPUT_user_one_BS_KBps);
+            }
+            avg_throughput = (num_users_total == 0) ? 0 : (cuml_throughput / num_users_total);
+        }
+
         return avg_throughput;
     }
 

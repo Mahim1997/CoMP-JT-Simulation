@@ -1,5 +1,6 @@
 package simulation_params;
 
+import comp_simulation.Main;
 import util_and_calculators.Helper;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,7 +19,7 @@ public class SimulationParameterBuilder {
         s.power_transmitted = 43; //dBm
         s.frequency_carrier = 2; //2 GHz
         s.bandwidth = 5 * Math.pow(10, 6); //5 Mhz
-        s.monte_carlo = 1000;
+        s.monte_carlo = Main.MONTE_CARLO;
 
         s.NOISE_SPECTRAL_POWER_DENSITY = -174; //-174 dBm/Hz
         

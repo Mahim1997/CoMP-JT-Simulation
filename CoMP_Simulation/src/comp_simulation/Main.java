@@ -2,14 +2,37 @@ package comp_simulation;
 
 public class Main {
 
+    public static boolean TAKE_AFTER_CALCULATION = true;
+    public static double CHI_STEP_SIZE_TASK_1 = 0.01;
+    public static int JT_INITIAL = 2;
+    public static int JT_FINAL = 3;
+    public static int MONTE_CARLO = 1000;
+    
+    
     public static void main(String[] args) {
-        System.out.println("Running for JT MODE = " + JT_MODE);
+        System.out.println(">>>>>>>>>>> Running in Main.main()");
         
-//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
+        
+        Main.JT_INITIAL = 2;
+        Main.JT_FINAL = 3;
+        Main.TAKE_AFTER_CALCULATION = false;
+        System.out.println("-------------------Running Task 2----------------------");
+        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
+         
+
+
+        Main.JT_INITIAL = 0;
+        Main.JT_FINAL = 5;
+        Main.TAKE_AFTER_CALCULATION = true;
+        System.out.println("-------------------Running Task 1----------------------");
         SimulationRunner.runSimulation(chi_based); //For Task 1
-        
-//        SimulationRunner.runSimulation(distance_based_prev_avg); //For Task 2.a
-//        SimulationRunner.runSimulation(distance_based_prev_all_UEs); //For Task 2.b
+
+        Main.JT_INITIAL = 0;
+        Main.JT_FINAL = 3;
+        System.out.println("-------------------Running Task 2----------------------");
+        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
+ 
+       
         
     }
 
