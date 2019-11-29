@@ -6,7 +6,7 @@ public class Main {
         System.out.println("Running for JT MODE = " + JT_MODE);
         
         SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
-        SimulationRunner.runSimulation(chi_based); //For Task 1
+//        SimulationRunner.runSimulation(chi_based); //For Task 1
         
 //        SimulationRunner.runSimulation(distance_based_prev_avg); //For Task 2.a
 //        SimulationRunner.runSimulation(distance_based_prev_all_UEs); //For Task 2.b

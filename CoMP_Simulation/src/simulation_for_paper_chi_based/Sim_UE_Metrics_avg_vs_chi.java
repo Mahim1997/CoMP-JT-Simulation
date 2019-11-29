@@ -158,7 +158,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
                 baseStations = user.getListOfBaseStations();  //After calculations... [to get the same num_slots_available]
                 num_users_total++;
                 list_of_all_users.add(user); //for further computations...
-                bs.list_users.add(user);
+//                bs.list_users.add(user);
             }
         }
         

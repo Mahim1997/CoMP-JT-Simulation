@@ -165,7 +165,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
                 num_users_total++;
 
                 list_users.add(user); //FOR DEBUG
-                bs.list_users.add(user); //FOR DEBUG
+//                bs.list_users.add(user); //FOR DEBUG
             }
 //            System.out.println("");
         }

@@ -24,6 +24,8 @@ public class User {
     //For power things
     public double power_received_UE;
 
+    public List<Integer> base_stations_connected_ids;
+    
     public List<BaseStation> getListOfBaseStations() {
         return this.baseStations;
     }
@@ -33,6 +35,7 @@ public class User {
         this.y_pos = y;
         this.baseStations = new ArrayList<>();
         this.is_UE_dropped = false;
+        this.base_stations_connected_ids = new ArrayList<>();
     }
 
     private String getBaseStationIDs(List<BaseStation> bs_l) {
@@ -158,6 +161,7 @@ public class User {
                     //Within JT , so decrement no_available_slots for BS. [Co-ordinating Base Stations]
                     bs.num_available_slots--;
                     coordinating_bs_received_power_idx_0 += bs.power_received_by_user_mW;
+                    this.base_stations_connected_ids.add(bs.base_station_id); //Add to base station ID
                 } else {
                     //Competing Base-Stations is here.
                     factor += (double) ((((double) (bs.num_initial_slots - bs.num_available_slots))

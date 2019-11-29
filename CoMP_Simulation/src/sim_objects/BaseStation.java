@@ -18,7 +18,7 @@ public class BaseStation {
     public double power_received_by_user_mW;
 
 //For DEBUG
-   public List<User> list_users = new ArrayList<>();
+//   public List<User> list_users = new ArrayList<>();
     
 //Constructors
     public BaseStation(int base_station_id, double x_pos, double y_pos, int tier) {
