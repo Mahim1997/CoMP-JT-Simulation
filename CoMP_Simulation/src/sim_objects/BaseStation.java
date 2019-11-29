@@ -20,6 +20,7 @@ public class BaseStation {
 //For DEBUG
 //   public List<User> list_users = new ArrayList<>();
     
+    
 //Constructors
     public BaseStation(int base_station_id, double x_pos, double y_pos, int tier) {
         this.x_pos = x_pos;

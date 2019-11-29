@@ -33,7 +33,9 @@ public class Sim_UE_avg_Throughput_vs_distance {
         for (int JT = simParams.JT_INITIAL; JT <= simParams.JT_FINAL; JT++) {
             simParams.JT_VALUE = JT;
             if (JT == 0) {
-                Main.JT_MODE = Main.JT_CONVENTIONAL;
+//                Main.JT_MODE = Main.JT_CONVENTIONAL;
+                Main.JT_MODE = Main.JT_DISTANCE;
+                simParams.JT_VALUE = 1;
             } else {
                 Main.JT_MODE = Main.PREV_MODE_JT;
             }
@@ -147,7 +149,8 @@ public class Sim_UE_avg_Throughput_vs_distance {
                 }
 //%% Power consumption of 7 BS's based on modified chi for hourly basis (BS x 24Hr )
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
-                double[] power_arr = user.getReceivedPowerArray();//arr[0]:Total received power in mW, arr[1]:OTHERs P_Rx, arr[2]:TOTAL
+                double[] power_arr = user.getReceivedPowerArray();
+//arr[0]:Co-ordinating received power in mW, arr[1]:OTHERs P_Rx, arr[2]:TOTAL
 
                 if (Main.JT_MODE.equals(Main.JT_CONVENTIONAL)) {
                     double power_recv_bs = user.getListOfBaseStations().get(bs_iter).power_received_by_user_mW;

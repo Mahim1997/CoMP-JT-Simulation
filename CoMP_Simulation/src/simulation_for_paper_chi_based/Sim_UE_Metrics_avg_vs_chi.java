@@ -13,6 +13,7 @@ import sim_results.SimResults;
 import simulation_params.SimulationParameters;
 
 public class Sim_UE_Metrics_avg_vs_chi {
+
     private static boolean IS_CONVENTIONAL = false;
     private final SimulationParameters simParams;
 
@@ -44,10 +45,10 @@ public class Sim_UE_Metrics_avg_vs_chi {
         String folderName = "Avg_Th_Chi";
         String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
-        if(IS_CONVENTIONAL){
+        if (IS_CONVENTIONAL) {
             System.out.println("-->>HEREE >>>> Running for Conventional ... ");
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
-                + "_JT_0.csv";
+                    + "_JT_0.csv";
         }
         //Always fixed parameters for all chi.
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius; // root(3) * cell_radius = IBS
@@ -151,17 +152,16 @@ public class Sim_UE_Metrics_avg_vs_chi {
                 user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr, factor);
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
-                
+
 //                System.out.println("-->>AFTER sorting wrt CID ... printing basestaiotns. ");
 //                Helper.printBaseStations(baseStations);
-                
                 baseStations = user.getListOfBaseStations();  //After calculations... [to get the same num_slots_available]
                 num_users_total++;
                 list_of_all_users.add(user); //for further computations...
 //                bs.list_users.add(user);
             }
         }
-        
+
         /*
         //-->>>FOR DEBUGGING...
         List<BaseStation> list2 = list_of_all_users.get(list_of_all_users.size() - 1).getListOfBaseStations(); //Get final instance.
@@ -177,10 +177,17 @@ public class Sim_UE_Metrics_avg_vs_chi {
             System.out.println("BS = " + bs.base_station_id + " , # UE dropped = " + x
                     + ", BS initialSlots = " + bs.num_initial_slots + " , BS available slots = " + bs.num_available_slots);
         }
-        */
+         */
+        for (int i = 0; i < list_of_all_users.size(); i++) {
+            User user = list_of_all_users.get(i);
+            if(!user.is_UE_dropped){
+                
+                for(int k=0; k<user.base_stations_connected_ids.size(); k++){
+                    BaseStation bs = baseStations.get(k);
+                }
+            }
+        }
 
-        
-        
         return list_of_all_users;
     }
 

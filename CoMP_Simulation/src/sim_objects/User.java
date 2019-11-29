@@ -70,7 +70,7 @@ public class User {
         return Helper.getDistance(x_pos, y_pos, bs.x_pos, bs.y_pos);
     }
 
-    public double calculate_Pr_mW_One_BS(double Pn_mW, double FSPL_dB, BaseStation bs) {
+    public double calculate_received_Power_one_BS(double Pn_mW, double FSPL_dB, BaseStation bs) {
         //total power loss = FSPL_dB (fixed) + distance_loss + fading_effect
         double d_UE_from_BS = getDistanceFromBS(bs);
         double alpha = simParams.path_loss_exponent_alpha;
@@ -93,7 +93,7 @@ public class User {
         this.baseStations.clear();
         for (int i = 0; i < baseStations.size(); i++) {
             BaseStation bs = baseStations.get(i);
-            double pow = calculate_Pr_mW_One_BS(Pn_mW, FSPL_dB, bs);
+            double pow = calculate_received_Power_one_BS(Pn_mW, FSPL_dB, bs);
             bs.power_received_by_user_mW = pow;
             this.baseStations.add(bs);
         }
