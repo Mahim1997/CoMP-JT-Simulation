@@ -11,6 +11,7 @@ import sim_objects.User;
 import sim_results.SimResult_oneMC;
 import sim_results.SimResults;
 import simulation_params.SimulationParameters;
+import util_and_calculators.MetricCalculator;
 
 public class Sim_UE_Metrics_avg_vs_chi {
 
@@ -140,16 +141,10 @@ public class Sim_UE_Metrics_avg_vs_chi {
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
 //power_arr[0]:Co-ordinating BS's received power, arr[1]:Other's Pr_mW, arr[2]:TOTAL
                 double[] power_arr = user.getReceivedPowerArray();
-                //FOR CONVENTIONAL APPROACH.
-                if (Main.JT_MODE.equals(Main.JT_CONVENTIONAL)) {
-                    double power_recv_bs = user.getListOfBaseStations().get(bs_iter).power_received_by_user_mW;
-                    double total_power_of_all_bs = power_arr[2];
-                    power_arr[0] = power_recv_bs;
-                    power_arr[1] = total_power_of_all_bs - power_recv_bs;
-                    //total power_arr[2] is SAME.
-                }
-                double factor = power_arr[3];
-                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr, factor);
+                double powers_recv_coordinating_BS = power_arr[0];
+                double powers_recv_competing_BS_X_chi = power_arr[3];
+                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, powers_recv_coordinating_BS, powers_recv_competing_BS_X_chi);
+                
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
 
@@ -157,18 +152,14 @@ public class Sim_UE_Metrics_avg_vs_chi {
 //                Helper.printBaseStations(baseStations);
                 baseStations = user.getListOfBaseStations();  //After calculations... [to get the same num_slots_available]
                 num_users_total++;
-                list_of_all_users.add(user); //for further computations...
+                list_of_all_users.add(user); //for further computations... [#BS X #UEs] [ALL USERS OF THE NETWORK]
 //                bs.list_users.add(user);
             }
         }
 
-        for (int i = 0; i < list_of_all_users.size(); i++) {
-            User user = list_of_all_users.get(i);
-            if(!user.is_UE_dropped){ //UE is taken.
-                System.out.println("-->>UE " + i + " is taken, len power recv array BSs = " + user.power_received_from_eachBS.size());
-            }
-        }
+//        List<User> new_user_list = MetricCalculator.getNewUsersListAfter_Tavg_calculation(list_of_all_users, baseStations, simParams, Pn_mW);
 
+//        return new_user_list;
         return list_of_all_users;
     }
 

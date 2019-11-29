@@ -5,7 +5,6 @@ import util_and_calculators.Helper;
 import util_and_calculators.ResourceBlockCalculator;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import sim_objects.BaseStation;
 import sim_objects.User;
 import sim_results.SimResult_Avg_T_vs_dist_per_chi;
@@ -158,17 +157,12 @@ public class Sim_UE_avg_Throughput_vs_distance {
 //%% Power consumption of 7 BS's based on modified chi for hourly basis (BS x 24Hr )
 //PcJT(BS,hr) = simParams.NTRX * ( simParams.P0 + chi(BS,hr) * simParams.Pmax * simParams.delp );
                 double[] power_arr = user.getReceivedPowerArray();
-//arr[0]:Co-ordinating received power in mW, arr[1]:OTHERs P_Rx, arr[2]:TOTAL
-
-                if (Main.JT_MODE.equals(Main.JT_CONVENTIONAL)) {
-                    double power_recv_bs = user.getListOfBaseStations().get(bs_iter).power_received_by_user_mW;
-                    double total_power_of_all_bs = power_arr[2];
-                    power_arr[0] = power_recv_bs;
-                    power_arr[1] = total_power_of_all_bs - power_recv_bs;
-                    //total power_arr[2] is SAME.
-                }
-                double factor = power_arr[3];
-                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, power_arr, factor);
+//arr[0]:Co-ordinating received power in mW, arr[1]:OTHERs P_Rx, arr[2]:TOTAL, arr[3]: sum(OTHERs P_Rx * chi)
+                double powers_recv_coordinating_BS = power_arr[0];
+                double powers_recv_competing_BS_X_chi = power_arr[3];
+                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, powers_recv_coordinating_BS, powers_recv_competing_BS_X_chi);
+                
+                
                 cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
                 //After calculations... [to get the same num_slots_available]
                 user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.

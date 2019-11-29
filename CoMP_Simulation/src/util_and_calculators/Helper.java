@@ -14,6 +14,13 @@ import simulation_params.SimulationParameters;
 
 public class Helper {
 
+    public static void printListDouble(List<Double> list) {
+        for (double x : list) {
+            System.out.print(x + ", ");
+        }
+        System.out.println("");
+    }
+
     public static void printBaseStationLocations(List<BaseStation> baseStations) {
         //Printing locations ... correct locations
         for (BaseStation bs : baseStations) {
@@ -169,8 +176,7 @@ public class Helper {
                 }
                 out.println();
             }
-            
-            
+
         } catch (IOException e) {
             e.printStackTrace();
             //exception handling left as an exercise for the reader
@@ -202,7 +208,7 @@ public class Helper {
 
     public static void printBaseStations(List<BaseStation> baseStations) {
         System.out.println("[Helper] >> Printing list of base stations.");
-        for(BaseStation bs: baseStations){
+        for (BaseStation bs : baseStations) {
             System.out.print(bs.base_station_id + ", ");
         }
         System.out.println("");

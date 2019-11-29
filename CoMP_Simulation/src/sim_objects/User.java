@@ -21,10 +21,11 @@ public class User {
     public double distance_min_BS;
 
     public boolean is_UE_dropped = false;
-    
-    public List<Double> power_received_from_eachBS; //wrt base station ID
-    
-    
+
+    //For AFTERWARDS throughput calculations.
+    public List<Double> power_received_from_eachBS_or_X_chi; //wrt base station ID
+    public List<Integer> indices_base_stations_connected;
+
     public List<BaseStation> getListOfBaseStations() {
         return this.baseStations;
     }
@@ -34,7 +35,8 @@ public class User {
         this.y_pos = y;
         this.baseStations = new ArrayList<>();
         this.is_UE_dropped = false;
-        this.power_received_from_eachBS = new ArrayList<>();
+        this.power_received_from_eachBS_or_X_chi = new ArrayList<>();
+        this.indices_base_stations_connected = new ArrayList<>();
     }
 
     private String getBaseStationIDs(List<BaseStation> bs_l) {
@@ -84,10 +86,7 @@ public class User {
         double Pt_dB = simParams.power_transmitted;
         //Pr_mW is the received power from THIS BS in mW unit
         double Pr_mW = Helper.convert_To_mW_From_dBM(Pt_dB - PL_dB);
-        
-        //Store it in the power array.
-        this.power_received_from_eachBS.add(Pr_mW);
-        
+
         return Pr_mW;
     }
 
@@ -126,7 +125,7 @@ public class User {
 
     public double[] getReceivedPowerArray() {
         double[] power_arr = new double[4]; //arr[0]:Co-ordinating BS's received power, arr[1]:Other's Pr_mW, arr[2]:TOTAL, arr[3]:factor
-        double factor = 0;
+        double denominator_competing_bs_power_multiplied_with_chi = 0;
         if (simParams.JT_VALUE > baseStations.size()) {
             System.out.println("In User.getReceivedPowerArray() ... simParams.JT_VALUE > baseStations.size() .. exiting -1");
             System.exit(-1);
@@ -155,19 +154,22 @@ public class User {
         } else {
             //TAKEN
             int num_BS_selected_so_far = 0;
-            factor = 0;
+            denominator_competing_bs_power_multiplied_with_chi = 0;
             for (int i = 0; i < baseStations.size(); i++) {
                 BaseStation bs = baseStations.get(i);
                 total_power_idx_2 += bs.power_received_by_user_mW;
                 if (num_BS_selected_so_far < simParams.JT_VALUE) {
                     bs.num_available_slots--;//Within JT , so decrement no_available_slots for BS. [Co-ordinating BSs]
                     coordinating_bs_received_power_idx_0 += bs.power_received_by_user_mW;
-//                    this.base_stations_connected_ids.add(bs.base_station_id); //Add to base station ID
+                    this.indices_base_stations_connected.add(bs.base_station_id); //Add to base station ID list
+                    this.power_received_from_eachBS_or_X_chi.add(bs.power_received_by_user_mW);
                 } else {
                     //Competing Base-Stations is here.
-                    factor += (double) ((((double) (bs.num_initial_slots - bs.num_available_slots))
+                    double factor = (double) ((((double) (bs.num_initial_slots - bs.num_available_slots))
                             / ((double) (bs.num_initial_slots))));
+                    denominator_competing_bs_power_multiplied_with_chi += (factor * bs.power_received_by_user_mW);
                     others_power_idx_1 += bs.power_received_by_user_mW;
+                    this.power_received_from_eachBS_or_X_chi.add((factor * bs.power_received_by_user_mW));
                 }
                 num_BS_selected_so_far++;
             }
@@ -175,7 +177,7 @@ public class User {
         power_arr[0] = coordinating_bs_received_power_idx_0;
         power_arr[1] = others_power_idx_1;
         power_arr[2] = total_power_idx_2;
-        power_arr[3] = factor;
+        power_arr[3] = denominator_competing_bs_power_multiplied_with_chi;
         return power_arr;
     }
 
@@ -184,15 +186,13 @@ public class User {
         double powers_of_coordinating_baseStations = received_powers_mW[0];
         double powers_of_competing_baseStations = received_powers_mW[1];
         this.SINR_user_one_BS = (powers_of_coordinating_baseStations / (power_noise_mW + powers_of_competing_baseStations));
-        this.THROUGHPUT_user_one_BS_KBps = 180 * (Helper.log2(1 + this.SINR_user_one_BS));
-
+        this.THROUGHPUT_user_one_BS_KBps = 180.0 * (Helper.log2(1 + this.SINR_user_one_BS));
     }
 
-    public void calculate_SINR_and_Throughput_of_UE(double power_noise_mW, double[] received_powers_mW, double factor) {
-        double powers_of_coordinating_baseStations = received_powers_mW[0];
-        double powers_of_competing_baseStations = received_powers_mW[1];
-        this.SINR_user_one_BS = (powers_of_coordinating_baseStations / (power_noise_mW + (factor * powers_of_competing_baseStations)));
+    public void calculate_SINR_and_Throughput_of_UE(double power_noise_mW, double powers_of_coordinating_baseStations,
+            double powers_of_competing_baseStations_X_chi) {
+        this.SINR_user_one_BS = (powers_of_coordinating_baseStations) / (power_noise_mW + powers_of_competing_baseStations_X_chi);
+//        this.SINR_user_one_BS = (powers_of_coordinating_baseStations / (power_noise_mW + (factor * powers_of_competing_baseStations)));
         this.THROUGHPUT_user_one_BS_KBps = 180 * (Helper.log2(1 + this.SINR_user_one_BS));
-
     }
 }
