@@ -18,7 +18,7 @@ public class SimulationParameterBuilder {
         s.power_transmitted = 43; //dBm
         s.frequency_carrier = 2; //2 GHz
         s.bandwidth = 5 * Math.pow(10, 6); //5 Mhz
-        s.monte_carlo = 100;
+        s.monte_carlo = 1000;
 
         s.NOISE_SPECTRAL_POWER_DENSITY = -174; //-174 dBm/Hz
         

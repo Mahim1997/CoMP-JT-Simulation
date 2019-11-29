@@ -169,7 +169,7 @@ public class User {
                             / ((double) (bs.num_initial_slots))));
                     denominator_competing_bs_power_multiplied_with_chi += (factor * bs.power_received_by_user_mW);
                     others_power_idx_1 += bs.power_received_by_user_mW;
-                    this.power_received_from_eachBS_or_X_chi.add((factor * bs.power_received_by_user_mW));
+                    this.power_received_from_eachBS_or_X_chi.add((bs.power_received_by_user_mW)); //for later calculation purposes.
                 }
                 num_BS_selected_so_far++;
             }

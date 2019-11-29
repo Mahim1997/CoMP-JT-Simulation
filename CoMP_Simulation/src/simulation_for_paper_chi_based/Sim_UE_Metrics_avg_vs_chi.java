@@ -11,7 +11,7 @@ import sim_objects.User;
 import sim_results.SimResult_oneMC;
 import sim_results.SimResults;
 import simulation_params.SimulationParameters;
-import util_and_calculators.MetricCalculator;
+import util_and_calculators.MetricCalculatorAfter;
 
 public class Sim_UE_Metrics_avg_vs_chi {
 
@@ -157,7 +157,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
             }
         }
 
-//        List<User> new_user_list = MetricCalculator.getNewUsersListAfter_Tavg_calculation(list_of_all_users, baseStations, simParams, Pn_mW);
+//        List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users, baseStations, simParams, Pn_mW);
 
 //        return new_user_list;
         return list_of_all_users;

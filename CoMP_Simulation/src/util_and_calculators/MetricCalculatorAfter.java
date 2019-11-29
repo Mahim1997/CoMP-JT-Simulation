@@ -6,7 +6,7 @@ import sim_objects.BaseStation;
 import sim_objects.User;
 import simulation_params.SimulationParameters;
 
-public class MetricCalculator {
+public class MetricCalculatorAfter {
 
     public static List<User> getNewUsersListAfter_Tavg_calculation(List<User> list_of_all_users,
             List<BaseStation> baseStations, SimulationParameters simParams, double power_noise_mW) {
@@ -24,11 +24,12 @@ public class MetricCalculator {
                         coordinating_powers_recv += (user.power_received_from_eachBS_or_X_chi.get(bs_itr));
                     } else {
                         //Competing base-stations
-                        competing_powers_recv += (user.power_received_from_eachBS_or_X_chi.get(bs_itr));
+                        double factor = bs.get_current_chi();
+                        competing_powers_recv += (user.power_received_from_eachBS_or_X_chi.get(bs_itr) * factor);
                     }
                     double SINR_one_UE_one_BS = ((coordinating_powers_recv) / (power_noise_mW + competing_powers_recv));
                     user.SINR_user_one_BS = SINR_one_UE_one_BS;
-                    user.THROUGHPUT_user_one_BS_KBps = MetricCalculator.calculateThroughput_kBps_1BS_1UE(SINR_one_UE_one_BS);
+                    user.THROUGHPUT_user_one_BS_KBps = MetricCalculatorAfter.calculateThroughput_kBps_1BS_1UE(SINR_one_UE_one_BS);
                     list_new_users.add(user);
                 }
             }
