@@ -32,9 +32,12 @@ public class MetricCalculatorAfter {
                     double SINR_one_UE_one_BS = ((coordinating_powers_recv) / (power_noise_mW + competing_powers_recv));
                     user.SINR_user_one_BS = SINR_one_UE_one_BS;
                     user.THROUGHPUT_user_one_BS_KBps = MetricCalculatorAfter.calculateThroughput_kBps_1BS_1UE(SINR_one_UE_one_BS);
-                    list_new_users.add(user);
+                    
+                    
                 }
+                
             }
+            list_new_users.add(user);
         }
 
         return list_new_users;
