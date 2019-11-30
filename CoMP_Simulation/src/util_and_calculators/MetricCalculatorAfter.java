@@ -21,11 +21,13 @@ public class MetricCalculatorAfter {
                     BaseStation bs = baseStations.get(bs_itr);
                     if (user.indices_base_stations_connected.contains(bs.base_station_id)) {
                         //Co-ordinating base stations ...
-                        coordinating_powers_recv += (user.power_received_from_eachBS_or_X_chi.get(bs_itr));
+                        //coordinating_powers_recv += (user.power_received_from_eachBS_or_X_chi.get(bs_itr));//
+                        coordinating_powers_recv += (user.power_received_from_eachBS_or_X_chi[bs.base_station_id]);
                     } else {
                         //Competing base-stations
                         double factor = bs.get_current_chi();
-                        competing_powers_recv += (user.power_received_from_eachBS_or_X_chi.get(bs_itr) * factor);
+//                        competing_powers_recv += (user.power_received_from_eachBS_or_X_chi.get(bs_itr) * factor);
+                        competing_powers_recv += (user.power_received_from_eachBS_or_X_chi[bs.base_station_id] * factor);
                     }
                     double SINR_one_UE_one_BS = ((coordinating_powers_recv) / (power_noise_mW + competing_powers_recv));
                     user.SINR_user_one_BS = SINR_one_UE_one_BS;

@@ -110,8 +110,7 @@ public class Sim_Metrics_avg_vs_Distance_OLD {
                 double x_user = (radial_distance_wrt_BS * Math.cos(theta)) + bs.x_pos; //r*cos(theta) + bs.x
                 double y_user = (radial_distance_wrt_BS * Math.sin(theta)) + bs.y_pos; //r*sin(theta) + bs.y
 
-                User user = new User(x_user, y_user);
-                user.formSimulationParameters(simParams);
+                User user = new User(x_user, y_user, simParams);
 
                 //Now calculation parts ...
                 user.copyListOfBaseStations(baseStations);

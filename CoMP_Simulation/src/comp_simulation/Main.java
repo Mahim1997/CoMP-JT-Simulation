@@ -6,24 +6,17 @@ public class Main {
     public static double CHI_STEP_SIZE_TASK_1 = 0.01;
     public static int JT_INITIAL = 2;
     public static int JT_FINAL = 3;
-    public static int MONTE_CARLO = 1000;
+    public static int MONTE_CARLO = 1;
     
     
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
-        
-        
-        Main.JT_INITIAL = 2;
-        Main.JT_FINAL = 3;
-        Main.TAKE_AFTER_CALCULATION = false;
-        System.out.println("-------------------Running Task 2----------------------");
-        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
          
         Main.JT_INITIAL = 0;
         Main.JT_FINAL = 3;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 2----------------------");
-        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
+//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW
 
         
         Main.JT_INITIAL = 0;

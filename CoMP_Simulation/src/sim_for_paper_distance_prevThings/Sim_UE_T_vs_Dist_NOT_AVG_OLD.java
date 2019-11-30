@@ -98,8 +98,7 @@ public class Sim_UE_T_vs_Dist_NOT_AVG_OLD {
                 double x_user = (inter_bs_distance * distance_wrt_BS * Math.cos(theta)) + bs.x_pos;
                 double y_user = (inter_bs_distance * distance_wrt_BS * Math.sin(theta)) + bs.y_pos;
                 
-                User user = new User(x_user, y_user);
-                user.formSimulationParameters(simParams);
+                User user = new User(x_user, y_user, simParams);
 
                 //Now calculation parts ...
                 user.copyListOfBaseStations(baseStations);

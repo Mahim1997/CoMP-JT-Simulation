@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 public class GraphPlotter extends Application {
 
     public static String FILE_NAME = "Conventional.csv";
-
+    public static boolean TAKE_AFTER_CALCS = true;
     public static String OUTPUT_FOLDER_NAME_TASK1 = "Avg_Metrics_vs_Chi/GRAPHS_UE_vs_CHI";
 
     public static double THRESHOLD_FOR_NOT_TAKING = 0.02;
@@ -147,6 +147,9 @@ public class GraphPlotter extends Application {
         String monte_carlo_str = "1000";
         for (int JT = 0; JT <= 3; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
+            if(TAKE_AFTER_CALCS){
+                fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + "_Take_after_calcs.csv";
+            }
 //            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
             Result_T_UE_vs_Chi res = reader.read_UE_vs_Chi_once(fileName);
             res.legendName = "JT=" + (String.valueOf(JT));
@@ -172,6 +175,10 @@ public class GraphPlotter extends Application {
 
         for (int JT = JT_initial; JT <= JT_final; JT++) {
             fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_" + String.valueOf(JT) + ".csv";
+            if (TAKE_AFTER_CALCS) {
+                fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_Take_after_calcs" + String.valueOf(JT) + ".csv";
+
+            }
             outputFileNameToSave = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_" + String.valueOf(JT) + ".png";
             String[] headings = Reader.read_headings(fileName);
             List< List<Double>> data_matrix = Reader.read_data(fileName, headings.length);

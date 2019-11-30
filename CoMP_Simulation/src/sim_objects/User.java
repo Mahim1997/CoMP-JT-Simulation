@@ -23,20 +23,22 @@ public class User {
     public boolean is_UE_dropped = false;
 
     //For AFTERWARDS throughput calculations.
-    public List<Double> power_received_from_eachBS_or_X_chi; //wrt base station ID
+    public Double[] power_received_from_eachBS_or_X_chi; //wrt base station ID
     public List<Integer> indices_base_stations_connected;
 
     public List<BaseStation> getListOfBaseStations() {
         return this.baseStations;
     }
 
-    public User(double x, double y) {
+    public User(double x, double y, SimulationParameters sParam) {
         this.x_pos = x;
         this.y_pos = y;
+        this.simParams = sParam;
         this.baseStations = new ArrayList<>();
         this.is_UE_dropped = false;
-        this.power_received_from_eachBS_or_X_chi = new ArrayList<>();
+        this.power_received_from_eachBS_or_X_chi = new Double[BaseStation.NUMBER_OF_BASE_STATIONS(this.simParams.tier)];
         this.indices_base_stations_connected = new ArrayList<>();
+        
     }
 
     private String getBaseStationIDs(List<BaseStation> bs_l) {
@@ -61,10 +63,6 @@ public class User {
                 return -1;
             }
         });
-    }
-
-    public void formSimulationParameters(SimulationParameters simParams) {
-        this.simParams = simParams;
     }
 
     public double getDistanceFromBS(BaseStation bs) {
@@ -162,14 +160,14 @@ public class User {
                     bs.num_available_slots--;//Within JT , so decrement no_available_slots for BS. [Co-ordinating BSs]
                     coordinating_bs_received_power_idx_0 += bs.power_received_by_user_mW;
                     this.indices_base_stations_connected.add(bs.base_station_id); //Add to base station ID list
-                    this.power_received_from_eachBS_or_X_chi.add(bs.power_received_by_user_mW);
+                    this.power_received_from_eachBS_or_X_chi[bs.base_station_id] = bs.power_received_by_user_mW; //for later calculations purposes.
                 } else {
                     //Competing Base-Stations is here.
                     double factor = (double) ((((double) (bs.num_initial_slots - bs.num_available_slots))
                             / ((double) (bs.num_initial_slots))));
                     denominator_competing_bs_power_multiplied_with_chi += (factor * bs.power_received_by_user_mW);
                     others_power_idx_1 += bs.power_received_by_user_mW;
-                    this.power_received_from_eachBS_or_X_chi.add((bs.power_received_by_user_mW)); //for later calculation purposes.
+                    this.power_received_from_eachBS_or_X_chi[bs.base_station_id] = bs.power_received_by_user_mW; //for later calculations purposes.
                 }
                 num_BS_selected_so_far++;
             }

@@ -43,11 +43,11 @@ public class Sim_UE_Metrics_avg_vs_chi {
         //Place Base Stations [Fixed Positions throughout all the simulations]
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
-        String folderName = "Avg_Th_Chi";
+        String folderName = "Avg_Metrics_vs_Chi";
         String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
         if (Main.TAKE_AFTER_CALCULATION) {
-            fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
+            fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + "_Take_after_calcs.csv";
         }
         if (IS_CONVENTIONAL) {
@@ -55,7 +55,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_0.csv";
             if (Main.TAKE_AFTER_CALCULATION) {
-                fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
+                fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                         + "_JT_0_Take_after_calcs.csv";
             }
         }
@@ -128,8 +128,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
 // --------------------------- Keep UE within cell-radius of each Base Station -------------------------------------
                 double x_user = (simParams.cell_radius * random_double_val * Math.cos(theta)) + bs.x_pos;
                 double y_user = (simParams.cell_radius * random_double_val * Math.sin(theta)) + bs.y_pos;
-                User user = new User(x_user, y_user);
-                user.formSimulationParameters(simParams);
+                User user = new User(x_user, y_user, simParams);
                 //Now calculation parts ...
                 user.copyListOfBaseStations(baseStations);
                 user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);//Calculate received powers
