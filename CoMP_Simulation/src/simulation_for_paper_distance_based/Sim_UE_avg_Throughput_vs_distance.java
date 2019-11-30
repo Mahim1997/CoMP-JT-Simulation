@@ -43,10 +43,18 @@ public class Sim_UE_avg_Throughput_vs_distance {
             }
             String fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
-
+            if(Main.TAKE_AFTER_CALCULATION){
+                fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
+                    + "_JT_" + String.valueOf(simParams.JT_VALUE) + "_Take_after_calcs.csv";
+            }
+            
             if (this.IS_CONVENTIONAL_TAKEN) {
                 fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
                         + "_JT_0.csv";
+                if(Main.TAKE_AFTER_CALCULATION){
+                    fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
+                        + "_JT_0_Take_after_calcs.csv";
+                }
             }
 
             List<SimResult_Avg_T_vs_dist_per_chi> list_results = new ArrayList<>();

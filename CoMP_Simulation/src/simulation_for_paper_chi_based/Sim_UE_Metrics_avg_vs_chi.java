@@ -46,10 +46,18 @@ public class Sim_UE_Metrics_avg_vs_chi {
         String folderName = "Avg_Th_Chi";
         String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
+        if (Main.TAKE_AFTER_CALCULATION) {
+            fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
+                    + "_JT_" + String.valueOf(simParams.JT_VALUE) + "_Take_after_calcs.csv";
+        }
         if (IS_CONVENTIONAL) {
             System.out.println("-->>HEREE >>>> Running for Conventional ... ");
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_0.csv";
+            if (Main.TAKE_AFTER_CALCULATION) {
+                fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
+                        + "_JT_0_Take_after_calcs.csv";
+            }
         }
         //Always fixed parameters for all chi.
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius; // root(3) * cell_radius = IBS
