@@ -16,6 +16,8 @@ import javax.imageio.ImageIO;
 
 public class GraphPlotter extends Application {
 
+    private int JT_FINAL = 5;
+
     public static String FILE_NAME = "Conventional.csv";
     public static boolean TAKE_AFTER_CALCS = true;
     public static String OUTPUT_FOLDER_NAME_TASK1 = "Avg_Metrics_vs_Chi/GRAPHS_UE_vs_CHI";
@@ -118,18 +120,18 @@ public class GraphPlotter extends Application {
                 } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
                     series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
                             listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
-                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_ACTIVE)) {
                     series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
-                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
-                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                            listResults.get(series_iter).proportion_UE_active_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.EFFECTIVE_CHI_MEAN_BSs)) {
                     series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
-                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
-                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                            listResults.get(series_iter).effective_chi_meanBSs_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.EFFECTIVE_CHI_PROP_ACTIVE)) {
                     series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
-                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
-                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                            listResults.get(series_iter).effective_chi_propActiveUEs_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.AVG_ACTIVE_UE_THROUGHPUT)) {
                     series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
-                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
+                            listResults.get(series_iter).avg_ACTIVE_UE_throughput_list.get(i)));
                 }
 
             }
@@ -157,7 +159,7 @@ public class GraphPlotter extends Application {
         List<Result_T_UE_vs_Chi> list = new ArrayList<>();
 
         String monte_carlo_str = "1000";
-        for (int JT = 0; JT <= 3; JT++) {
+        for (int JT = 0; JT <= JT_FINAL; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
             if (TAKE_AFTER_CALCS) {
                 fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + "_Take_after_calcs.csv";
@@ -181,84 +183,6 @@ public class GraphPlotter extends Application {
         plotGraphAndSaveForTask1("Effective Chi(%) mean BSs", "Chi(%)", "Effective_chi_mean_BSs vs Chi.png", list, monte_carlo_str, Mode.EFFECTIVE_CHI_MEAN_BSs);
         plotGraphAndSaveForTask1("Effective Chi(%) prop active UEs", "Chi(%)", "Effective_chi_prop_active_UEs vs Chi.png", list, monte_carlo_str, Mode.EFFECTIVE_CHI_PROP_ACTIVE);
         plotGraphAndSaveForTask1("Avg ACTIVE UE Throughput (kBps)", "Chi(%)", "T_avg active UE vs Chi.png", list, monte_carlo_str, Mode.AVG_ACTIVE_UE_THROUGHPUT);
-    }
-
-    // ----------------------------------------------- TASK 2 ----------------------------------
-    private void plot_avg_T_vs_dist() {
-        String folderName = "UE_T_avg_vs_distance_BS";
-        String fileName = "", outputFileNameToSave = "";
-        int JT_final = 3, JT_initial = 0;
-        String monte_carlo = "1000";
-
-        for (int JT = JT_initial; JT <= JT_final; JT++) {
-            fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_" + String.valueOf(JT) + ".csv";
-            if (TAKE_AFTER_CALCS) {
-                fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_Take_after_calcs" + String.valueOf(JT) + ".csv";
-
-            }
-            outputFileNameToSave = folderName + "/UE_T_avg_vs_distance_BS_MC_" + monte_carlo + "_JT_" + String.valueOf(JT) + ".png";
-            String[] headings = Reader.read_headings(fileName);
-            List< List<Double>> data_matrix = Reader.read_data(fileName, headings.length);
-
-            plotGraphAndSaveForTask2("Distance(m)", "Avg UE Throughput (kBps)", "Avg UE Throughput vs Distance for various chi",
-                    headings, data_matrix, outputFileNameToSave);
-
-        }
-
-    }
-
-    private void plotGraphAndSaveForTask2(String x_axis_title,
-            String y_axis_title, String titleGraph, String[] headings, List< List<Double>> column_data_list, String outputFileNameToSave) {
-
-        //headings[0]: Distance(m)
-        //headings[1]: Chi = 0.1 and so on...
-        //column_data_list[0]: Distance column
-        //column_data_list[1]: Chi = 0.1 column of UE avg Throughputs
-        stage.setTitle("Graphs");
-        //defining the axes
-
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-
-        xAxis.setLabel(x_axis_title);
-        yAxis.setLabel(y_axis_title);
-        //creating the chart
-
-        LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-
-        lineChart.setCreateSymbols(false);
-        lineChart.setTitle(titleGraph);
-
-        //List of Serieses, initialization
-        List<XYChart.Series> series_list = new ArrayList<>();
-        for (int i = 0; i < (column_data_list.size() - 1); i++) { //since column_data_list[0] is Distance column
-            series_list.add(new XYChart.Series());
-        }
-        //Set legends
-        for (int i = 0; i < series_list.size(); i++) {
-            series_list.get(i).setName(headings[i + 1]); //headings[i] is Distance
-        }
-
-        //populating the series with data
-        int num_data_points = column_data_list.get(0).size();
-
-        for (int series_iter = 0; series_iter < series_list.size(); series_iter++) {
-            XYChart.Series series = series_list.get(series_iter);
-            for (int i = 0; i < num_data_points; i++) {
-                series.getData().add(new XYChart.Data(column_data_list.get(0).get(i),
-                        column_data_list.get(series_iter + 1).get(i))); //[0] is distance, [series_iter] is other column
-            }
-        }
-
-        Scene scene = new Scene(lineChart, 1000, 800); //Height and Width [Default values]
-
-        lineChart.setAnimated(false);
-        for (int i = 0; i < series_list.size(); i++) {
-            lineChart.getData().add(series_list.get(i)); //append
-        }
-
-        stage.setScene(scene);
-        saveAsPng(scene, outputFileNameToSave);
     }
 
 }
