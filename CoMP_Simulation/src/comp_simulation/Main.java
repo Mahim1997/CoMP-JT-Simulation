@@ -18,10 +18,10 @@ public class Main {
         SimulationRunner.runSimulation(chi_based); //For Task 1
 
         Main.JT_INITIAL = 0;
-        Main.JT_FINAL = 3;
-        Main.TAKE_AFTER_CALCULATION = true;
-        System.out.println("-------------------Running Task 2----------------------");
-        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+        Main.JT_FINAL = 5;
+        Main.TAKE_AFTER_CALCULATION = false;
+        System.out.println("-------------------Running Task 1----------------------");
+        SimulationRunner.runSimulation(chi_based); //For Task 2 NEW                       
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

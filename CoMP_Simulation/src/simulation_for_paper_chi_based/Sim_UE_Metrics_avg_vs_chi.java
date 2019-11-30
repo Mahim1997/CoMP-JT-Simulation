@@ -68,14 +68,14 @@ public class Sim_UE_Metrics_avg_vs_chi {
         SimResults simResults = new SimResults();
         SimResult_oneMC res_one_MC;
         for (double chi = simParams.chi_initial; chi <= simParams.chi_final; chi += simParams.chi_step_size) {
-            System.out.println("-->>Runnning simulation of avg UE throughput (kBps) vs chi = " + chi
-                    + " , monte_carlo = " + simParams.monte_carlo + " times , JT = " + simParams.JT_VALUE
-                    + " , fileName = " + fileName);
+            System.out.println("-->>Runnning sim T_avg vs chi = " + chi
+                    + " , MC = " + simParams.monte_carlo + ", JT = " + simParams.JT_VALUE
+                    + " , file = " + fileName);
             //Run monte_carlo times for THIS value of CHI and write that to the CSV file.
+            simParams.chi_for_task_1 = chi;
             res_one_MC = run_sim_one_chi_monte_carlo(FSPL_dB, inter_bs_distance, chi, baseStations);
             simResults.enterMetricsForOneMC(chi, res_one_MC);
             simResults.write_to_csv_file(fileName);
-
         }
 
     }
@@ -86,11 +86,12 @@ public class Sim_UE_Metrics_avg_vs_chi {
         List<User> list_users;
         SimResult_oneMC finalSimResult = new SimResult_oneMC();
         SimResult_oneMC currentSimResult;
-        for (int mc = 0; mc <= simParams.monte_carlo; mc++) {
+        for (int mc = 1; mc <= simParams.monte_carlo; mc++) {
+            
             list_users = run_sim_for_one_chi_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
             currentSimResult = new SimResult_oneMC();
 //Calculate metrics like Avg T, Spectral Efficiency, etc
-            currentSimResult.calculate_metrics(list_users, simParams);
+            currentSimResult.calculate_metrics(list_users, simParams, chi);
             finalSimResult.addMetrics(currentSimResult);
         }
         double divide_by = (double) (simParams.monte_carlo);

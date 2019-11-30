@@ -118,6 +118,18 @@ public class GraphPlotter extends Application {
                 } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
                     series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
                             listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
+                } else if (mode.equalsIgnoreCase(Mode.PROPORTION_UE_DROPPED)) {
+                    series.getData().add(new XYChart.Data(listResults.get(series_iter).chi_list.get(i),
+                            listResults.get(series_iter).proportion_UE_dropped_list.get(i)));
                 }
 
             }
@@ -145,9 +157,9 @@ public class GraphPlotter extends Application {
         List<Result_T_UE_vs_Chi> list = new ArrayList<>();
 
         String monte_carlo_str = "1000";
-        for (int JT = 0; JT <= 5; JT++) {
+        for (int JT = 0; JT <= 3; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
-            if(TAKE_AFTER_CALCS){
+            if (TAKE_AFTER_CALCS) {
                 fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + "_Take_after_calcs.csv";
             }
 //            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
@@ -163,7 +175,12 @@ public class GraphPlotter extends Application {
         plotGraphAndSaveForTask1("Cell-Edge Throughput (kBps)", "Chi (%)", "Cell Edge Throughput vs Chi.png", list, monte_carlo_str, Mode.CELL_EDGE_THROUGHPUT);
         plotGraphAndSaveForTask1("Discrimination Index", "Chi (%)", "Discrimination Index vs Chi.png", list, monte_carlo_str, Mode.DISCRIMINATION_INDEX);
         plotGraphAndSaveForTask1("Entropy", "Chi (%)", "Entropy vs Chi.png", list, monte_carlo_str, Mode.ENTROPY);
-        plotGraphAndSaveForTask1("% UE dropped", "Chi (%)", "%UE dropped vs Chi.png", list, monte_carlo_str, Mode.PROPORTION_UE_DROPPED);
+        plotGraphAndSaveForTask1("%UE dropped", "Chi (%)", "%UE dropped vs Chi.png", list, monte_carlo_str, Mode.PROPORTION_UE_DROPPED);
+//Nov 30, 2019
+        plotGraphAndSaveForTask1("%UE active", "Chi(%)", "%UE active vs Chi.png", list, monte_carlo_str, Mode.PROPORTION_UE_ACTIVE);
+        plotGraphAndSaveForTask1("Effective Chi(%) mean BSs", "Chi(%)", "Effective_chi_mean_BSs vs Chi.png", list, monte_carlo_str, Mode.EFFECTIVE_CHI_MEAN_BSs);
+        plotGraphAndSaveForTask1("Effective Chi(%) prop active UEs", "Chi(%)", "Effective_chi_prop_active_UEs vs Chi.png", list, monte_carlo_str, Mode.EFFECTIVE_CHI_PROP_ACTIVE);
+        plotGraphAndSaveForTask1("Avg ACTIVE UE Throughput (kBps)", "Chi(%)", "T_avg active UE vs Chi.png", list, monte_carlo_str, Mode.AVG_ACTIVE_UE_THROUGHPUT);
     }
 
     // ----------------------------------------------- TASK 2 ----------------------------------

@@ -11,12 +11,13 @@ public class MetricCalculatorAfter {
     public static List<User> getNewUsersListAfter_Tavg_calculation(List<User> list_of_all_users,
             List<BaseStation> baseStations, SimulationParameters simParams, double power_noise_mW) {
         List<User> list_new_users = new ArrayList<>();
+        double num_UE_active = 0;
         for (int ue_itr = 0; ue_itr < list_of_all_users.size(); ue_itr++) {
             User user = list_of_all_users.get(ue_itr);
             double coordinating_powers_recv = 0, competing_powers_recv = 0;
             
             if (!user.is_UE_dropped) { //UE is taken.
-                
+                num_UE_active ++;
                 for (int bs_itr = 0; bs_itr < baseStations.size(); bs_itr++) { // FOR EACH B.S.
                     BaseStation bs = baseStations.get(bs_itr);
                     if (user.indices_base_stations_connected.contains(bs.base_station_id)) {
@@ -39,7 +40,7 @@ public class MetricCalculatorAfter {
             }
             list_new_users.add(user);
         }
-
+//        System.out.println("-->>MetricCalculator.java, NUM ACTIVE  UE = " + num_UE_active + " , NUM_TOTAL UE = " + list_new_users.size());
         return list_new_users;
     }
 

@@ -16,8 +16,16 @@ public class SimResults {
     public List<Double> power_consumed_avg_BS_list = new ArrayList<>();
     public List<Double> proportion_UE_dropped_list = new ArrayList<>();
 
-    public String[] headings_arr = {"Chi(proportion)", "Avg UE Throughput(kBps)", "Spectral Efficiency", "Fairness Idx",
-        "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy", "Proportion UE dropped", "Avg Power Consumed by BS (kW)"};
+//New metrics , 30 Nov 2019.
+    public List<Double> proportion_UE_active_list = new ArrayList<>();
+    public List<Double> effective_chi_avg_list_mean_BSs = new ArrayList<>();
+    public List<Double> effective_chi_prop_active_UEs = new ArrayList<>();
+    public List<Double> avg_throughput_active_UE_list = new ArrayList<>();
+    
+    
+    public String[] headings_arr = {"Chi(proportion)", "T_avg UE(kBps)", "Spectral Efficiency", "Fairness Idx",
+        "Cell-Edge Throughput(kBps)", "Discrimination Idx", "Entropy", "Proportion UE dropped",
+        "Proportion of UE active", "Eff chi mean BSs", "Eff chi active UEs", "T_Avg Active UE(kBps)"};
 
 
     public void write_to_csv_file(String fileName) {
@@ -37,6 +45,11 @@ public class SimResults {
         this.entropy_list.add(res.entropy);
         this.power_consumed_avg_BS_list.add(res.power_consumed_avg_BS);
         this.proportion_UE_dropped_list.add(res.proportion_UE_dropped);
+        this.proportion_UE_active_list.add(res.proportion_of_active_UE);
+        this.effective_chi_avg_list_mean_BSs.add(res.effective_chi_mean_of_all_BS);
+        this.effective_chi_prop_active_UEs.add(res.effective_chi_prop_active_UE);
+        this.avg_throughput_active_UE_list.add(res.avg_throughput_of_active_UEs);
+
     }
 
 }

@@ -37,7 +37,10 @@ public class FileWriter_CSV {
                         + res.cell_edge_throughput_list.get(i) + "," + res.discrimination_index_list.get(i) + ","
                         + res.entropy_list.get(i) + ","
                         + res.proportion_UE_dropped_list.get(i) + ","
-                        + res.power_consumed_avg_BS_list.get(i)
+                        + res.proportion_UE_active_list.get(i) + ","
+                        + res.effective_chi_avg_list_mean_BSs.get(i) + ","
+                        + res.effective_chi_prop_active_UEs.get(i) + ","
+                        + res.avg_throughput_active_UE_list.get(i)
                 );
 
                 out.println(); //newline

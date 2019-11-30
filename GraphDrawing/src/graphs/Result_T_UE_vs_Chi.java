@@ -13,6 +13,11 @@ public class Result_T_UE_vs_Chi {
     public List<Double> entropy_list = new ArrayList<>();
     public List<Double> proportion_UE_dropped_list = new ArrayList<>();
     
+//Nov 30, 2019
+    public List<Double> proportion_UE_active_list = new ArrayList<>();
+    public List<Double> effective_chi_meanBSs_list = new ArrayList<>();
+    public List<Double> effective_chi_propActiveUEs_list = new ArrayList<>();
+    public List<Double> avg_ACTIVE_UE_throughput_list = new ArrayList<>();
     
     public String legendName;
     public int JT_num;

@@ -46,11 +46,9 @@ public class Reader {
 
     public static List< List<Double>> read_data(String fileName, int num) {
         List< List<Double>> list_of_columns = new ArrayList<>();
-
         for (int i = 0; i < num; i++) { //INITIALIZE [Little In-efficient]
             list_of_columns.add(new ArrayList<>());
         }
-
         BufferedReader csvReader = null;
         String row = null;
         int row_num = 0;
@@ -63,15 +61,10 @@ public class Reader {
                     for (int i = 0; i < data.length; i++) {
                         list_of_columns.get(i).add((Double.parseDouble(data[i])));
                     }
-
                 } catch (NumberFormatException e) {
-
                 }
-
             }
-
-        } catch (Exception e) {
-
+        } catch (IOException e) {
         }
         return list_of_columns;
     }
@@ -84,17 +77,12 @@ public class Reader {
             csvReader = new BufferedReader(new FileReader(fileName));
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");
-                
-                for(int i=0; i<data.length; i++){
+                for (int i = 0; i < data.length; i++) {
                     data[i] = get3SigFigStr(data[i]);
                 }
-                
                 return data;
-
             }
-
-        } catch (Exception e) {
-
+        } catch (IOException e) {
         }
         return null;
     }
@@ -115,7 +103,8 @@ public class Reader {
 //                System.out.println("data[0] = " + data[0] + " , data[1] = " + data[1]);
                 try {
                     double chi, avg_throughput, spectral_efficiency, cell_edge_thpt, fairness_idx, discrimination_idx,
-                            entropy, proportion_UE_dropped_avg;
+                            entropy, proportion_UE_dropped_avg, 
+                            proportion_UE_active, effective_chi_meanBSs, effective_chi_prop_active_UE, Tavg_active_UE;
                     chi = Double.parseDouble(data[0]);
                     avg_throughput = Double.parseDouble(data[1]);
                     spectral_efficiency = Double.parseDouble(data[2]);
@@ -124,6 +113,10 @@ public class Reader {
                     discrimination_idx = Double.parseDouble(data[5]);
                     entropy = Double.parseDouble(data[6]);
                     proportion_UE_dropped_avg = Double.parseDouble(data[7]);
+                    proportion_UE_active = Double.parseDouble(data[8]);
+                    effective_chi_meanBSs = Double.parseDouble(data[9]);
+                    effective_chi_prop_active_UE = Double.parseDouble(data[10]);
+                    Tavg_active_UE = Double.parseDouble(data[11]);
                     if (avg_throughput > GraphPlotter.THRESHOLD_FOR_NOT_TAKING) {
                         //Only take for chi > THRESHLOD [here, 0.02]
                         rs.chi_list.add(chi * 100); //PERCENTAGE
@@ -134,7 +127,10 @@ public class Reader {
                         rs.discrimination_index_list.add(discrimination_idx);
                         rs.entropy_list.add(entropy);
                         rs.proportion_UE_dropped_list.add(proportion_UE_dropped_avg * 100); //PERCENTAGE
-
+                        rs.proportion_UE_active_list.add(proportion_UE_active * 100);
+                        rs.effective_chi_meanBSs_list.add(effective_chi_meanBSs * 100);
+                        rs.effective_chi_propActiveUEs_list.add(effective_chi_prop_active_UE * 100);
+                        rs.avg_ACTIVE_UE_throughput_list.add(Tavg_active_UE);
                     }
                 } catch (NumberFormatException e2) {
                     //Do nothing ... just continue

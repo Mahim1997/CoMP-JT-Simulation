@@ -43,17 +43,17 @@ public class Sim_UE_avg_Throughput_vs_distance {
             }
             String fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
-            if(Main.TAKE_AFTER_CALCULATION){
+            if (Main.TAKE_AFTER_CALCULATION) {
                 fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
-                    + "_JT_" + String.valueOf(simParams.JT_VALUE) + "_Take_after_calcs.csv";
+                        + "_JT_" + String.valueOf(simParams.JT_VALUE) + "_Take_after_calcs.csv";
             }
-            
+
             if (this.IS_CONVENTIONAL_TAKEN) {
                 fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
                         + "_JT_0.csv";
-                if(Main.TAKE_AFTER_CALCULATION){
+                if (Main.TAKE_AFTER_CALCULATION) {
                     fileName = folderName + "/UE_T_avg_vs_distance_BS_MC_" + String.valueOf(simParams.monte_carlo)
-                        + "_JT_0_Take_after_calcs.csv";
+                            + "_JT_0_Take_after_calcs.csv";
                 }
             }
 
@@ -101,7 +101,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
     public double run_sim_one_distance_monte_carlo(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         double avg_throughput = 0;
-        for (int mc = 0; mc <= simParams.monte_carlo; mc++) {
+        for (int mc = 1; mc <= simParams.monte_carlo; mc++) {
             double thpt = run_sim_for_one_distance_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
             avg_throughput += thpt;
         }
@@ -147,7 +147,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
                 double y_user = (radial_distance_wrt_BS * Math.sin(theta)) + bs.y_pos; //r*sin(theta) + bs.y
 
                 User user = new User(x_user, y_user, simParams);
-                
+
                 //Now calculation parts ...
                 user.copyListOfBaseStations(baseStations);
 
@@ -201,11 +201,11 @@ public class Sim_UE_avg_Throughput_vs_distance {
         double avg_throughput = (num_users_total == 0) ? 0 : (cumulative_throughput / num_users_total);
 
         if (Main.TAKE_AFTER_CALCULATION) {
-            List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users, 
+            List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users,
                     baseStations, simParams, Pn_mW);
 
             double cuml_throughput = 0.0;
-            for(int i=0; i<new_user_list.size(); i++){
+            for (int i = 0; i < new_user_list.size(); i++) {
                 cuml_throughput += (new_user_list.get(i).THROUGHPUT_user_one_BS_KBps);
             }
             avg_throughput = (num_users_total == 0) ? 0 : (cuml_throughput / num_users_total);
