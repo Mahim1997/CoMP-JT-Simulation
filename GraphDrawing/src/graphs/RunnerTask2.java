@@ -94,7 +94,7 @@ public class RunnerTask2 {
         for (int chi_idx = 0; chi_idx < fileNames_arr.length; chi_idx++) {
             String fileNameToSave = fileNames_arr[chi_idx];
             fileNameToSave = (OUTPUT_FOLDER_TASK_2 + "/" + fileNameToSave);
-            plotDataOnce(jt_arr, fileNameToSave, chi_idx, RunnerTask2.titles_arr[chi_idx]);
+            plotDataOnce(jt_arr, fileNameToSave, chi_idx, RunnerTask2.titles_arr[chi_idx] + ", MC = 1000");
         }
     }
 }
