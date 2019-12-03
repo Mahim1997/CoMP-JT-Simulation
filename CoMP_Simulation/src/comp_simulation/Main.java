@@ -3,19 +3,20 @@ package comp_simulation;
 public class Main {
 
     public static boolean TAKE_AFTER_CALCULATION = true;
-    public static double CHI_STEP_SIZE_TASK_1 = 0.01;
-    public static int JT_INITIAL = 2;
-    public static int JT_FINAL = 3;
+//    public static double CHI_STEP_SIZE_TASK_1 = 0.001;
+    public static int JT_INITIAL = 0;
+    public static int JT_FINAL = 5;
     public static int MONTE_CARLO = 1000;
 
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
         Main.JT_INITIAL = 0;
-        Main.JT_FINAL = 3;
+        Main.JT_FINAL = 5;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 2----------------------");
-        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+        SimulationRunner.runSimulation(chi_based); //For Task 2 NEW        
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

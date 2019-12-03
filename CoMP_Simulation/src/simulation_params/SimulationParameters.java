@@ -9,8 +9,8 @@ public class SimulationParameters {
      */
     public double chi_initial = 0.1; //DEBUG
     public double chi_final = 1;
-    public double chi_step_size = 0.005;
-    public double chi_for_task_1;
+    public double chi_step_size = 0.001;
+    public double chi_for_task_1; //used as temp variable
 //-------------------------------- FOR TASK 2 ----------------------------
     public double chi_step_size_task_2 = 0.1;
 
