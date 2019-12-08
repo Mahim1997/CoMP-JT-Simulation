@@ -13,7 +13,7 @@ public class GraphPlotter extends Application {
 
     public static int TASK_MODE = 1;
 
-    public static int JT_FINAL = 3;
+    public static int JT_FINAL = 5;
 
     public static String FILE_NAME = "Conventional.csv"; //Don't remove, otherwise Reader class gives errors.
     public static boolean TAKE_AFTER_CALCS = true;

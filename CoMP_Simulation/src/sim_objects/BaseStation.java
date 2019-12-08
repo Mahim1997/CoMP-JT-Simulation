@@ -1,6 +1,5 @@
 package sim_objects;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BaseStation {

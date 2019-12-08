@@ -25,6 +25,8 @@ public class User {
     //For AFTERWARDS throughput calculations.
     public Double[] power_received_from_eachBS_or_X_chi; //wrt base station ID
     public List<Integer> indices_base_stations_connected;
+    public int base_station_chosen_id;
+    public int base_station_tier;
 
     public List<BaseStation> getListOfBaseStations() {
         return this.baseStations;

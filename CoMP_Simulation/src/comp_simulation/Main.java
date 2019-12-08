@@ -2,6 +2,8 @@ package comp_simulation;
 
 public class Main {
 
+    public static boolean GET_OUTER_RING_BASE_STATIONS = true;
+    public static boolean NEW_SIMULATION_STRATEGY = true;
     public static boolean TAKE_AFTER_CALCULATION = true;
 //    public static double CHI_STEP_SIZE_TASK_1 = 0.001;
     public static int JT_INITIAL = 0;
@@ -16,7 +18,7 @@ public class Main {
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 2----------------------");
 //        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
-        SimulationRunner.runSimulation(chi_based); //For Task 2 NEW        
+        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

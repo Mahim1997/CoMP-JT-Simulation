@@ -68,6 +68,9 @@ public class Sim_UE_Metrics_avg_vs_chi {
         SimResults simResults = new SimResults();
         SimResult_oneMC res_one_MC;
         for (double chi = simParams.chi_initial; chi <= simParams.chi_final; chi += simParams.chi_step_size) {
+            if (Main.NEW_SIMULATION_STRATEGY) {
+                System.out.print("[NEW STRATEGY SIMULATION] ");
+            }
             System.out.println("-->>Runnning sim T_avg vs chi = " + chi
                     + " , MC = " + simParams.monte_carlo + ", JT = " + simParams.JT_VALUE
                     + " , file = " + fileName);
@@ -87,10 +90,18 @@ public class Sim_UE_Metrics_avg_vs_chi {
         SimResult_oneMC finalSimResult = new SimResult_oneMC();
         SimResult_oneMC currentSimResult;
         for (int mc = 1; mc <= simParams.monte_carlo; mc++) {
-            
-            list_users = run_sim_for_one_chi_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
+
+            if (Main.NEW_SIMULATION_STRATEGY) {
+                list_users = run_sim_for_one_chi_one_iteration_NEW(FSPL_dB, inter_bs_distance, chi, baseStations);
+            } else {
+                list_users = run_sim_for_one_chi_one_iteration(FSPL_dB, inter_bs_distance, chi, baseStations);
+            }
+
             currentSimResult = new SimResult_oneMC();
 //Calculate metrics like Avg T, Spectral Efficiency, etc
+            if (Main.GET_OUTER_RING_BASE_STATIONS) {
+                list_users = getOnlyOuterRingUsers(list_users);
+            }
             currentSimResult.calculate_metrics(list_users, simParams, chi);
             finalSimResult.addMetrics(currentSimResult);
         }
@@ -131,6 +142,9 @@ public class Sim_UE_Metrics_avg_vs_chi {
                 double y_user = (simParams.cell_radius * random_double_val * Math.sin(theta)) + bs.y_pos;
                 User user = new User(x_user, y_user, simParams);
                 //Now calculation parts ...
+                user.base_station_chosen_id = bs.base_station_id;
+                user.base_station_tier = bs.tier;
+
                 user.copyListOfBaseStations(baseStations);
                 user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);//Calculate received powers
 
@@ -174,5 +188,82 @@ public class Sim_UE_Metrics_avg_vs_chi {
         return list_of_all_users;
     }
 
+    public List<User> run_sim_for_one_chi_one_iteration_NEW(double FSPL_dB, double inter_bs_distance,
+            double chi, List<BaseStation> baseStations) {
+        double cumulative_throughput = 0;
+        double num_users_total = 0;
+        double bw_MHz = simParams.bandwidth / Math.pow(10, 6);
+        int no_resource_blocks = ResourceBlockCalculator.numberOfResourceBlocks(bw_MHz);
+        int num_users_per_BS = (int) (chi * no_resource_blocks); //All B.S. same chi
+        double Pn = simParams.NOISE_SPECTRAL_POWER_DENSITY + (10 * Math.log10(simParams.bandwidth)); //Pn = -174 + 10*log(BW)
+        double Pn_mW = Helper.convert_To_mW_From_dBM(Pn);
+
+        //Make each Base Station have num available slots as THIS NUMBER intially ... will decrement as UE is added.
+        for (BaseStation bs : baseStations) {
+            bs.num_available_slots = (int) (1 * no_resource_blocks); //chi = 1 IS the max
+            bs.num_initial_slots = bs.num_available_slots;
+        }
+
+        List<User> list_of_all_users = new ArrayList<>();
+//        for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
+        for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+//            BaseStation bs = baseStations.get(bs_iter);
+            for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
+                BaseStation bs = baseStations.get(bs_iter);
+//            for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+                double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
+                Random rand = new Random();
+                double random_double_val = rand.nextDouble();
+                double x_user = (simParams.cell_radius * random_double_val * Math.cos(theta)) + bs.x_pos;
+                double y_user = (simParams.cell_radius * random_double_val * Math.sin(theta)) + bs.y_pos;
+                User user = new User(x_user, y_user, simParams);
+                //Now calculation parts ...
+                user.base_station_chosen_id = bs.base_station_id;
+                user.base_station_tier = bs.tier;
+
+                user.copyListOfBaseStations(baseStations);
+                user.calculateReceivedPowersOfAllBaseStations(Pn_mW, FSPL_dB, baseStations);//Calculate received powers
+
+                //WHICH APPROACH...
+                if (Main.JT_MODE.equals(Main.JT_SINR)) {
+                    user.sortBaseStations_wrt_Pr_mW_DESC();
+                } else if (Main.JT_MODE.equals(Main.JT_DISTANCE)) {
+//                    System.out.println("Distance based sorting...");
+                    user.sortBaseStations_wrt_Distances_ASC();
+                } else if (Main.JT_MODE.equals(Main.JT_HYBRID)) { //TO DO HYBRID....
+                    System.out.println("-->>TO DO JT_HYBRID ... 231 of Sim_HT_T_avg_vs_chi.java");
+                }
+                double[] power_arr = user.getReceivedPowerArray();
+                double powers_recv_coordinating_BS = power_arr[0];
+                double powers_recv_competing_BS_X_chi = power_arr[3];
+                user.calculate_SINR_and_Throughput_of_UE(Pn_mW, powers_recv_coordinating_BS, powers_recv_competing_BS_X_chi);
+                cumulative_throughput += user.THROUGHPUT_user_one_BS_KBps;
+                user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
+                baseStations = user.getListOfBaseStations();  //After calculations... [to get the same num_slots_available]
+                num_users_total++;
+                list_of_all_users.add(user); //for further computations... [#BS X #UEs] [ALL USERS OF THE NETWORK]
+            }
+        }
+
+        if (Main.TAKE_AFTER_CALCULATION) {
+            List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users, baseStations, simParams, Pn_mW);
+            return new_user_list;
+        }
+
+        return list_of_all_users;
+    }
 //----------------------------------------  CLASS ENDS -----------------------------------------------------------
+
+    private List<User> getOnlyOuterRingUsers(List<User> list_users) {
+        List<User> newList = new ArrayList<>();
+        list_users.stream().filter((u) -> {
+//            return u.base_station_tier == simParams.tier;
+            return (u.base_station_tier != simParams.tier);
+        }).forEachOrdered((u) -> {
+            //only final tier .. so add the user
+            newList.add(u);
+        });
+
+        return newList;
+    }
 }
