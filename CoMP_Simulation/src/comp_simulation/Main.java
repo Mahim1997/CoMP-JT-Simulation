@@ -16,9 +16,9 @@ public class Main {
         Main.JT_INITIAL = 0;
         Main.JT_FINAL = 5;
         Main.TAKE_AFTER_CALCULATION = true;
-        System.out.println("-------------------Running Task 2----------------------");
-        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
-//        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
+        System.out.println("-------------------Running Task 1----------------------");
+//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE
