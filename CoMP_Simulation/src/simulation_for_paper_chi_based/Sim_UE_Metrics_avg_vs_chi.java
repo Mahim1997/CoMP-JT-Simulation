@@ -258,7 +258,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
         List<User> newList = new ArrayList<>();
         list_users.stream().filter((u) -> {
 //            return u.base_station_tier == simParams.tier;
-            return (u.base_station_tier != simParams.tier);
+            return (u.base_station_tier == 0);
         }).forEachOrdered((u) -> {
             //only final tier .. so add the user
             newList.add(u);

@@ -131,9 +131,12 @@ public class Sim_UE_avg_Throughput_vs_distance {
 
 //        Helper.printBaseStations(baseStations);
         List<User> list_of_all_users = new ArrayList<>();
-        for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
-            BaseStation bs = baseStations.get(bs_iter);
-            for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+        for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+//        for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {            
+//            BaseStation bs = baseStations.get(bs_iter);
+//            for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+            for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
+                BaseStation bs = baseStations.get(bs_iter);
 //                System.out.println("-->>TRYING TO CONNECT TO bs.id = " + bs.base_station_id + " , UE_id = " + itr_user);
                 double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                 double radial_distance_wrt_BS = simParams.distance_taken;
