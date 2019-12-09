@@ -122,7 +122,7 @@ public class RunnerTask1 {
         List<Result_T_UE_vs_Chi> list = new ArrayList<>();
 
         String monte_carlo_str = "1000";
-        for (int JT = 0; JT <= GraphPlotter.JT_FINAL; JT++) {
+        for (int JT = 0; JT <= GraphPlotter.JT_FINAL_TASK_1; JT++) {
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
             if (TAKE_AFTER_CALCS) {
                 fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + "_Take_after_calcs.csv";
