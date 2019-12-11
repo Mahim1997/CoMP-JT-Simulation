@@ -201,16 +201,35 @@ public class Sim_UE_avg_Throughput_vs_distance {
                     + ", BS initialSlots = " + bs.num_initial_slots + " , BS available slots = " + bs.num_available_slots);
         }
          */
+        //NORMAL USAGE [NOT USED ANYMORE]
         double avg_throughput = (num_users_total == 0) ? 0 : (cumulative_throughput / num_users_total);
 
         if (Main.TAKE_AFTER_CALCULATION) {
-            List<User> new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users,
-                    baseStations, simParams, Pn_mW);
+
+            List<User> new_user_list;
+
+            if (Main.GET_OUTER_RING_BASE_STATIONS) {
+                List<User> without_outer_ring_users = new ArrayList<>();
+                for (int iter = 0; iter < list_of_all_users.size(); iter++) {
+                    User u = list_of_all_users.get(iter);
+                    if (u.base_station_tier <= 2) {
+                        without_outer_ring_users.add(u);
+                    }
+                }
+                new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(without_outer_ring_users,
+                        baseStations, simParams, Pn_mW);
+            } else {
+                //Take all base stations.
+                new_user_list = MetricCalculatorAfter.getNewUsersListAfter_Tavg_calculation(list_of_all_users,
+                        baseStations, simParams, Pn_mW);
+
+            }
 
             double cuml_throughput = 0.0;
             for (int i = 0; i < new_user_list.size(); i++) {
                 cuml_throughput += (new_user_list.get(i).THROUGHPUT_user_one_BS_KBps);
             }
+            num_users_total = (double)new_user_list.size();
             avg_throughput = (num_users_total == 0) ? 0 : (cuml_throughput / num_users_total);
         }
 

@@ -6,7 +6,7 @@ public class Main {
     public static boolean NEW_SIMULATION_STRATEGY = true;
     public static boolean TAKE_AFTER_CALCULATION = true;
 //    public static double CHI_STEP_SIZE_TASK_1 = 0.001;
-    public static int JT_INITIAL = 0;
+    public static int JT_INITIAL = 1;
     public static int JT_FINAL = 5;
     public static int MONTE_CARLO = 1000;
 
@@ -17,8 +17,8 @@ public class Main {
         Main.JT_FINAL = 5;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 1----------------------");
-//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
-        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
+        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+//        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE
