@@ -15,7 +15,7 @@ public class SimulationParameterBuilder {
 
         //1. Normal parameters.
         s.cell_radius = 1000; ///1000m = 1km
-        s.tier = 3;
+        s.tier = 2;
         s.power_transmitted = 43; //dBm
         s.frequency_carrier = 2; //2 GHz
         s.bandwidth = 5 * Math.pow(10, 6); //5 Mhz

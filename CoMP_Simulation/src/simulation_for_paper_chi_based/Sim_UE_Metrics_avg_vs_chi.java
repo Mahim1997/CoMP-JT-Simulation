@@ -257,8 +257,10 @@ public class Sim_UE_Metrics_avg_vs_chi {
 
     private List<User> getOnlyOuterRingUsers(List<User> list_users) {
         List<User> newList = new ArrayList<>();
-        for(User u:list_users){
-            if(u.base_station_tier == 3){
+        for (User u : list_users) {
+            if(true){ //tier = 2, ALL BSs
+//            if (u.base_station_tier < 3) { // tier = 3, ONLY INNER RING BSs
+//            if(u.base_station_tier == 3){ // tier = 3, ONLY OUTER RING BSs
                 newList.add(u);
             }
         }
