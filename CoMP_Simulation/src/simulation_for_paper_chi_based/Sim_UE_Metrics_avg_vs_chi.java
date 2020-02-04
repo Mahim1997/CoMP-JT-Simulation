@@ -6,6 +6,7 @@ import util_and_calculators.ResourceBlockCalculator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 import sim_objects.BaseStation;
 import sim_objects.User;
 import sim_results.SimResult_oneMC;
@@ -256,13 +257,11 @@ public class Sim_UE_Metrics_avg_vs_chi {
 
     private List<User> getOnlyOuterRingUsers(List<User> list_users) {
         List<User> newList = new ArrayList<>();
-        list_users.stream().filter((u) -> {
-//            return u.base_station_tier == simParams.tier;
-            return (u.base_station_tier <= 2);
-        }).forEachOrdered((u) -> {
-            //only final tier .. so add the user
-            newList.add(u);
-        });
+        for(User u:list_users){
+            if(u.base_station_tier == 3){
+                newList.add(u);
+            }
+        }
 
         return newList;
     }

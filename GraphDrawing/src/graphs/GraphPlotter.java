@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 public class GraphPlotter extends Application {
 
-    public static int TASK_MODE = 2;
+    public static int TASK_MODE = 1;
 
     public static int JT_FINAL_TASK_1 = 5;
 
