@@ -87,6 +87,14 @@ public class Sim_UE_Metrics_avg_vs_chi {
     public SimResult_oneMC run_sim_one_chi_monte_carlo(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         double avg_throughput = 0;
+        
+        if(Main.DYNAMIC_JT_CHANGE_WRT_CHI_FLAG == true){
+            int prev_jt = simParams.JT_VALUE;
+            simParams.JT_VALUE = Helper.GET_DYNAMIC_JT_VALUE(chi);
+            System.out.println("-->>Changing JT from " + prev_jt + " , to " + simParams.JT_VALUE);
+            simParams.JT_VALUE = prev_jt;
+        }
+        
         List<User> list_users;
         SimResult_oneMC finalSimResult = new SimResult_oneMC();
         SimResult_oneMC currentSimResult;
@@ -258,8 +266,8 @@ public class Sim_UE_Metrics_avg_vs_chi {
     private List<User> getOnlyOuterRingUsers(List<User> list_users) {
         List<User> newList = new ArrayList<>();
         for (User u : list_users) {
-            if(true){ //tier = 2, ALL BSs
-//            if (u.base_station_tier < 3) { // tier = 3, ONLY INNER RING BSs
+//            if(true){ //tier = 2, ALL BSs
+            if (u.base_station_tier < 3) { // tier = 3, ONLY INNER RING BSs
 //            if(u.base_station_tier == 3){ // tier = 3, ONLY OUTER RING BSs
                 newList.add(u);
             }

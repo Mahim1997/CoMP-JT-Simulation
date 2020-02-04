@@ -214,4 +214,8 @@ public class Helper {
         System.out.println("");
     }
 
+    public static int GET_DYNAMIC_JT_VALUE(double chi) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

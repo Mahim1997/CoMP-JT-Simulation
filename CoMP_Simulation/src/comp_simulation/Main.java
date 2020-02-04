@@ -6,15 +6,16 @@ public class Main {
     public static boolean NEW_SIMULATION_STRATEGY = true;
     public static boolean TAKE_AFTER_CALCULATION = true;
 //    public static double CHI_STEP_SIZE_TASK_1 = 0.001;
-    public static int JT_INITIAL = 1;
-    public static int JT_FINAL = 5;
+    public static int JT_INITIAL ;
+    public static int JT_FINAL ;
     public static int MONTE_CARLO = 1000;
+    public static boolean DYNAMIC_JT_CHANGE_WRT_CHI_FLAG = true;
 
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
-        Main.JT_INITIAL = 0;
-        Main.JT_FINAL = 5;
+        Main.JT_INITIAL = 4;
+        Main.JT_FINAL = 4;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 1----------------------");
 //        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
