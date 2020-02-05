@@ -41,7 +41,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
     }
 
     public void run_UE_Tavg_vs_chi() {
-        //Place Base Stations [Fixed Positions throughout all the simulations]
+        //Place Base Stations [Fixed Positions throughout all the simulations]        
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
         String folderName = "Avg_Metrics_vs_Chi";
@@ -89,10 +89,9 @@ public class Sim_UE_Metrics_avg_vs_chi {
         double avg_throughput = 0;
         
         if(Main.DYNAMIC_JT_CHANGE_WRT_CHI_FLAG == true){
-            int prev_jt = simParams.JT_VALUE;
+            int prev_jt = simParams.JT_VALUE; //helpful for printing after two lines ... see down after two lines
             simParams.JT_VALUE = Helper.GET_DYNAMIC_JT_VALUE(chi);
-            System.out.println("-->>Changing JT from " + prev_jt + " , to " + simParams.JT_VALUE);
-            simParams.JT_VALUE = prev_jt;
+            System.out.println("-->>Changing JT from " + prev_jt + " , to " + simParams.JT_VALUE + " , where chi = " + chi);
         }
         
         List<User> list_users;
@@ -117,6 +116,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
         double divide_by = (double) (simParams.monte_carlo);
         finalSimResult.divideMetricsBy(divide_by);
 
+        simParams.JT_VALUE = Main.DYNAMIC_JT_VALUE_FOR_FILE;
         return finalSimResult;
     }
 

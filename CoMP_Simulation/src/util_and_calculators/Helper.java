@@ -1,5 +1,6 @@
 package util_and_calculators;
 
+import comp_simulation.Main;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -215,7 +216,17 @@ public class Helper {
     }
 
     public static int GET_DYNAMIC_JT_VALUE(double chi) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(chi < Main.chi_critical_JT_3_JT_2){ //left most range
+            return 3;
+        }
+        else if((chi >= Main.chi_critical_JT_3_JT_2) && (chi < Main.chi_critical_JT_2_JT_1)){ //mid range JT = 2
+            return 2;
+        }
+        else if(chi >= Main.chi_critical_JT_2_JT_1){ //right most range JT = 1 [DPS]
+            return 1;
+        }
+        //Default DPS
+        return 1;
     }
 
 }

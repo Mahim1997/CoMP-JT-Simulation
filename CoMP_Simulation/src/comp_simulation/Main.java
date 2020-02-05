@@ -10,16 +10,21 @@ public class Main {
     public static int JT_FINAL ;
     public static int MONTE_CARLO = 1000;
     public static boolean DYNAMIC_JT_CHANGE_WRT_CHI_FLAG = true;
+    public static int JT_DYNAMIC_CHANGE_START = 3;
 
+    public static double chi_critical_JT_3_JT_2 = 0.275;
+    public static double chi_critical_JT_2_JT_1 = 0.44;
+    public static int DYNAMIC_JT_VALUE_FOR_FILE = 6;
+    
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
-        Main.JT_INITIAL = 0;
-        Main.JT_FINAL = 5;
+        Main.JT_INITIAL = 6;
+        Main.JT_FINAL = 6;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 1----------------------");
-        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
-        //SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
+//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

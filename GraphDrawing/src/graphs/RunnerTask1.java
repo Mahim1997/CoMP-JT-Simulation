@@ -133,6 +133,18 @@ public class RunnerTask1 {
 //            res.legendName = "" + (String.valueOf(JT));
             list.add(res);
         }
+        if(GraphPlotter.TAKE_DYNAMIC_JT == true){
+            int JT = 6;
+            fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + ".csv";
+            if (TAKE_AFTER_CALCS) {
+                fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + monte_carlo_str + "_JT_" + String.valueOf(JT) + "_Take_after_calcs.csv";
+            }
+//            System.out.println("FileName to read .. = " + fileName + " , image file name = " + imageFile);
+            Result_T_UE_vs_Chi res = reader.read_UE_vs_Chi_once(fileName);
+            res.legendName = "DYNAMIC JT";
+//            res.legendName = "" + (String.valueOf(JT));
+            list.add(res);
+        }
 
         plotGraphAndSaveForTask1("Average UE Throughput (kBps)", "Chi (%)", "Avg UE Throughput vs Chi.png", list, monte_carlo_str, Mode.AVG_UE_Throughput);
         plotGraphAndSaveForTask1("Spectral Efficiency", "Chi (%)", "Avg Spectral Efficiency vs Chi.png", list, monte_carlo_str, Mode.SPECTRAL_EFFICIENCY);

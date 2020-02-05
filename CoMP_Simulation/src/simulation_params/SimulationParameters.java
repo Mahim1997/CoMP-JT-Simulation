@@ -3,12 +3,9 @@ package simulation_params;
 import comp_simulation.Main;
 
 public class SimulationParameters {
-
-
-
     /*
     These parameters are for varying chi and measuring avg UE throughput [for paper work]
-     */
+    */
     public double chi_initial = 0.1; //DEBUG
     public double chi_final = 1;
     public double chi_step_size = 0.005;
