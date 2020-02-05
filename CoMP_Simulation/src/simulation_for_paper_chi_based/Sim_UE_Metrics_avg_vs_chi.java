@@ -87,13 +87,14 @@ public class Sim_UE_Metrics_avg_vs_chi {
     public SimResult_oneMC run_sim_one_chi_monte_carlo(double FSPL_dB, double inter_bs_distance,
             double chi, List<BaseStation> baseStations) {
         double avg_throughput = 0;
-        
-        if(Main.DYNAMIC_JT_CHANGE_WRT_CHI_FLAG == true){
+
+        if (Main.DYNAMIC_JT_CHANGE_WRT_CHI_FLAG == true) {
             int prev_jt = simParams.JT_VALUE; //helpful for printing after two lines ... see down after two lines
             simParams.JT_VALUE = Helper.GET_DYNAMIC_JT_VALUE(chi);
             System.out.println("-->>Changing JT from " + prev_jt + " , to " + simParams.JT_VALUE + " , where chi = " + chi);
+            //FINALLY CHANGED AT THE END ... TO MAINTAIN THE SAME FILE NAME
         }
-        
+
         List<User> list_users;
         SimResult_oneMC finalSimResult = new SimResult_oneMC();
         SimResult_oneMC currentSimResult;
@@ -115,8 +116,11 @@ public class Sim_UE_Metrics_avg_vs_chi {
         }
         double divide_by = (double) (simParams.monte_carlo);
         finalSimResult.divideMetricsBy(divide_by);
-
-        simParams.JT_VALUE = Main.DYNAMIC_JT_VALUE_FOR_FILE;
+        
+        //CHANGE BACK TO MAINTAIN THE SAME FILE NAME
+        if (Main.DYNAMIC_JT_CHANGE_WRT_CHI_FLAG == true) {
+            simParams.JT_VALUE = Main.DYNAMIC_JT_VALUE_FOR_FILE;
+        }
         return finalSimResult;
     }
 
