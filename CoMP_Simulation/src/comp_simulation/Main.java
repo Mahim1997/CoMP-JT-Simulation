@@ -14,12 +14,12 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
-        Main.JT_INITIAL = 4;
-        Main.JT_FINAL = 4;
+        Main.JT_INITIAL = 0;
+        Main.JT_FINAL = 5;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 1----------------------");
-//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
-        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
+        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+        //SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE
