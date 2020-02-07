@@ -10,6 +10,7 @@ function [] = plotter_for_traffic_model(x_data, y_data_0, y_data_1, y_data_2, y_
     h1 = plot(x_data, y_data_1, '-o');
     h2 = plot(x_data, y_data_2, '-o');
     h3 = plot(x_data, y_data_3, '-o');
+    h4 = plot(x_data, y_data_4, '--o');
     g_y=[0:Y_STEP_SIZE:MAX_Y_AXIS]; % user defined grid Y [start:spaces:end]
     g_x=[0:X_STEP_SIZE:MAX_X_AXIS]; % user defined grid X [start:spaces:end]
     for i=1:length(g_x)
@@ -26,9 +27,10 @@ function [] = plotter_for_traffic_model(x_data, y_data_0, y_data_1, y_data_2, y_
        % plot([g_x(1) g_x(end)],[g_y(i) g_y(i)],'k:'); %x grid lines
        hold on;
     end
-    legend([h0, h1, h2, h3],LEGENDS);
+%     legend([h0, h1, h2, h3],LEGENDS);
+    legend([h0, h1, h2, h3, h4],LEGENDS);
 %     print(fileToSave, '-dtiff', '-r1440');
     % saveas(gcf, fullfile(folderToSave, sprintf('FIGURE.emf')));
     hold off;
-    fprintf("-->> NOT saving to file name = %s\n", fileToSave);
+    fprintf("-->>NOT Saving to file name = %s\n", fileToSave);
 end

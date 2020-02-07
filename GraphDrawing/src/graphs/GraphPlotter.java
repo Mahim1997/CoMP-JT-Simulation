@@ -20,7 +20,9 @@ public class GraphPlotter extends Application {
     public static String OUTPUT_FOLDER_NAME_TASK1 = "Avg_Metrics_vs_Chi/GRAPHS_UE_vs_CHI";
 
     public static double THRESHOLD_FOR_NOT_TAKING = 0.02;
-    static boolean TAKE_DYNAMIC_JT = false;
+    
+    //--------------------------- FOR DYNAMIC JT ------------------------------
+    static boolean TAKE_DYNAMIC_JT = true;
 
     public static void main(String[] args) {
         launch(args);
