@@ -1,17 +1,17 @@
-function [] = plot_for_upto_jt_3_without_dummy(x_data, y_data_0, y_data_1, y_data_2, y_data_3, y_data_4, y_data_5, ...
-    LEGENDS, x_label, y_label, TITLE, fileToSave, USE_GRID, MAX_Y_AXIS, Y_STEP_SIZE)
+function [] = plotter_for_traffic_model(x_data, y_data_0, y_data_1, y_data_2, y_data_3, y_data_4, y_data_5, ...
+    LEGENDS, x_label, y_label, TITLE, fileToSave, USE_GRID, MAX_Y_AXIS, Y_STEP_SIZE, MAX_X_AXIS, X_STEP_SIZE)
     grid on;
     grid;
-    h0 = plot(x_data, y_data_0);
+    h0 = plot(x_data, y_data_0, '-o');
     title(TITLE);
     xlabel(x_label);
     ylabel(y_label);
     hold on;
-    h1 = plot(x_data, y_data_1);
-    h2 = plot(x_data, y_data_2);
-    h3 = plot(x_data, y_data_3);
+    h1 = plot(x_data, y_data_1, '-o');
+    h2 = plot(x_data, y_data_2, '-o');
+    h3 = plot(x_data, y_data_3, '-o');
     g_y=[0:Y_STEP_SIZE:MAX_Y_AXIS]; % user defined grid Y [start:spaces:end]
-    g_x=[0:1:100]; % user defined grid X [start:spaces:end]
+    g_x=[0:X_STEP_SIZE:MAX_X_AXIS]; % user defined grid X [start:spaces:end]
     for i=1:length(g_x)
        if USE_GRID == 1
             plot([g_x(i) g_x(i)],[g_y(1) g_y(end)],'k:', 'Linewidth', 0.10); %y grid lines

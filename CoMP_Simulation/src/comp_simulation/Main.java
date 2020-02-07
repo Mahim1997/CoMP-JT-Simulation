@@ -12,8 +12,8 @@ public class Main {
     public static boolean DYNAMIC_JT_CHANGE_WRT_CHI_FLAG = true;
     public static int JT_DYNAMIC_CHANGE_START = 3;
 
-    public static double chi_critical_JT_3_JT_2 = 0.275;
-    public static double chi_critical_JT_2_JT_1 = 0.44;
+    public static double chi_critical_JT_3_JT_2 = 0.30;
+    public static double chi_critical_JT_2_JT_1 = 0.48;
     public static int DYNAMIC_JT_VALUE_FOR_FILE = 6;
     
     
