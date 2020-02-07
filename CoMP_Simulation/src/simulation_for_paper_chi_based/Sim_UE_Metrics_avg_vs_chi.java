@@ -68,7 +68,7 @@ public class Sim_UE_Metrics_avg_vs_chi {
         //for each chi
         SimResults simResults = new SimResults();
         SimResult_oneMC res_one_MC;
-        for (double chi = simParams.chi_initial; chi <= simParams.chi_final; chi += simParams.chi_step_size) {
+        for (double chi = simParams.chi_initial_desc; chi >= simParams.chi_final_desc; chi -= simParams.chi_step_size_desc) {
             if (Main.NEW_SIMULATION_STRATEGY) {
                 System.out.print("[NEW STRATEGY SIMULATION] ");
             }

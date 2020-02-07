@@ -16,6 +16,7 @@ public class Main {
     public static double chi_critical_JT_2_JT_1 = 0.44;
     public static int DYNAMIC_JT_VALUE_FOR_FILE = 6;
     
+    
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
@@ -24,7 +25,8 @@ public class Main {
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Task 1----------------------");
 //        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
-        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW        
+//        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW 
+        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE
@@ -34,7 +36,7 @@ public class Main {
 
     public static String chi_based = "Metrics_vs_Chi_for_JT"; //Metrics AVG vs CHI [chi is varied] (Task 1)    
     public static String distance_based_avg_NEW = "UE_T_avg_vs_Distance_for_JT"; //For Task 2 [NEW]
-
+    public static String TRAFFIC_MODE_task_1 = "TRAFFIC_MODE_task_1";
 //---------------------------- MODES FOR JT -------------------------------------
     public static String JT_SINR = "JT_SINR";
     public static String JT_DISTANCE = "JT_DISTANCE";

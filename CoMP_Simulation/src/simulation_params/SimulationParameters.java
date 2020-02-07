@@ -6,9 +6,14 @@ public class SimulationParameters {
     /*
     These parameters are for varying chi and measuring avg UE throughput [for paper work]
     */
+    //------- DESCENDING CHI -------
+    public double chi_initial_desc = 1.0;
+    public double chi_final_desc = 0.05;
+    public double chi_step_size_desc = 0.04; //RB:UE ratio
+    
     public double chi_initial = 0.1; //DEBUG
     public double chi_final = 1;
-    public double chi_step_size = 0.005;
+    public double chi_step_size = 0.04;//0.005;
     public double chi_for_task_1; //used as temp variable
 //-------------------------------- FOR TASK 2 ----------------------------
     public double chi_step_size_task_2 = 0.1;
@@ -70,6 +75,7 @@ public class SimulationParameters {
 
     //5. Solar data.
     public double[] solar_data = new double[24];
+    
 
     public void printParameters() {
         System.out.println(this.toString());
