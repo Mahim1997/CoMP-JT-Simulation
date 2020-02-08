@@ -6,27 +6,36 @@ public class Main {
     public static boolean NEW_SIMULATION_STRATEGY = true;
     public static boolean TAKE_AFTER_CALCULATION = true;
 //    public static double CHI_STEP_SIZE_TASK_1 = 0.001;
-    public static int JT_INITIAL ;
-    public static int JT_FINAL ;
+    public static int JT_INITIAL;
+    public static int JT_FINAL;
     public static int MONTE_CARLO = 1000;
-    public static boolean DYNAMIC_JT_CHANGE_WRT_CHI_FLAG = true;
+    public static boolean DYNAMIC_JT_CHANGE_WRT_CHI_FLAG = false;
     public static int JT_DYNAMIC_CHANGE_START = 3;
 
     public static double chi_critical_JT_3_JT_2 = 0.30;
     public static double chi_critical_JT_2_JT_1 = 0.48;
     public static int DYNAMIC_JT_VALUE_FOR_FILE = 6;
     
+    public static int TIER_START = 10;
+    public static int TIER_FINAL = 21; //BESHI HOYE GELO ????
     
+
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
-        Main.JT_INITIAL = 6;
-        Main.JT_FINAL = 6;
+        Main.JT_INITIAL = 5;
+        Main.JT_FINAL = 19;
         Main.TAKE_AFTER_CALCULATION = true;
-        System.out.println("-------------------Running Task 1----------------------");
+        System.out.println("-------------------Running Simulation ----------------------");
 //        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
 //        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW 
-        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
+//        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
+        
+        
+        
+        Main.JT_INITIAL = 2;
+        Main.JT_FINAL = 2;
+        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2 
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE
@@ -37,6 +46,7 @@ public class Main {
     public static String chi_based = "Metrics_vs_Chi_for_JT"; //Metrics AVG vs CHI [chi is varied] (Task 1)    
     public static String distance_based_avg_NEW = "UE_T_avg_vs_Distance_for_JT"; //For Task 2 [NEW]
     public static String TRAFFIC_MODE_task_1 = "TRAFFIC_MODE_task_1";
+    public static String TIER_VARIATION_FOR_DUMMY_RING = "TIER_VARIATION_FOR_DUMMY_RING";
 //---------------------------- MODES FOR JT -------------------------------------
     public static String JT_SINR = "JT_SINR";
     public static String JT_DISTANCE = "JT_DISTANCE";
