@@ -271,8 +271,8 @@ public class Sim_UE_tier_vary_for_dummy_ring {
     private List<User> getOnlyOuterRingUsers(List<User> list_users) {
         List<User> newList = new ArrayList<>();
         for (User u : list_users) {
-//            if(true){ //tier = 2, ALL BSs
-            if (u.base_station_tier < (simParams.tier)) { // tier = 3, ONLY INNER RING BSs
+            if(true){ //tier = 2, ALL BSs
+//            if (u.base_station_tier < (simParams.tier)) { // tier = 3, ONLY INNER RING BSs
 //            if(u.base_station_tier == 3){ // tier = 3, ONLY OUTER RING BSs
                 newList.add(u);
             }

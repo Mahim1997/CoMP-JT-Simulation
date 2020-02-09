@@ -16,8 +16,8 @@ public class Main {
     public static double chi_critical_JT_2_JT_1 = 0.48;
     public static int DYNAMIC_JT_VALUE_FOR_FILE = 6;
     
-    public static int TIER_START = 10;
-    public static int TIER_FINAL = 21; //BESHI HOYE GELO ????
+    public static int TIER_START = 1;
+    public static int TIER_FINAL = 14; //BESHI HOYE GELO ????
     
 
     public static void main(String[] args) {
