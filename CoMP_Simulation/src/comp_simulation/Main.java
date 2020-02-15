@@ -15,27 +15,45 @@ public class Main {
     public static double chi_critical_JT_3_JT_2 = 0.30;
     public static double chi_critical_JT_2_JT_1 = 0.48;
     public static int DYNAMIC_JT_VALUE_FOR_FILE = 6;
-    
+
     public static int TIER_START = 1;
     public static int TIER_FINAL = 14; //BESHI HOYE GELO ????
-    
+    public static boolean DUMMY_RING_TAKE = true;
 
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
-        Main.JT_INITIAL = 5;
-        Main.JT_FINAL = 19;
+        Main.JT_INITIAL = 2;
+        Main.JT_FINAL = 15;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Simulation ----------------------");
 //        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
 //        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW 
 //        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
+        Main.JT_INITIAL = 1;
+        Main.JT_FINAL = 1;
+
+//        Main.DUMMY_RING_TAKE = true;
+//        Main.TIER_START = 11;
+//        Main.TIER_FINAL = 15;
+//        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2
+//        
         
+        Main.JT_INITIAL = 0;
+        Main.JT_FINAL = 0;
+
+//        Main.DUMMY_RING_TAKE = true;
+//        Main.TIER_START = 14;
+//        Main.TIER_FINAL = 14;
+//        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2  
+
+        //without dummy ring
         
-        
-        Main.JT_INITIAL = 2;
-        Main.JT_FINAL = 2;
-        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2 
+        Main.DUMMY_RING_TAKE = false;
+        Main.TIER_START = 11;
+        Main.TIER_FINAL = 13;
+        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2  
+
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

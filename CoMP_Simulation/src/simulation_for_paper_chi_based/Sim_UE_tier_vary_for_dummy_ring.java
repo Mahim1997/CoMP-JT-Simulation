@@ -49,10 +49,17 @@ public class Sim_UE_tier_vary_for_dummy_ring {
         String folderName = "Avg_Metrics_vs_Chi/FOR_TIER_THINGS";
         String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
+        String mode_for_dummy_ring = "";
+        if (Main.DUMMY_RING_TAKE == true) {
+            mode_for_dummy_ring = "WITH_DUMMY_RING";
+        } else {
+            mode_for_dummy_ring = "WITHOUT_DUMMY_RING";
+        }
         if (Main.TAKE_AFTER_CALCULATION) {
+
             fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                     + "_JT_" + String.valueOf(simParams.JT_VALUE) + "_tier_" + String.valueOf(simParams.tier)
-                    + "_Take_after_calcs.csv";
+                    + "_Take_after_calcs_" + mode_for_dummy_ring + ".csv";
         }
         if (IS_CONVENTIONAL) {
             System.out.println("-->>HEREE >>>> Running for Conventional ... ");
@@ -60,7 +67,7 @@ public class Sim_UE_tier_vary_for_dummy_ring {
                     + "_JT_0.csv";
             if (Main.TAKE_AFTER_CALCULATION) {
                 fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
-                        + "_JT_0_tier_" + String.valueOf(simParams.tier) + "_Take_after_calcs.csv";
+                        + "_JT_0_tier_" + String.valueOf(simParams.tier) + "_Take_after_calcs_" + mode_for_dummy_ring + ".csv";
             }
         }
         //Always fixed parameters for all chi.
@@ -270,11 +277,17 @@ public class Sim_UE_tier_vary_for_dummy_ring {
 
     private List<User> getOnlyOuterRingUsers(List<User> list_users) {
         List<User> newList = new ArrayList<>();
-        for (User u : list_users) {
-            if(true){ //tier = 2, ALL BSs
-//            if (u.base_station_tier < (simParams.tier)) { // tier = 3, ONLY INNER RING BSs
 //            if(u.base_station_tier == 3){ // tier = 3, ONLY OUTER RING BSs
+        if (Main.DUMMY_RING_TAKE == false) { //tier = 2, ALL BSs
+            for (User u : list_users) { ///take all
                 newList.add(u);
+            }
+        } else {
+            //Take DUMMY RING ...
+            for (User u : list_users) {
+                if (u.base_station_tier < (simParams.tier)) { // take ONLY inner BSs
+                    newList.add(u);
+                }
             }
         }
 
