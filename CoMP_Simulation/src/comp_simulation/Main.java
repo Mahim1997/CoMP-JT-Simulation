@@ -19,7 +19,8 @@ public class Main {
     public static int TIER_START = 1;
     public static int TIER_FINAL = 14; //BESHI HOYE GELO ????
     public static boolean DUMMY_RING_TAKE = true;
-
+    public static boolean CENTER_BS_ONLY = true;
+    
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
@@ -33,27 +34,16 @@ public class Main {
         Main.JT_INITIAL = 1;
         Main.JT_FINAL = 1;
 
-//        Main.DUMMY_RING_TAKE = true;
-//        Main.TIER_START = 11;
-//        Main.TIER_FINAL = 15;
-//        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2
-//        
-        
-        Main.JT_INITIAL = 0;
-        Main.JT_FINAL = 0;
 
-//        Main.DUMMY_RING_TAKE = true;
-//        Main.TIER_START = 14;
-//        Main.TIER_FINAL = 14;
-//        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2  
 
-        //without dummy ring
-        
-        Main.DUMMY_RING_TAKE = false;
-        Main.TIER_START = 11;
-        Main.TIER_FINAL = 13;
-        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING); //For Dummy ring test JT = 2  
-
+        //Center BS Only
+        Main.CENTER_BS_ONLY = true;
+        Main.TIER_START = 14;
+        Main.TIER_FINAL = 14;
+        //JT = 2
+        Main.JT_INITIAL = 2;
+        Main.JT_FINAL = 2;
+        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING);
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

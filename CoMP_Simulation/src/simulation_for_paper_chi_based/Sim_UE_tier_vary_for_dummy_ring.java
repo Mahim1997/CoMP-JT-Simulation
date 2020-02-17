@@ -278,15 +278,24 @@ public class Sim_UE_tier_vary_for_dummy_ring {
     private List<User> getOnlyOuterRingUsers(List<User> list_users) {
         List<User> newList = new ArrayList<>();
 //            if(u.base_station_tier == 3){ // tier = 3, ONLY OUTER RING BSs
-        if (Main.DUMMY_RING_TAKE == false) { //tier = 2, ALL BSs
-            for (User u : list_users) { ///take all
-                newList.add(u);
+        if (Main.CENTER_BS_ONLY == true) {  // take only the center base-station
+            for(User u: list_users){
+                if(u.base_station_tier == 0){
+//                    System.out.println("Taking user u.BS_tier = " + u.base_station_tier + " , u.BS_id = " + u.base_station_chosen_id);
+                    newList.add(u);
+                }
             }
         } else {
-            //Take DUMMY RING ...
-            for (User u : list_users) {
-                if (u.base_station_tier < (simParams.tier)) { // take ONLY inner BSs
+            if (Main.DUMMY_RING_TAKE == false) { //tier = 2, ALL BSs
+                for (User u : list_users) { ///take all
                     newList.add(u);
+                }
+            } else {
+                //Take DUMMY RING ...
+                for (User u : list_users) {
+                    if (u.base_station_tier < (simParams.tier)) { // take ONLY inner BSs
+                        newList.add(u);
+                    }
                 }
             }
         }
