@@ -30,7 +30,7 @@
 % legend([h1, h2], {"With Dummy Ring", "Without Dummy Ring"});
 % xlabel("Effective Tier");
 % ylabel("Avg Throughput (kBps)");
-% title("Effectiveness of Dummy Ring");
+% title("Effectiveness of Dummy Ring (JT 2)");
 % fileToSave = "GRAPHS/TIER_DUMMY_VS_NOT_DUMMY/T_avg_vs_Tier_Dummy_vs_NO_Dummy.emf";
 % print(fileToSave, '-dtiff', '-r1440');
 

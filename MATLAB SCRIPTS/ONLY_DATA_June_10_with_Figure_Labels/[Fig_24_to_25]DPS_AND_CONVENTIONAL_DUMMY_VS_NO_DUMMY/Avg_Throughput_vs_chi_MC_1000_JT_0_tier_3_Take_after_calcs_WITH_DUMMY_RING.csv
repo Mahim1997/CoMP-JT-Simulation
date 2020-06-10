@@ -1,0 +1,2 @@
+Chi(proportion),T_avg UE(kBps),Spectral Efficiency,Fairness Idx,Cell-Edge Throughput(kBps),Discrimination Idx,Entropy,Proportion UE dropped,Proportion of UE active,Eff chi mean BSs,Eff chi active UEs,T_Avg Active UE(kBps)
+1.0,725.7937986021448,6.895041086720383E-5,0.39492227939212077,3.0362300191650586,0.6050777206078801,7.97894723584143,0.03174736842105259,0.9682526315789486,0.9712259459459485,0.9682526315789486,749.5995343701313

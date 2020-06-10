@@ -46,7 +46,7 @@ public class Sim_UE_tier_vary_for_dummy_ring {
         //Place Base Stations [Fixed Positions throughout all the simulations]        
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
-        String folderName = "Avg_Metrics_vs_Chi/FOR_TIER_THINGS";
+        String folderName = "Avg_Metrics_vs_Chi/FOR_TIER_THINGS_June10_CenterBS_NoDummy";
         String fileName = folderName + "/Avg_Throughput_vs_chi_MC_" + String.valueOf(simParams.monte_carlo)
                 + "_JT_" + String.valueOf(simParams.JT_VALUE) + ".csv";
         String mode_for_dummy_ring = "";

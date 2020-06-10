@@ -110,7 +110,7 @@ public class BaseStation {
 
             tiers_matched++; //increment the tiers.
         }
-
+        System.out.println("-->>BaseStation.java : Tier = " + tier + ", No. of BSs = " + baseStations_List.size());
     }
 
     @Override
