@@ -38,11 +38,11 @@ public class Main {
 
         //Center BS Only
         Main.CENTER_BS_ONLY = true;
-        Main.TIER_START = 1;
-        Main.TIER_FINAL = 11; // do only upto 11 for now ... later do for 12 as well [JT = 0 done] June 10, 2020
+        Main.TIER_START = 13;
+        Main.TIER_FINAL = 13; // do only upto 11 for now ... later do for 12 as well [JT = 0 done] June 10, 2020
         //JT = 2
-        Main.JT_INITIAL = 1;
-        Main.JT_FINAL = 5;
+        Main.JT_INITIAL = 0;
+        Main.JT_FINAL = 3;
         SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING);
     }
 
