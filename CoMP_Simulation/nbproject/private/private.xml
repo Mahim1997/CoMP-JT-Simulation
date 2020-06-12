@@ -3,10 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/util_and_calculators/MetricCalculatorAfter.java</file>
             <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/simulation_for_paper_chi_based/Sim_UE_tier_vary_for_dummy_ring.java</file>
-            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/sim_objects/BaseStation.java</file>
+            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/util_and_calculators/ResourceBlockCalculator.java</file>
             <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/comp_simulation/SimulationRunner.java</file>
-            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/simulation_params/SimulationParameterBuilder.java</file>
+            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/sim_objects/BaseStation.java</file>
+            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/sim_objects/User.java</file>
+            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/simulation_for_paper_distance_based/Sim_UE_avg_Throughput_vs_distance.java</file>
+            <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/simulation_for_paper_chi_based/Sim_UE_Metrics_avg_vs_chi.java</file>
             <file>file:/C:/Users/viper/OneDrive/Desktop/CoMP%20Things/Code_Mahim/CoMP_Mahim_Codes/CoMP_Simulation/src/comp_simulation/Main.java</file>
         </group>
     </open-files>
