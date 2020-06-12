@@ -20,7 +20,7 @@ public class Main {
     public static int TIER_FINAL = 14; //BESHI HOYE GELO ????
     public static boolean DUMMY_RING_TAKE = false;
     public static boolean CENTER_BS_ONLY = true;
-    
+
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
 
@@ -28,22 +28,25 @@ public class Main {
 //        Main.JT_FINAL = 15;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Simulation ----------------------");
-//        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+        
+        
+        Main.DUMMY_RING_TAKE = true;
+        Main.JT_INITIAL = 0;
+        Main.JT_FINAL = 3;
+        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+
 //        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW 
 //        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
 //        Main.JT_INITIAL = 1;
 //        Main.JT_FINAL = 1;
-
-
-
         //Center BS Only
-        Main.CENTER_BS_ONLY = true;
-        Main.TIER_START = 13;
-        Main.TIER_FINAL = 13; // do only upto 11 for now ... later do for 12 as well [JT = 0 done] June 10, 2020
-        //JT = 2
-        Main.JT_INITIAL = 0;
-        Main.JT_FINAL = 3;
-        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING);
+//        Main.CENTER_BS_ONLY = true;
+//        Main.TIER_START = 13;
+//        Main.TIER_FINAL = 13; // do only upto 11 for now ... later do for 12 as well [JT = 0 done] June 10, 2020
+//        //JT = 2
+//        Main.JT_INITIAL = 0;
+//        Main.JT_FINAL = 3;
+//        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING);
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE

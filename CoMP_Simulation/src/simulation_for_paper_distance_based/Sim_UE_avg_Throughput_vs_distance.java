@@ -56,6 +56,7 @@ public class Sim_UE_avg_Throughput_vs_distance {
                             + "_JT_0_Take_after_calcs.csv";
                 }
             }
+            System.out.println("->>File name is " + fileName);
 
             List<SimResult_Avg_T_vs_dist_per_chi> list_results = new ArrayList<>();
             for (double chi = simParams.chi_initial; chi < simParams.chi_final; chi += simParams.chi_step_size_task_2) {
@@ -131,12 +132,12 @@ public class Sim_UE_avg_Throughput_vs_distance {
 
 //        Helper.printBaseStations(baseStations);
         List<User> list_of_all_users = new ArrayList<>();
-        for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
-//        for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {            
-//            BaseStation bs = baseStations.get(bs_iter);
-//            for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
-            for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
-                BaseStation bs = baseStations.get(bs_iter);
+//        for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+        for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {            
+            BaseStation bs = baseStations.get(bs_iter);
+            for (int itr_user = 0; itr_user < num_users_per_BS; itr_user++) {
+//            for (int bs_iter = 0; bs_iter < baseStations.size(); bs_iter++) {
+//                BaseStation bs = baseStations.get(bs_iter);
 //                System.out.println("-->>TRYING TO CONNECT TO bs.id = " + bs.base_station_id + " , UE_id = " + itr_user);
                 double theta = Math.random() * 2 * Math.PI; //an angle randomly taken from 0 to π [ALREADY in radians]
                 double radial_distance_wrt_BS = simParams.distance_taken;
@@ -208,11 +209,12 @@ public class Sim_UE_avg_Throughput_vs_distance {
 
             List<User> new_user_list;
 
-            if (Main.GET_OUTER_RING_BASE_STATIONS) {
+            if (Main.DUMMY_RING_TAKE) {
                 List<User> without_outer_ring_users = new ArrayList<>();
                 for (int iter = 0; iter < list_of_all_users.size(); iter++) {
                     User u = list_of_all_users.get(iter);
-                    if (u.base_station_tier <= 2) {
+                    if (u.base_station_tier <= simParams.tier) {
+                        System.out.println("-->>TAKING user with bs_tier = " + u.base_station_tier + " , bs_id = " + u.base_station_chosen_id);
                         without_outer_ring_users.add(u);
                     }
                 }
