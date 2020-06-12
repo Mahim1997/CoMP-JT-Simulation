@@ -23,34 +23,35 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println(">>>>>>>>>>> Running in Main.main()");
-
 //        Main.JT_INITIAL = 2;
 //        Main.JT_FINAL = 15;
         Main.TAKE_AFTER_CALCULATION = true;
         System.out.println("-------------------Running Simulation ----------------------");
         
-        
-        Main.DUMMY_RING_TAKE = true;
-        Main.JT_INITIAL = 0;
-        Main.JT_FINAL = 3;
-        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
-
+        // ------------------------------------- Task 1 --------------------------------------------------
 //        Main.DUMMY_RING_TAKE = true;
 //        Main.JT_INITIAL = 1;
 //        Main.JT_FINAL = 1;
 //        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW 
-        
-        
 //        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
+        //------------------------------------------------------------------------------------------------
 
+        // ------------------------------------- Task 2 --------------------------------------------------
+        Main.DUMMY_RING_TAKE = true;
+        Main.JT_INITIAL = 0;
+        Main.JT_FINAL = 3;
+        SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
+        //------------------------------------------------------------------------------------------------
+        
+        // ------------------------------------ TIER dummy vs no dummy -----------------------------------
         //Center BS Only // TIER VARIATION dummy vs no-dummy
 //        Main.CENTER_BS_ONLY = true;
-//        Main.TIER_START = 13;
-//        Main.TIER_FINAL = 13; // do only upto 11 for now ... later do for 12 as well [JT = 0 done] June 10, 2020
-//        //JT = 2
+//        Main.TIER_START = 12;
+//        Main.TIER_FINAL = 12; // do only upto 11 for now ... later do for 12 as well [JT = 0 done] June 10, 2020
 //        Main.JT_INITIAL = 0;
 //        Main.JT_FINAL = 3;
 //        SimulationRunner.runSimulation(TIER_VARIATION_FOR_DUMMY_RING);
+        // ------------------------------------------------------------------------------------------------
     }
 
     public static String PREV_MODE_JT; //OTHER FILES MAY USE THIS VARIABLE
