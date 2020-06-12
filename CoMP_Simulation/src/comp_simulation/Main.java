@@ -35,11 +35,15 @@ public class Main {
         Main.JT_FINAL = 3;
         SimulationRunner.runSimulation(distance_based_avg_NEW); //For Task 2 NEW                       
 
-//        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW 
-//        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
+//        Main.DUMMY_RING_TAKE = true;
 //        Main.JT_INITIAL = 1;
 //        Main.JT_FINAL = 1;
-        //Center BS Only
+//        SimulationRunner.runSimulation(chi_based); //For Task 1 NEW 
+        
+        
+//        SimulationRunner.runSimulation(TRAFFIC_MODE_task_1); //For Traffic mode ... Task 1 extension
+
+        //Center BS Only // TIER VARIATION dummy vs no-dummy
 //        Main.CENTER_BS_ONLY = true;
 //        Main.TIER_START = 13;
 //        Main.TIER_FINAL = 13; // do only upto 11 for now ... later do for 12 as well [JT = 0 done] June 10, 2020

@@ -115,7 +115,7 @@ public class BaseStation {
 
     @Override
     public String toString() {
-        return "BaseStation{" + "x_pos=" + x_pos + ", y_pos=" + y_pos + ", base_station_id=" + base_station_id + ", num_available_slots=" + num_available_slots + ", power_received_by_user_mW=" + power_received_by_user_mW + '}';
+        return "BaseStation{" + "x_pos=" + x_pos + ", y_pos=" + y_pos + ", base_station_id=" + base_station_id + ", base_station_tier = " + tier + ", num_available_slots=" + num_available_slots + ", power_received_by_user_mW=" + power_received_by_user_mW + '}';
     }
 
     public static int NUMBER_OF_BASE_STATIONS(int tier) {

@@ -74,6 +74,11 @@ public class Sim_UE_avg_Throughput_vs_distance {
         SimResult_Avg_T_vs_dist_per_chi simResult = new SimResult_Avg_T_vs_dist_per_chi();
         List<BaseStation> baseStations = new ArrayList<>();
         BaseStation.placeBaseStations(baseStations, simParams.cell_radius, simParams.tier);
+        
+//        for(BaseStation bs: baseStations){
+//            System.out.println(bs.toString());
+//        }
+        
         //Always fixed parameters for all chi.
         double inter_bs_distance = Math.pow(3, 0.5) * simParams.cell_radius; // root(3) * cell_radius = IBS
         double FSPL_dB = (20 * Math.log10(simParams.path_loss_reference_distance))
@@ -178,7 +183,10 @@ public class Sim_UE_avg_Throughput_vs_distance {
                 user.sortBaseStations_wrt_baseStationID(); //SORT to get back the previous base stations list ids.
                 baseStations = user.getListOfBaseStations(); //COPY base stations to get the available_tokens
                 num_users_total++;
-
+                
+                user.base_station_chosen_id = bs.base_station_id;
+                user.base_station_tier = bs.tier;
+                
                 list_of_all_users.add(user); //FOR DEBUG
 //                bs.list_users.add(user); //FOR DEBUG
             }
@@ -213,8 +221,9 @@ public class Sim_UE_avg_Throughput_vs_distance {
                 List<User> without_outer_ring_users = new ArrayList<>();
                 for (int iter = 0; iter < list_of_all_users.size(); iter++) {
                     User u = list_of_all_users.get(iter);
-                    if (u.base_station_tier <= simParams.tier) {
-                        System.out.println("-->>TAKING user with bs_tier = " + u.base_station_tier + " , bs_id = " + u.base_station_chosen_id);
+                    
+                    if (u.base_station_tier < simParams.tier) {
+//                        System.out.println("-->>PRINTING ... UE iter = " + iter + ", TAKING simParams.tier = " + simParams.tier + ", user with bs_tier = " + u.base_station_tier + " , bs_id = " + u.base_station_chosen_id);
                         without_outer_ring_users.add(u);
                     }
                 }
