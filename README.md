@@ -1,12 +1,26 @@
 # CoMP-JT-Simulation
 Codes for CoMP-JT in-depth simulation. 
  
-* Java used for simulation codes (and graph generation)
-* MATLAB used for graph generation
+* Java used for simulation codes (and preliminary graph generation)
+* MATLAB used for (final) graph generation
 
-## Tasks simulated include the following
+## Metrics simulated include the following :
 
 ### Average metrics against traffic rate
 
-- Avg throughput (using SINR, Shanon's formula)
-- 
+- Avg throughput considering **all** UEs (using SINR, Shanon's formula)
+- Avg throughput considering only **active** UEs (using SINR, Shanon's formula)
+- Cell-Edge Throughput
+- Proportion of active UEs
+- Proportion of dropped UEs
+- Effective traffic
+- Entropy
+- Discrimination Index
+- Jain's Fairness Index
+- Spectral Efficiency
+- Avg Throughput
+
+### Additional metrics
+
+- Average throughput vs Number of Co-ordinating Base-Stations (Conventional, DPS, JT=2,3,4,5)
+- Variation by including/not including the concept of a **dummy ring**.
