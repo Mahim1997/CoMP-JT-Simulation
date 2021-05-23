@@ -1,5 +1,5 @@
-# CoMP-JT-Simulation
-Codes for CoMP-JT in-depth simulation. 
+# CoMP Networks Simulation
+Codes for CoMP networks in-depth simulation. 
  
 * Java used for simulation codes (and preliminary graph generation)
 * MATLAB used for (final) graph generation
