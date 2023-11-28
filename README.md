@@ -1,4 +1,4 @@
-# CoMP Networks Simulation
+# Coordinated Multi-Point (CoMP) Networks Simulation
 Codes for CoMP networks in-depth simulation. 
  
 * Java used for simulation codes (and preliminary graph generation)
