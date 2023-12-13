@@ -1,5 +1,7 @@
 # Coordinated Multi-Point (CoMP) Networks Simulation
-Codes for CoMP networks in-depth simulation. 
+A simulation tool for simulating 5G-CoMP networks under various conditions including Conventional, Dynamic Point Selection (DPS) and Joint Transmission (JT)
+
+# Codes for CoMP networks in-depth simulation. 
  
 * Java used for simulation codes (and preliminary graph generation)
 * MATLAB used for (final) graph generation
