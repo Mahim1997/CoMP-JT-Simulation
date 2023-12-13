@@ -6,6 +6,9 @@ A simulation tool for simulating 5G-CoMP networks under various conditions inclu
 * Java used for simulation codes (and preliminary graph generation)
 * MATLAB used for (final) graph generation
 
+## Documentation:
+Please see [CoMP_JT.pdf](https://github.com/Mahim1997/CoMP-JT-Simulation/blob/master/CoMP_JT.pdf) for more details.
+
 ## Metrics simulated include the following :
 
 ### Average metrics against traffic rate
